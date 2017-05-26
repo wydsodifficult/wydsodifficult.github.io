@@ -19,6 +19,8 @@ All documentation (Features/Functions/etc.) should be added to their appropriate
 - [ ] Load in Appropriate Header and Footer HTML files
 ___
 # Main Features (Everything that needs to be in the release versions :dog: :cat:)
+- [ ] Blog (JDR)
+- [ ] Landing Page (JDR)
 ---
 # Additional Features (Things that would be helpful :hatching_chick:)
 - [ ] Custom 404 Page
