@@ -7,13 +7,19 @@
 * Jacob (Landing Page, Documentation, & Assist Legal Crap)
 ---
 ## Documentation
-All documentation (Features/Functions/etc.) should be added to their appropriate places in the WYD Wiki. We (Jacob) will later compile the features into a viewer friendly doc list within the site.
+* All documentation (Features/Functions/etc.) should be added to their appropriate places in the [WYD Wiki](https://github.com/wydsodifficult/wydsodifficult.github.io/wiki).
+* We (Jacob) will later compile the features into a viewer friendly doc list within the site.
 ---
-[Markdown Cheat Sheet for Reference] (https://help.github.com/articles/basic-writing-and-formatting-syntax/)
+[Markdown Cheat Sheet for Reference](https://help.github.com/articles/basic-writing-and-formatting-syntax/)
 ---
 # Initial Setup
 - [X] Make Project Page (this)
 - [ ] Edit Template for Blank Pages
+    - [X] Load Footer
+    - [ ] Load Header Navs
+        - [ ] Operations (Need to shift sidebars next)
+        - [ ] Employees
+        - [ ] GodMode
 - [ ] Create Firebase for Project
 - [ ] Finish this list...
 - [ ] Load in Appropriate Header and Footer HTML files
@@ -21,8 +27,12 @@ ___
 # Main Features (Everything that needs to be in the release versions :dog: :cat:)
 - [ ] Blog (JDR)
 - [ ] Landing Page (JDR)
+- [ ] Operations Section (BH)
+- [ ] Employees Section (BH)
+- [ ] GodMode Section (BH)
 ---
 # Additional Features (Things that would be helpful :hatching_chick:)
 - [ ] Custom 404 Page
 ---
 # Feathers (Anything that is not needed but add to the experience :rainbow:)
+- [ ] DOGE
