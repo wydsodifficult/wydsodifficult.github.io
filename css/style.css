@@ -8,7 +8,7 @@
 @charset "UTF-8";
 /*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
 html {
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
   line-height: 1.15;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%; }
@@ -2831,7 +2831,7 @@ header.navbar {
     padding: 0.5rem 1rem;
     margin-right: 0;
     background-color: #fff;
-    background-image: url("../img/logo.png");
+    background-image: url("../img/WYD_logo_acronym.png");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 80px auto;
@@ -13578,7 +13578,7 @@ base-chart.chart {
   color: #d1d4d7; }
 
 .sidebar .sidebar-header {
-  height: 200px;
+  height: 50px;
   padding-bottom: 10px;
   text-align: center;
   background: rgba(0, 0, 0, 0.2); }
