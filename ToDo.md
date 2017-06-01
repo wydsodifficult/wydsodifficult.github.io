@@ -17,8 +17,8 @@
 - [ ] Edit Template for Blank Pages
     - [X] Load Footer
     - [ ] Load Header Navs
-        - [ ] Operations (Need to shift sidebars next)
-        - [ ] Employees
+        - [X] Operations
+        - [X] Employees
         - [ ] GodMode
 - [ ] Create Firebase for Project
 - [ ] Finish this list...

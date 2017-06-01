@@ -11033,7 +11033,7 @@ app-root {
     height: calc(100vh - 2.375rem - 55px); }
 
 .aside-menu-fixed .main, .aside-menu-fixed .app-footer {
-  margin-right: 250px; }
+  margin-right: 0px; } /* Was 250 */
 
 .aside-menu-fixed.aside-menu-hidden .main, .aside-menu-fixed.aside-menu-hidden .app-footer {
   margin-right: 0; }
@@ -13599,7 +13599,7 @@ base-chart.chart {
       text-decoration: none; }
 
 .sidebar .sidebar-header + .sidebar-nav {
-  height: calc(100vh - 55px - 200px) !important; }
+  height: calc(100vh - 55px) !important; } /* Took out "- 200px" */
 
 @media (min-width: 576px) {
   .sidebar-compact .sidebar .sidebar-header {
