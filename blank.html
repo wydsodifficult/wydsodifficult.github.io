@@ -30,17 +30,6 @@
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
     
-    <!-- Load jquery so that we can load navs and footer -->
-    <script src="js/libs/jquery.min.js"></script>
-    
-    <script>
-        $(document).ready(function () {
-            $("#footer").load("footer.html");
-            $("#navbar").load("operations-navbar.html");
-            //$("#navbar").load("employees-navbar.html");
-            //$("#navbar").load("god-navbar.html");
-        });
-    </script>       
 
 </head>
 
@@ -274,16 +263,23 @@
 
     <!-- Plugins and scripts required by all views -->
     <script src="js/libs/Chart.min.js"></script>
-    <script src="js/libs/toastr.min.js"></script>
-    <script src="js/libs/gauge.min.js"></script>
-    <script src="js/libs/moment.min.js"></script>
-    <script src="js/libs/daterangepicker.js"></script>
 
 
     <!-- Main scripts -->
     <script src="js/app.js"></script>
 
-
+    
+    <!-- Load jquery so that we can load navs and footer -->
+    <script src="js/libs/jquery.min.js"></script>
+    
+    <script>
+        $(document).ready(function () {
+            $("#footer").load("footer.html");
+            $("#navbar").load("operations-navbar.html");
+            //$("#navbar").load("employees-navbar.html");
+            //$("#navbar").load("god-navbar.html");
+        });
+    </script>   
 
 </body>
 
