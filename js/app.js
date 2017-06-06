@@ -28,6 +28,9 @@
 
 $(document).ready(function($){
 
+  // Hide run the hideNav function on either the operations-navbar.html or employees-navbar.html
+  hideNav();
+    
   // Add class .active to current link
   $.navigation.find('a').each(function(){
 
