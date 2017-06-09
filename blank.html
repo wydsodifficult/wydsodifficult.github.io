@@ -2,6 +2,7 @@
  * WYD - blank.html template
  * @version v0.17.05.31
  * Copyright (c) 2017 WYD
+ * NOTE: Login redirect is commented out
  -->
  <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +30,7 @@
 
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
-    
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
 
 </head>
 
@@ -43,7 +44,7 @@
 
 -->
 
-<body class="app header-fixed sidebar-fixed">
+<body class="app header-fixed sidebar-fixed" onload="checkUser()">
     
     <!-- Navigation -->             
     <div id="navbar"></div> 
@@ -53,7 +54,7 @@
 
             <div class="sidebar-header">
                 <div>
-                    <br>
+                   <br>
                     <strong id="full-name">SHANIQUA JONES</strong>
                 </div>
                 <div class="text-muted">
@@ -172,16 +173,6 @@
         <!-- Main content -->
         <main class="main">
 
-            <!-- Breadcrumb -->
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item">Home</li>
-
-                <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li>
-                <li class="breadcrumb-item active">Dashboard</li>
-
-            </ol>
-
             <div class="container-fluid">
 
                 <div class="animated fadeIn">
@@ -196,6 +187,9 @@
     
     <div id="footer"></div>
 
+    <!-- Load jquery for navs and footer -->
+    <script src="js/libs/jquery.min.js"></script>
+    
     <!-- Bootstrap and necessary plugins -->
     <script src="js/libs/tether.min.js"></script>
     <script src="js/libs/bootstrap.min.js"></script>
@@ -208,11 +202,8 @@
 
     <!-- Main scripts -->
     <script src="js/app.js"></script>
-
     
-    <!-- Load jquery so that we can load navs and footer -->
-    <script src="js/libs/jquery.min.js"></script>
-    
+    <!-- Comment out unneeded navbars -->
     <script>
         $(document).ready(function () {
             $("#footer").load("footer.html");
@@ -220,7 +211,21 @@
             //$("#navbar").load("employees-navbar.html");
             //$("#navbar").load("god-navbar.html");
         });
-    </script>   
+    </script>
+    
+    <!-- Make sure user is logged in, else send to login -->
+    <script>
+        function checkUser() {
+            firebase.auth().onAuthStateChanged(function(user) {
+              if (user) {
+                // User is signed in.
+              } else {
+                // No user is signed in.
+//                window.location="login.html";
+              }
+            });
+        }
+    </script>
 
 </body>
 

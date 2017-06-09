@@ -26,6 +26,18 @@
 * MAIN NAVIGATION
 */
 
+
+// Initialization for Firebase app
+var config = {
+    apiKey: "AIzaSyBJZ82GGbMNtg3aACcT0PVdLlY4yz9-jjo",
+    authDomain: "wydo-19f1a.firebaseapp.com",
+    databaseURL: "https://wydo-19f1a.firebaseio.com",
+    projectId: "wydo-19f1a",
+    storageBucket: "wydo-19f1a.appspot.com",
+    messagingSenderId: "603556880559"
+};
+firebase.initializeApp(config);
+
 $(document).ready(function($){
 
   // Hide run the hideNav function on either the operations-navbar.html or employees-navbar.html
@@ -142,3 +154,13 @@ function init(url) {
   $('[rel="popover"],[data-rel="popover"],[data-toggle="popover"]').popover();
 
 }
+
+// Check for HTML5 Local Storage
+function localStorageCheck() {
+try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
+}
+
