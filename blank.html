@@ -198,6 +198,7 @@
 
     <!-- Plugins and scripts required by all views -->
     <script src="js/libs/Chart.min.js"></script>
+    <script src="js/libs/toastr.min.js"></script>
 
 
     <!-- Main scripts -->
@@ -222,6 +223,7 @@
               } else {
                 // No user is signed in.
 //                window.location="login.html";
+                toastr["warning"]("User Not Logged In!");
               }
             });
         }
