@@ -55,10 +55,10 @@
                             <input id="password-confirm" type="password" class="form-control" placeholder="Repeat password" onkeyup="passCheck(); return false;">
                         </div>
 
-                        <button type="button" class="btn btn-block btn-success disabled" id="create-button">Create Account</button>
+                        <button type="button" class="btn btn-block btn-success disabled" id="button-create-company" onclick="createCompany()">Create Account</button>
                         
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
