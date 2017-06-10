@@ -172,7 +172,7 @@ function passCheck() {
     // Store the Confimation Message Object
     var message = document.getElementById('password-match');
     // Store the button that creates user
-    var createButton = document.getElementById('create-button');
+    var createButton = document.getElementById('button-create-company');
     // Set the colors we will be using
     var goodColor = $.brandSuccess;
     var badColor = $.brandDanger;
@@ -212,4 +212,19 @@ function passMinCheck() {
     }else{
         hintMessage.innerHTML = null;
     }
+}
+
+// Function run when creating a new company profile
+function createCompany() {
+    if(document.getElementById('button-create-company').classList.contains("disabled")) return false;
+    progressBar('progress-bar',10); 
+}
+
+// Increments a progress-bar div by a given amount
+function progressBar(progressDiv, incrementVal) {
+    var progress = document.getElementById(progressDiv);
+    var temp = Number(progress.getAttribute('aria-valuenow'))+incrementVal;
+    var wTemp = 'width: '+String(temp)+'%';
+    progress.setAttribute('aria-valuenow', temp);
+    progress.setAttribute('style',wTemp);
 }
