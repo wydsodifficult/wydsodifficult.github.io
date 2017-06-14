@@ -76,7 +76,6 @@ $(document).ready(function($){
   });
 
   function resizeBroadcast() {
-
     var timesRun = 0;
     var interval = setInterval(function(){
       timesRun += 1;
@@ -86,27 +85,23 @@ $(document).ready(function($){
       window.dispatchEvent(new Event('resize'));
     }, 62.5);
   }
-
+    
   /* ---------- Main Menu Open/Close, Min/Full ---------- */
   $('.navbar-toggler').click(function(){
-
     if ($(this).hasClass('sidebar-toggler')) {
       $('body').toggleClass('sidebar-hidden');
       resizeBroadcast();
     }
-
     if ($(this).hasClass('aside-menu-toggler')) {
       $('body').toggleClass('aside-menu-hidden');
       resizeBroadcast();
     }
-
     if ($(this).hasClass('mobile-sidebar-toggler')) {
       $('body').toggleClass('sidebar-mobile-show');
       resizeBroadcast();
     }
-
   });
-
+    
   $('.sidebar-close').click(function(){
     $('body').toggleClass('sidebar-opened').parent().toggleClass('sidebar-opened');
   });
@@ -146,25 +141,37 @@ function capitalizeFirstLetter(string) {
 }
 
 function init(url) {
-
   /* ---------- Tooltip ---------- */
   $('[rel="tooltip"],[data-rel="tooltip"]').tooltip({"placement":"bottom",delay: { show: 400, hide: 200 }});
 
   /* ---------- Popover ---------- */
   $('[rel="popover"],[data-rel="popover"],[data-toggle="popover"]').popover();
-
 }
 
+/* ----- Useful Scripts: Can Be Used Anywhere ----- */
+
 // Check for HTML5 Local Storage
+// All pages
 function localStorageCheck() {
-try {
-    return 'localStorage' in window && window['localStorage'] !== null;
-  } catch (e) {
-    return false;
-  }
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
+
+// Increments a progress-bar div by a given amount
+// All pages
+function progressBar(progressDiv, incrementVal) {
+    var progress = document.getElementById(progressDiv);
+    var temp = Number(progress.getAttribute('aria-valuenow'))+incrementVal;
+    var wTemp = 'width: '+String(temp)+'%';
+    progress.setAttribute('aria-valuenow', temp);
+    progress.setAttribute('style',wTemp);
 }
 
 // Check to make sure that passwords match
+// Register
 function passCheck() {
     // Store the password field objects into variables
     var pass1 = document.getElementById('password-input');
@@ -198,33 +205,59 @@ function passCheck() {
 }
 
 // Passwords must be of minimal length 8 for firebase
+// Register
 function passMinCheck() {
-    // Store the password field objects into variables
-    var pass = document.getElementById('password-input');
     // Store the Password Hint Message Object
     var hintMessage = document.getElementById('password-hint');
+    var input = document.getElementById('password-input');
+    var confirm = document.getElementById('password-confirm');
     // Set the color to be used
     var badColor = $.brandDanger;
     // Compare the length of the Password
-    if(pass.value.length < 8) {
+    if(input.value.length < 8) {
         hintMessage.style.color = badColor;
         hintMessage.innerHTML = "Password Must be at least 8 characters long";
+        if(!confirm.hasAttribute('disabled')) {
+            confirm.setAttribute('disabled',true);
+        }
     }else{
         hintMessage.innerHTML = null;
+        document.getElementById('password-confirm').removeAttribute("disabled");
     }
 }
 
-// Function run when creating a new company profile
-function createCompany() {
-    if(document.getElementById('button-create-company').classList.contains("disabled")) return false;
-    progressBar('progress-bar',10); 
-}
+/* ----- Page Specific Scripts ----- */
 
-// Increments a progress-bar div by a given amount
-function progressBar(progressDiv, incrementVal) {
-    var progress = document.getElementById(progressDiv);
-    var temp = Number(progress.getAttribute('aria-valuenow'))+incrementVal;
-    var wTemp = 'width: '+String(temp)+'%';
-    progress.setAttribute('aria-valuenow', temp);
-    progress.setAttribute('style',wTemp);
+// Function run when creating a new company account
+// Register
+$('#button-create-company').on('click',function(){
+    if(!document.getElementById('button-create-company').classList.contains('disabled')) {
+        var input = document.getElementById('password-input');
+        var confirm = document.getElementById('password-confirm');
+        if(input.value == confirm.value) {
+                var email = document.getElementById('email-input');
+                var loading = document.getElementById('loading');
+                email.setAttribute('disabled',true);
+                input.setAttribute('disabled',true);
+                confirm.setAttribute('disabled',true);
+                loading.setAttribute('style','display:true');
+                // Actually sign up user
+                firebase.auth().createUserWithEmailAndPassword(email.value, input.value).catch(function (err) {
+                    // Handle errors
+                    toastr["warning"]("Something Happened. Please try again.\n"+err);
+                    email.removeAttribute('disabled');
+                    input.removeAttribute('disabled');
+                    confirm.removeAttribute('disabled');
+                    loading.setAttribute('style','display:none');
+                    });
+        } else{
+            toastr["warning"]("Passwords Do Not Match!!\nPlease Try Again.");
+        }
+    }
+});
+
+// Function run when creating a new company profile
+// Create Company Profile
+$('#button-create-company-profile').on('click', function(){
+    
 }
