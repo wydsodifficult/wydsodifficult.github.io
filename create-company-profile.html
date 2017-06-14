@@ -16,7 +16,7 @@
     <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
     <link rel="shortcut icon" href="img/WYD_logo.png">
 
-    <title>WYD - Register</title>
+    <title>WYD - Company Profile</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -34,28 +34,39 @@
             <div class="col-md-6">
                 <div class="card mx-2">
                     <div class="card-block p-2">
-                        <h1>Register</h1>
-                        <p class="text-muted">Create your company account</p>
+                        <h1>Company Profile</h1>
+                        <p class="text-muted">Setup The Profile That All Your Employees Will See!</p>
                         <div class="input-group mb-1">
                             <span class="input-group-addon"><i class="icon-user"></i></span>
-                            <input id="email-input" type="text" class="form-control" placeholder="Email">
+                            <input id="name-input" type="text" class="form-control" placeholder="Company Name">
                         </div>
-
-                        <div id="password-hint"></div>
+                        
                         <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="icon-lock"></i>
-                            </span>
-                            <input id="password-input" type="password" class="form-control" placeholder="Password" onkeyup="passMinCheck(); return false;">
+                            <span class="input-group-addon"><i class="icon-map"></i></span>
+                            <input id="address-input" type="text" class="form-control" placeholder="Address">
+                        </div>
+                        
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-phone"></i></span>
+                            <input id="contact-input" type="telephone" class="form-control" placeholder="Contact #">
+                        </div>
+                        
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-printer"></i></span>
+                            <input id="fax-input" type="telephone" class="form-control" placeholder="Fax #">
+                        </div>
+                        
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-globe"></i></span>
+                            <input id="website-input" type="text" class="form-control" placeholder="Website Address">
+                        </div>
+                        
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-cup"></i></span>
+                            <input id="lunch-input" type="number" class="form-control" placeholder="Standard Lunch Length (minutes)">
                         </div>
 
-                        <div id="password-match"></div>
-                        <div class="input-group mb-2">
-                            <span class="input-group-addon"><i class="icon-lock"></i>
-                            </span>
-                            <input id="password-confirm" type="password" class="form-control" disabled placeholder="Repeat password" onkeyup="passCheck(); return false;">
-                        </div>
-
-                        <button type="button" class="btn btn-block btn-success disabled" id="button-create-company">Create Account</button>
+                        <button type="button" class="btn btn-block btn-success disabled" id="button-create-company-profile">Create Profile</button>
                         
                         <div class="progress" style="display:none">
                             <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
@@ -86,25 +97,14 @@
     
     
         <!-- Sends User to Company Profile Setup when Account Succesfully is Created -->
-    <script>
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            // User is signed in.
-            toastr["info"]("User Signed In");
-            window.location='/create-company-profile.html';
-          } else {
-            // No user is signed in.
-          }
-        });
-        $(document).ready(function() {
-            firebase.auth().signOut().then(function() {
-              // Sign-out successful.
-                toastr["info"]("User Signed Out");
-            }).catch(function(error) {
-              // An error happened.
-                toastr["warning"]("Something happened:\n"+error);
-            }); 
-        });
+    <script> firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+          toastr["info"]("User Signed In");
+      } else {
+        // No user is signed in.
+      }
+    });
     </script>
 
 
