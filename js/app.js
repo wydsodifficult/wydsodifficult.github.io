@@ -228,7 +228,7 @@ function passMinCheck() {
 
 /* ----- Page Specific Scripts ----- */
 
-// Function run when creating a new company account
+// Function run when creating a new company account: createCompany()
 // Register
 $('#button-create-company').on('click',function(){
     if(!document.getElementById('button-create-company').classList.contains('disabled')) {
@@ -256,8 +256,54 @@ $('#button-create-company').on('click',function(){
     }
 });
 
+// Checks to Make sure that Company Profile Information is filled in before enabling save button
+// Create Company Profile
+function companyProfileCheck() {
+    var allFilled = 0;
+    if(document.getElementById('name-input').value == "") {
+        allFilled++;
+    }
+    if(document.getElementById('address-input').value == "") {
+        allFilled++;
+    }
+    if(document.getElementById('contact-input').value == "") {
+        allFilled++;
+    }
+    if(document.getElementById('website-input').value == "") {
+        allFilled++;
+    }
+    if(document.getElementById('lunch-input').value == "") {
+        allFilled++;
+    }
+    if(allFilled == 0) {
+        document.getElementById('button-create-company-profile').classList.remove("disabled");
+    }
+    else {
+        document.getElementById('button-create-company-profile').classList.add("disabled");
+    }
+}
+
 // Function run when creating a new company profile
 // Create Company Profile
 $('#button-create-company-profile').on('click', function(){
-    
-}
+    var newCompany = firebase.database().ref('company').push();
+    var newCompanyKey = newCompany.key;
+    firebase.database().ref('company/' + newCompanyKey + '/info').set({
+        name: document.getElementById('name-input').value,
+        numContact: document.getElementById('contact-input').value,
+        address: document.getElementById('address-input').value,
+        numFax: document.getElementById('fax-input').value,
+        website: document.getElementById('website-input').value,
+        lunch: document.getElementById('lunch-input').value
+    })
+    .then(function() {
+        // If set correctly
+        localStorage["companyName"] = document.getElementById('name-input').value;
+        localStorage["companyKey"] = newCompanyKey;
+        toastr["info"](localStorage["companyName"] + " Information Successfully!");
+        //window.location='/operations-dashboard.html';
+    })
+    .catch(function(error) {
+        toastr["Warning"]("Something happened when saving company details: " + error.message);
+    });
+});
