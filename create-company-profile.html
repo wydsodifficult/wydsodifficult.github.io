@@ -77,12 +77,27 @@
                         All Fields Must Be Filled In To Continue!</p>
                         <div class="input-group mb-1">
                             <span class="input-group-addon"><i class="icon-user"></i></span>
-                            <input id="name-input" type="text" class="form-control" placeholder="Company Name">
+                            <input id="first-input" type="text" class="form-control" placeholder="First Name">
                         </div>
                         
                         <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="icon-map"></i></span>
-                            <input id="address-input" type="text" class="form-control" placeholder="Address">
+                            <span class="input-group-addon"><i class="icon-user"></i></span>
+                            <input id="last-input" type="text" class="form-control" placeholder="Last Name">
+                        </div>
+                        
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-user"></i></span>
+                            <input id="full-input" type="text" class="form-control" placeholder="Full Name">
+                        </div>
+                        
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-user"></i></span>
+                            <input id="initials-input" type="text" class="form-control" placeholder="Initials">
+                        </div>
+                        
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-screen-smartphone"></i></span>
+                            <input id="cell-input" type="telephone" class="form-control" placeholder="Cellular #">
                         </div>
                         
                         <div class="input-group mb-1">
@@ -91,18 +106,23 @@
                         </div>
                         
                         <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="icon-printer"></i></span>
-                            <input id="fax-input" type="telephone" class="form-control" placeholder="Fax #">
+                            <span class="input-group-addon"><i class="icon-graduation"></i></span>
+                            <input id="class-input" type="input" class="form-control" placeholder="Classification">
                         </div>
                         
                         <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="icon-globe"></i></span>
-                            <input id="website-input" type="url" class="form-control" placeholder="Website Address">
+                            <span class="input-group-addon"><i class="icon-badge"></i></span>
+                            <input id="title-input" type="text" class="form-control" placeholder="Job Title">
                         </div>
                         
                         <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="icon-cup"></i></span>
-                            <input id="lunch-input" type="number" class="form-control" placeholder="Standard Lunch Length (minutes)">
+                            <span class="input-group-addon"><i class="icon-briefcase"></i></span>
+                            <input id="employee-input" type="text" class="form-control" placeholder="Employee ID #">
+                        </div>
+                        
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-layers"></i></span>
+                            <textarea id="additional-input" type="textarea" class="form-control" placeholder=" Additional Information"></textarea>
                         </div>
 
                         <button type="button" class="btn btn-block btn-success disabled" id="button-create-company-profile">Save Company Info & Profile</button>
@@ -142,6 +162,8 @@
           toastr["info"]("User Signed In");
       } else {
         // No user is signed in.
+          toastr["warning"]("User Not Signed In");
+          window.location='/register.html';
       }
     });
         
