@@ -20,7 +20,7 @@
 	$.grayLighter =   '#d1d4d7';
 	$.grayLightest =  '#f8f9fa';
 
-'use strict';
+'use strict';``
 
 /****
 * MAIN NAVIGATION
@@ -156,6 +156,7 @@ function localStorageCheck() {
     try {
         return 'localStorage' in window && window['localStorage'] !== null;
     } catch (e) {
+        alert("localStorage is not supported. For this site to function properly, please use a compatible browser.")
         return false;
     }
 }
@@ -241,6 +242,7 @@ $('#button-create-company').on('click',function(){
                 input.setAttribute('disabled',true);
                 confirm.setAttribute('disabled',true);
                 loading.setAttribute('style','display:true');
+                localStorage["userEmail"] = email.value;
                 // Actually sign up user
                 firebase.auth().createUserWithEmailAndPassword(email.value, input.value).catch(function (err) {
                     // Handle errors
@@ -249,7 +251,7 @@ $('#button-create-company').on('click',function(){
                     input.removeAttribute('disabled');
                     confirm.removeAttribute('disabled');
                     loading.setAttribute('style','display:none');
-                    });
+                });
         } else{
             toastr["warning"]("Passwords Do Not Match!!\nPlease Try Again.");
         }
@@ -263,16 +265,40 @@ function companyProfileCheck() {
     if(document.getElementById('name-input').value == "") {
         allFilled++;
     }
-    if(document.getElementById('address-input').value == "") {
+    else if(document.getElementById('address-input').value == "") {
         allFilled++;
     }
-    if(document.getElementById('contact-input').value == "") {
+    else if(document.getElementById('contact-input').value == "") {
         allFilled++;
     }
-    if(document.getElementById('website-input').value == "") {
+    else if(document.getElementById('website-input').value == "") {
         allFilled++;
     }
-    if(document.getElementById('lunch-input').value == "") {
+    else if(document.getElementById('lunch-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('first-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('last-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('full-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('initials-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('cell-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('contact-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('class-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('title-input').value == "") {
         allFilled++;
     }
     if(allFilled == 0) {
@@ -284,26 +310,59 @@ function companyProfileCheck() {
 }
 
 // Function run when creating a new company profile
+// createCompanyProfile()
 // Create Company Profile
 $('#button-create-company-profile').on('click', function(){
     var newCompany = firebase.database().ref('company').push();
     var newCompanyKey = newCompany.key;
-    firebase.database().ref('company/' + newCompanyKey + '/info').set({
-        name: document.getElementById('name-input').value,
-        numContact: document.getElementById('contact-input').value,
-        address: document.getElementById('address-input').value,
-        numFax: document.getElementById('fax-input').value,
-        website: document.getElementById('website-input').value,
-        lunch: document.getElementById('lunch-input').value
-    })
+    var uID = localStorage["userID"];
+    var updateEverything = {};
+    var loading = document.getElementById('loading').setAttribute('style','display:true');
+    // Add Company Information
+    updateEverything['company/' + newCompanyKey + '/mainUser'] = uID;
+    updateEverything['company/' + newCompanyKey + '/info/name'] = document.getElementById('name-input').value;
+    updateEverything['company/' + newCompanyKey + '/info/numContact'] = document.getElementById('contact-input').value;
+    updateEverything['company/' + newCompanyKey + '/info/address'] = document.getElementById('address-input').value;
+    updateEverything['company/' + newCompanyKey + '/info/numFax'] = document.getElementById('fax-input').value;
+    updateEverything['company/' + newCompanyKey + '/info/website'] = document.getElementById('website-input').value;
+    updateEverything['company/' + newCompanyKey + '/info/lunch'] = document.getElementById('lunch-input').value;
+    // Add User Information in Company
+    updateEverything['company/' + newCompanyKey + '/users/' + uID + '/nameFirst'] = document.getElementById('first-input').value;
+    updateEverything['company/' + newCompanyKey + '/users/' + uID + '/nameLast'] = document.getElementById('last-input').value;
+    updateEverything['company/' + newCompanyKey + '/users/' + uID + '/nameFull'] = document.getElementById('full-input').value;
+    updateEverything['company/' + newCompanyKey + '/users/' + uID + '/nameInitials'] = document.getElementById('initials-input').value;
+    updateEverything['company/' + newCompanyKey + '/users/' + uID + '/class'] = document.getElementById('class-input').value;
+    // Add User Information in Users Section
+    updateEverything['user/' + uID + '/access'] = 1;
+    updateEverything['user/' + uID + '/nameFirst'] = document.getElementById('first-input').value;
+    updateEverything['user/' + uID + '/nameLast'] = document.getElementById('last-input').value;
+    updateEverything['user/' + uID + '/nameFull'] = document.getElementById('full-input').value;
+    updateEverything['user/' + uID + '/nameInitials'] = document.getElementById('initials-input').value;
+    toastr["info", "userEmail: " + localStorage["userEmail"]];
+    updateEverything['user/' + uID + '/email'] = localStorage["userEmail"];
+    updateEverything['user/' + uID + '/numCell'] = document.getElementById('cell-input').value;
+    updateEverything['user/' + uID + '/numContact'] = document.getElementById('contact-input').value;
+    updateEverything['user/' + uID + '/class'] = document.getElementById('class-input').value;
+    updateEverything['user/' + uID + '/jobTitle'] = document.getElementById('title-input').value;
+    updateEverything['user/' + uID + '/nameInitials'] = document.getElementById('initials-input').value;
+    updateEverything['user/' + uID + '/companyName'] = document.getElementById('name-input').value;
+    updateEverything['user/' + uID + '/companyID'] = newCompanyKey;
+    updateEverything['user/' + uID + '/numID'] = document.getElementById('employee-input').value;
+    updateEverything['user/' + uID + '/additional'] = document.getElementById('additional-input').value;
+    updateEverything['user/' + uID + '/userID'] = uID;
+    // Send All Data to Firebase
+    firebase.database().ref().update(updateEverything)
     .then(function() {
         // If set correctly
         localStorage["companyName"] = document.getElementById('name-input').value;
         localStorage["companyKey"] = newCompanyKey;
-        toastr["info"](localStorage["companyName"] + " Information Successfully!");
+        toastr["info"](localStorage["companyName"] + " Information Successfully Saved!");
+        document.getElementById('loading').setAttribute('style','display:none');
         //window.location='/operations-dashboard.html';
     })
     .catch(function(error) {
-        toastr["Warning"]("Something happened when saving company details: " + error.message);
+        // If wrong
+        toastr["warning"]("Something happened when saving company details: " + error.message);
+        console.log(error);
     });
 });
