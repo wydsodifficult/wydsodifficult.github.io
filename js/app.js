@@ -63,7 +63,6 @@ $(document).ready(function($){
 
   // Dropdown Menu
   $.navigation.on('click', 'a', function(e){
-
     if ($.ajaxLoad) {
       e.preventDefault();
     }
@@ -170,6 +169,16 @@ function progressBar(progressDiv, incrementVal) {
     progress.setAttribute('aria-valuenow', temp);
     progress.setAttribute('style',wTemp);
 }
+
+// Login a User
+// Login
+// userLogin
+$('#button-login').on('click',function(){
+    firebase.auth().signInWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).catch(function(error) {
+        toastr["warning", "Error:" + error.message];
+    });
+});
+
 
 // Check to make sure that passwords match
 // Register
@@ -319,7 +328,8 @@ $('#button-create-company-profile').on('click', function(){
     var updateEverything = {};
     var loading = document.getElementById('loading').setAttribute('style','display:true');
     // Add Company Information
-    updateEverything['company/' + newCompanyKey + '/mainUser'] = uID;
+    // Change the below if seat numbers are changed when making payments
+    updateEverything['company/' + newCompanyKey + '/payment/seats'] = 25;
     updateEverything['company/' + newCompanyKey + '/info/name'] = document.getElementById('name-input').value;
     updateEverything['company/' + newCompanyKey + '/info/numContact'] = document.getElementById('contact-input').value;
     updateEverything['company/' + newCompanyKey + '/info/address'] = document.getElementById('address-input').value;
@@ -358,7 +368,7 @@ $('#button-create-company-profile').on('click', function(){
         localStorage["companyKey"] = newCompanyKey;
         toastr["info"](localStorage["companyName"] + " Information Successfully Saved!");
         document.getElementById('loading').setAttribute('style','display:none');
-        //window.location='/operations-dashboard.html';
+        window.location='/operations-dashboard.html';
     })
     .catch(function(error) {
         // If wrong
