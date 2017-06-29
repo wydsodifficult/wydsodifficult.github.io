@@ -348,7 +348,7 @@ $('#button-create-company-profile').on('click', function(){
     updateEverything['user/' + uID + '/nameLast'] = document.getElementById('last-input').value;
     updateEverything['user/' + uID + '/nameFull'] = document.getElementById('full-input').value;
     updateEverything['user/' + uID + '/nameInitials'] = document.getElementById('initials-input').value;
-    toastr["info", "userEmail: " + localStorage["userEmail"]];
+    toastr["info", "userEmail: " + localStorage["userEmail"]];  
     updateEverything['user/' + uID + '/email'] = localStorage["userEmail"];
     updateEverything['user/' + uID + '/numCell'] = document.getElementById('cell-input').value;
     updateEverything['user/' + uID + '/numContact'] = document.getElementById('contact-input').value;
@@ -375,4 +375,13 @@ $('#button-create-company-profile').on('click', function(){
         toastr["warning"]("Something happened when saving company details: " + error.message);
         console.log(error);
     });
+});
+
+$('#logout').on('click', function() {
+    firebase.auth().signOut().then(function() {
+    // Sign-out successful.
+        toastr["info", "You Have Successfully Signed Out!"];
+    }, function(error) {
+      // An error happened.
+    }); 
 });
