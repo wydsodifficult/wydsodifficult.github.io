@@ -63,7 +63,6 @@ $(document).ready(function($){
 
   // Dropdown Menu
   $.navigation.on('click', 'a', function(e){
-
     if ($.ajaxLoad) {
       e.preventDefault();
     }
@@ -170,6 +169,16 @@ function progressBar(progressDiv, incrementVal) {
     progress.setAttribute('aria-valuenow', temp);
     progress.setAttribute('style',wTemp);
 }
+
+// Login a User
+// Login
+// userLogin
+$('#button-login').on('click',function(){
+    firebase.auth().signInWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).catch(function(error) {
+        toastr["warning", "Error:" + error.message];
+    });
+});
+
 
 // Check to make sure that passwords match
 // Register
@@ -319,7 +328,8 @@ $('#button-create-company-profile').on('click', function(){
     var updateEverything = {};
     var loading = document.getElementById('loading').setAttribute('style','display:true');
     // Add Company Information
-    updateEverything['company/' + newCompanyKey + '/mainUser'] = uID;
+    // Change the below if seat numbers are changed when making payments
+    updateEverything['company/' + newCompanyKey + '/payment/seats'] = 25;
     updateEverything['company/' + newCompanyKey + '/info/name'] = document.getElementById('name-input').value;
     updateEverything['company/' + newCompanyKey + '/info/numContact'] = document.getElementById('contact-input').value;
     updateEverything['company/' + newCompanyKey + '/info/address'] = document.getElementById('address-input').value;
@@ -338,7 +348,7 @@ $('#button-create-company-profile').on('click', function(){
     updateEverything['user/' + uID + '/nameLast'] = document.getElementById('last-input').value;
     updateEverything['user/' + uID + '/nameFull'] = document.getElementById('full-input').value;
     updateEverything['user/' + uID + '/nameInitials'] = document.getElementById('initials-input').value;
-    toastr["info", "userEmail: " + localStorage["userEmail"]];
+    toastr["info", "userEmail: " + localStorage["userEmail"]];  
     updateEverything['user/' + uID + '/email'] = localStorage["userEmail"];
     updateEverything['user/' + uID + '/numCell'] = document.getElementById('cell-input').value;
     updateEverything['user/' + uID + '/numContact'] = document.getElementById('contact-input').value;
@@ -358,11 +368,20 @@ $('#button-create-company-profile').on('click', function(){
         localStorage["companyKey"] = newCompanyKey;
         toastr["info"](localStorage["companyName"] + " Information Successfully Saved!");
         document.getElementById('loading').setAttribute('style','display:none');
-        //window.location='/operations-dashboard.html';
+        window.location='/operations-dashboard.html';
     })
     .catch(function(error) {
         // If wrong
         toastr["warning"]("Something happened when saving company details: " + error.message);
         console.log(error);
     });
+});
+
+$('#logout').on('click', function() {
+    firebase.auth().signOut().then(function() {
+    // Sign-out successful.
+        toastr["info", "You Have Successfully Signed Out!"];
+    }, function(error) {
+      // An error happened.
+    }); 
 });

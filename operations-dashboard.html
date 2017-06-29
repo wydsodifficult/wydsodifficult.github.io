@@ -17,7 +17,7 @@
     <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
     <link rel="shortcut icon" href="img/WYD_logo.png">
 
-    <title>WYD - Blank Template</title>
+    <title>WYD - Operations Dashboard</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -28,6 +28,7 @@
     <link href="css/glyphicons-filetypes.css" rel="stylesheet">
     <link href="css/glyphicons-social.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+
 
 </head>
 
@@ -105,7 +106,7 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a id="logout" class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
+                        <a class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
@@ -160,7 +161,7 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
+                        <a id="logout" class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
@@ -209,9 +210,6 @@
         $(document).ready(function () {
             $("#footer").load("footer.html");
             $("#navbar").load("operations-navbar.html");
-            if(firebase.auth().currentUser == null) {
-                window.location="login.html";
-            }
             //$("#navbar").load("employees-navbar.html");
             //$("#navbar").load("god-navbar.html");
         });
@@ -222,10 +220,9 @@
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             // User is signed in.
-            toastr["info"]("user logged in");
           } else {
             // No user is signed in.
-//                window.location="login.html";
+            window.location="login.html";
             toastr["warning"]("User Not Logged In!");
           }
         });
