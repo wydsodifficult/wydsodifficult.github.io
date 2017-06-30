@@ -159,7 +159,6 @@
     <script> firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
-          toastr["info"]("User Signed In");
       } else {
         // No user is signed in.
           toastr["warning"]("User Not Signed In");

@@ -251,7 +251,7 @@ $('#button-create-company').on('click',function(){
                 input.setAttribute('disabled',true);
                 confirm.setAttribute('disabled',true);
                 loading.setAttribute('style','display:true');
-                localStorage["userEmail"] = email.value;
+                localStorage["WYDuserEmail"] = email.value;
                 // Actually sign up user
                 firebase.auth().createUserWithEmailAndPassword(email.value, input.value).catch(function (err) {
                     // Handle errors
@@ -324,12 +324,13 @@ function companyProfileCheck() {
 $('#button-create-company-profile').on('click', function(){
     var newCompany = firebase.database().ref('company').push();
     var newCompanyKey = newCompany.key;
-    var uID = localStorage["userID"];
+    var uID = localStorage["WYDuserID"];
     var updateEverything = {};
     var loading = document.getElementById('loading').setAttribute('style','display:true');
     // Add Company Information
     // Change the below if seat numbers are changed when making payments
     updateEverything['company/' + newCompanyKey + '/payment/seats'] = 25;
+    updateEverything['company/' + newCompanyKey + '/payment/used'] = 0;
     updateEverything['company/' + newCompanyKey + '/info/name'] = document.getElementById('name-input').value;
     updateEverything['company/' + newCompanyKey + '/info/numContact'] = document.getElementById('contact-input').value;
     updateEverything['company/' + newCompanyKey + '/info/address'] = document.getElementById('address-input').value;
@@ -348,8 +349,8 @@ $('#button-create-company-profile').on('click', function(){
     updateEverything['user/' + uID + '/nameLast'] = document.getElementById('last-input').value;
     updateEverything['user/' + uID + '/nameFull'] = document.getElementById('full-input').value;
     updateEverything['user/' + uID + '/nameInitials'] = document.getElementById('initials-input').value;
-    toastr["info", "userEmail: " + localStorage["userEmail"]];  
-    updateEverything['user/' + uID + '/email'] = localStorage["userEmail"];
+    toastr["info", "userEmail: " + localStorage["WYDuserEmail"]];  
+    updateEverything['user/' + uID + '/email'] = localStorage["WYDuserEmail"];
     updateEverything['user/' + uID + '/numCell'] = document.getElementById('cell-input').value;
     updateEverything['user/' + uID + '/numContact'] = document.getElementById('contact-input').value;
     updateEverything['user/' + uID + '/class'] = document.getElementById('class-input').value;
@@ -364,9 +365,9 @@ $('#button-create-company-profile').on('click', function(){
     firebase.database().ref().update(updateEverything)
     .then(function() {
         // If set correctly
-        localStorage["companyName"] = document.getElementById('name-input').value;
-        localStorage["companyKey"] = newCompanyKey;
-        toastr["info"](localStorage["companyName"] + " Information Successfully Saved!");
+        localStorage["WYDcompanyName"] = document.getElementById('name-input').value;
+        localStorage["WYDcompanyKey"] = newCompanyKey;
+        toastr["info"](localStorage["WYDcompanyName"] + " Information Successfully Saved!");
         document.getElementById('loading').setAttribute('style','display:none');
         window.location='/operations-dashboard.html';
     })
@@ -377,9 +378,44 @@ $('#button-create-company-profile').on('click', function(){
     });
 });
 
+// Function to save all user data into localStorage
+function getUserData() {
+    localStorage["WYDuserID"] = firebase.auth().currentUser.uid;
+    firebase.database().ref('user/' + localStorage["WYDuserID"]).once('value').then(function(snapshot) {
+        localStorage["WYDuserAccess"] = snapshot.val().access;
+        localStorage["WYDuserNameFirst"] = snapshot.val().nameFirst;
+        localStorage["WYDuserNameLast"] = snapshot.val().nameLast;
+        localStorage["WYDuserNameFull"] = snapshot.val().nameFull;
+        localStorage["WYDuserInitials"] = snapshot.val().nameInitials;
+        localStorage["WYDuserEmail"] = snapshot.val().email;
+        localStorage["WYDuserNumCell"] = snapshot.val().numCell;
+        localStorage["WYDuserContact"] = snapshot.val().numContact;
+        localStorage["WYDuserClass"] = snapshot.val().class;
+        localStorage["WYDuserJobTitle"] = snapshot.val().jobTitle;
+        localStorage["WYDuserCompanyName"] = snapshot.val().companyName;
+        localStorage["WYDuserCompanyID"] = snapshot.val().companyID;
+        localStorage["WYDuserNumID"] = snapshot.val().numID;
+    });
+}
+
+// When anything with the id "Logout" is clicked LOGOUT
+// userLogout()
 $('#logout').on('click', function() {
     firebase.auth().signOut().then(function() {
     // Sign-out successful.
+        localStorage["WYDuserAccess"].removeItem();
+        localStorage["WYDuserNameFirst"].removeItem();
+        localStorage["WYDuserNameLast"].removeItem();
+        localStorage["WYDuserNameFull"].removeItem();
+        localStorage["WYDuserInitials"].removeItem();
+        localStorage["WYDuserEmail"].removeItem();
+        localStorage["WYDuserNumCell"].removeItem();
+        localStorage["WYDuserContact"].removeItem();
+        localStorage["WYDuserClass"].removeItem();
+        localStorage["WYDuserJobTitle"].removeItem();
+        localStorage["WYDuserCompanyName"].removeItem();
+        localStorage["WYDuserCompanyID"].removeItem();
+        localStorage["WYDuserNumID"].removeItem();
         toastr["info", "You Have Successfully Signed Out!"];
     }, function(error) {
       // An error happened.
