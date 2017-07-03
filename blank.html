@@ -28,6 +28,7 @@
     <link href="css/glyphicons-filetypes.css" rel="stylesheet">
     <link href="css/glyphicons-social.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+    <script src="js/fbinit.js"></script>
 
 </head>
 
@@ -105,7 +106,7 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a id="logout" class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
@@ -160,7 +161,7 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
@@ -184,9 +185,10 @@
     
     <div id="footer"></div>
 
-   
     <!-- Load jquery for navs and footer -->
     <script src="js/libs/jquery.min.js"></script>
+    <!-- Main scripts -->
+    <script src="js/app.js"></script>
     
     <!-- Bootstrap and necessary plugins -->
     <script src="js/libs/tether.min.js"></script>
@@ -198,9 +200,6 @@
     <script src="js/libs/Chart.min.js"></script>
     <script src="js/libs/toastr.min.js"></script>
 
-
-    <!-- Main scripts -->
-    <script src="js/app.js"></script>
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
     
@@ -209,11 +208,12 @@
         $(document).ready(function () {
             $("#footer").load("footer.html");
             $("#navbar").load("operations-navbar.html");
-            if(firebase.auth().currentUser == null) {
-                window.location="login.html";
-            }
             //$("#navbar").load("employees-navbar.html");
             //$("#navbar").load("god-navbar.html");
+            if(localStorage["WYDuserNameFull"]!=null){
+                document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
+                document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
+            }
         });
     </script>
     
@@ -226,7 +226,7 @@
             if(localStorage["WYDuserID"]!=user.uid) getUserData();
           } else {
             // No user is signed in.
-//                window.location="login.html";
+            window.location="login.html";
             toastr["warning"]("User Not Logged In!");
           }
         });
