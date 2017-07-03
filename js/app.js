@@ -26,23 +26,7 @@
 * MAIN NAVIGATION
 */
 
-
-// Initialization for Firebase app
-var config = {
-    apiKey: "AIzaSyBJZ82GGbMNtg3aACcT0PVdLlY4yz9-jjo",
-    authDomain: "wydo-19f1a.firebaseapp.com",
-    databaseURL: "https://wydo-19f1a.firebaseio.com",
-    projectId: "wydo-19f1a",
-    storageBucket: "wydo-19f1a.appspot.com",
-    messagingSenderId: "603556880559"
-};
-firebase.initializeApp(config);
-
 $(document).ready(function($){
-
-  // Hide run the hideNav function on either the operations-navbar.html or employees-navbar.html
-  hideNav();
-    
   // Add class .active to current link
   $.navigation.find('a').each(function(){
 
@@ -71,7 +55,6 @@ $(document).ready(function($){
       $(this).parent().toggleClass('open');
       resizeBroadcast();
     }
-
   });
 
   function resizeBroadcast() {
@@ -381,20 +364,23 @@ $('#button-create-company-profile').on('click', function(){
 // Function to save all user data into localStorage
 function getUserData() {
     localStorage["WYDuserID"] = firebase.auth().currentUser.uid;
+    toastr["info"]("Updating Local Storage for:" + localStorage["WYDuserID"]);
     firebase.database().ref('user/' + localStorage["WYDuserID"]).once('value').then(function(snapshot) {
-        localStorage["WYDuserAccess"] = snapshot.val().access;
-        localStorage["WYDuserNameFirst"] = snapshot.val().nameFirst;
-        localStorage["WYDuserNameLast"] = snapshot.val().nameLast;
-        localStorage["WYDuserNameFull"] = snapshot.val().nameFull;
-        localStorage["WYDuserInitials"] = snapshot.val().nameInitials;
-        localStorage["WYDuserEmail"] = snapshot.val().email;
-        localStorage["WYDuserNumCell"] = snapshot.val().numCell;
-        localStorage["WYDuserContact"] = snapshot.val().numContact;
-        localStorage["WYDuserClass"] = snapshot.val().class;
-        localStorage["WYDuserJobTitle"] = snapshot.val().jobTitle;
-        localStorage["WYDuserCompanyName"] = snapshot.val().companyName;
-        localStorage["WYDuserCompanyID"] = snapshot.val().companyID;
-        localStorage["WYDuserNumID"] = snapshot.val().numID;
+        data = snapshot.val();
+        console.log("WYD Data: " + data);
+        localStorage["WYDuserAccess"] = data.access;
+        localStorage["WYDuserNameFirst"] = data.nameFirst;
+        localStorage["WYDuserNameLast"] = data.nameLast;
+        localStorage["WYDuserNameFull"] = data.nameFull;
+        localStorage["WYDuserInitials"] = data.nameInitials;
+        localStorage["WYDuserEmail"] = data.email;
+        localStorage["WYDuserNumCell"] = data.numCell;
+        localStorage["WYDuserContact"] = data.numContact;
+        localStorage["WYDuserClass"] = data.class;
+        localStorage["WYDuserJobTitle"] = data.jobTitle;
+        localStorage["WYDuserCompanyName"] = data.companyName;
+        localStorage["WYDuserCompanyID"] = data.companyID;
+        localStorage["WYDuserNumID"] = data.numID;
     });
 }
 
@@ -403,21 +389,33 @@ function getUserData() {
 $('#logout').on('click', function() {
     firebase.auth().signOut().then(function() {
     // Sign-out successful.
-        localStorage["WYDuserAccess"].removeItem();
-        localStorage["WYDuserNameFirst"].removeItem();
-        localStorage["WYDuserNameLast"].removeItem();
-        localStorage["WYDuserNameFull"].removeItem();
-        localStorage["WYDuserInitials"].removeItem();
-        localStorage["WYDuserEmail"].removeItem();
-        localStorage["WYDuserNumCell"].removeItem();
-        localStorage["WYDuserContact"].removeItem();
-        localStorage["WYDuserClass"].removeItem();
-        localStorage["WYDuserJobTitle"].removeItem();
-        localStorage["WYDuserCompanyName"].removeItem();
-        localStorage["WYDuserCompanyID"].removeItem();
-        localStorage["WYDuserNumID"].removeItem();
-        toastr["info", "You Have Successfully Signed Out!"];
+        localStorage.removeItem('WYDuserAccess');
+        localStorage.removeItem('WYDuserNameFirst');
+        localStorage.removeItem('WYDuserNameLast');
+        localStorage.removeItem('WYDuserNameFull');
+        localStorage.removeItem('WYDuserInitials');
+        localStorage.removeItem('WYDuserEmail');
+        localStorage.removeItem('WYDuserNumCell');
+        localStorage.removeItem('WYDuserContact');
+        localStorage.removeItem('WYDuserClass');
+        localStorage.removeItem('WYDuserJobTitle');
+        localStorage.removeItem('WYDuserCompanyName');
+        localStorage.removeItem('WYDuserCompanyID');
+        localStorage.removeItem('WYDuserNumID');
+        localStorage.removeItem('WYDuserID');
+        console.log("Logging Out");
+        alert("You Have Successfully Signed Out!");
+        window.location="index.html";
     }, function(error) {
       // An error happened.
+        toastr["warning"]("User has not logged out");
     }); 
 });
+
+function getLocalStorage() {
+  for(var i=0, len=localStorage.length; i<len; i++) {
+    var key = localStorage.key(i);
+    var value = localStorage[key];
+    console.log(key + " => " + value);
+  }
+}
