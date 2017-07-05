@@ -312,8 +312,6 @@ $('#button-create-company-profile').on('click', function(){
     var loading = document.getElementById('loading').setAttribute('style','display:true');
     // Add Company Information
     // Change the below if seat numbers are changed when making payments
-    updateEverything['company/' + newCompanyKey + '/payment/seats'] = 25;
-    updateEverything['company/' + newCompanyKey + '/payment/used'] = 0;
     updateEverything['company/' + newCompanyKey + '/info/name'] = document.getElementById('name-input').value;
     updateEverything['company/' + newCompanyKey + '/info/numContact'] = document.getElementById('contact-input').value;
     updateEverything['company/' + newCompanyKey + '/info/address'] = document.getElementById('address-input').value;
@@ -349,10 +347,74 @@ $('#button-create-company-profile').on('click', function(){
     .then(function() {
         // If set correctly
         localStorage["WYDcompanyName"] = document.getElementById('name-input').value;
-        localStorage["WYDcompanyKey"] = newCompanyKey;
         toastr["info"](localStorage["WYDcompanyName"] + " Information Successfully Saved!");
         document.getElementById('loading').setAttribute('style','display:none');
+        getUserData();
         window.location='/operations-dashboard.html';
+    })
+    .catch(function(error) {
+        // If wrong
+        toastr["warning"]("Something happened when saving company details: " + error.message);
+        document.getElementById('loading').setAttribute('style','display:none');
+        console.log(error);
+    });
+});
+
+// Function run to edit the company profile
+// editCompanyProfile()
+// Edit Company Profile
+$('#button-edit-company-profile').on('click', function(){
+    document.getElementById("name-input").removeAttribute("disabled");
+    document.getElementById("address-input").removeAttribute("disabled");
+    document.getElementById("contact-input").removeAttribute("disabled");
+    document.getElementById("fax-input").removeAttribute("disabled");
+    document.getElementById("website-input").removeAttribute("disabled");
+    document.getElementById("lunch-input").removeAttribute("disabled");
+    document.getElementById("button-edit-company-profile").style = "display:none";
+    document.getElementById("button-save-company-profile").style = "display:true";
+    document.getElementById("button-cancel-company-profile").style = "display:true";
+});
+
+// Function run to cancel the editing of the company profile
+// cancelEditCompanyProfile()
+// Edit Company Profile
+$('#button-cancel-company-profile').on('click', function(){
+    document.getElementById("name-input").setAttribute("disabled", "true");
+    document.getElementById("address-input").setAttribute("disabled", "true");
+    document.getElementById("contact-input").setAttribute("disabled", "true");
+    document.getElementById("fax-input").setAttribute("disabled", "true");
+    document.getElementById("website-input").setAttribute("disabled", "true");
+    document.getElementById("lunch-input").setAttribute("disabled", "true");
+    document.getElementById("button-edit-company-profile").style = "display:true";
+    document.getElementById("button-save-company-profile").style = "display:none";
+    document.getElementById("button-cancel-company-profile").style = "display:none";
+});
+
+// Function run when editing the company profile
+// editCompanyProfile()
+// Edit Company Profile
+$('#button-save-company-profile').on('click', function(){
+    var uID = localStorage["WYDuserID"];
+    var companyKey = localStorage["WYDuserCompanyID"];
+    var updateEverything = {};
+    var loading = document.getElementById('loading').setAttribute('style','display:true');
+    // Add Company Information
+    // Change the below if seat numbers are changed when making payments
+    updateEverything['company/' + companyKey + '/payment/seats'] = 25;
+    updateEverything['company/' + companyKey + '/payment/used'] = 0;
+    updateEverything['company/' + companyKey + '/info/name'] = document.getElementById('name-input').value;
+    updateEverything['company/' + companyKey + '/info/numContact'] = document.getElementById('contact-input').value;
+    updateEverything['company/' + companyKey + '/info/address'] = document.getElementById('address-input').value;
+    updateEverything['company/' + companyKey + '/info/numFax'] = document.getElementById('fax-input').value;
+    updateEverything['company/' + companyKey + '/info/website'] = document.getElementById('website-input').value;
+    updateEverything['company/' + companyKey + '/info/lunch'] = document.getElementById('lunch-input').value;
+    // Send All Data to Firebase
+    firebase.database().ref().update(updateEverything)
+    .then(function() {
+        // If set correctly
+        localStorage["WYDcompanyName"] = document.getElementById('name-input').value;
+        toastr["info"](localStorage["WYDcompanyName"] + " Information Successfully Saved!");
+        document.getElementById('loading').setAttribute('style','display:none');
     })
     .catch(function(error) {
         // If wrong
@@ -361,13 +423,14 @@ $('#button-create-company-profile').on('click', function(){
     });
 });
 
+
+/* USEFUL SCRIPTS USED ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
 function getUserData() {
     localStorage["WYDuserID"] = firebase.auth().currentUser.uid;
     toastr["info"]("Updating Local Storage for:" + localStorage["WYDuserID"]);
     firebase.database().ref('user/' + localStorage["WYDuserID"]).once('value').then(function(snapshot) {
         data = snapshot.val();
-        console.log("WYD Data: " + data);
         localStorage["WYDuserAccess"] = data.access;
         localStorage["WYDuserNameFirst"] = data.nameFirst;
         localStorage["WYDuserNameLast"] = data.nameLast;
@@ -378,9 +441,12 @@ function getUserData() {
         localStorage["WYDuserContact"] = data.numContact;
         localStorage["WYDuserClass"] = data.class;
         localStorage["WYDuserJobTitle"] = data.jobTitle;
-        localStorage["WYDuserCompanyName"] = data.companyName;
         localStorage["WYDuserCompanyID"] = data.companyID;
         localStorage["WYDuserNumID"] = data.numID;
+        firebase.database().ref('company/' + data.companyID + "/info").once('value').then(function(snapshot) {
+            localStorage["WYDuserCompanyName"] = snapshot.val().name;
+            location.reload();
+        });
     });
 }
 

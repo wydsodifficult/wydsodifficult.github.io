@@ -16,7 +16,7 @@
     <meta name="keyword" content="Real Bootstrap 4 Admin Template">
     <!-- <link rel="shortcut icon" href="assets/ico/favicon.png"> -->
 
-    <title>WYD - Login</title>
+    <title>WYD-Login</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -84,6 +84,7 @@
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             // User is signed in.
+            getUserData();
             window.location="operations-dashboard.html";
           } else {
             // No user is signed in.
