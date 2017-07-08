@@ -2,7 +2,6 @@
  * WYD - blank.html template
  * @version v0.17.05.31
  * Copyright (c) 2017 WYD
- * NOTE: Login redirect is commented out
  -->
  <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +16,7 @@
     <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
     <link rel="shortcut icon" href="img/WYD_logo.png">
 
-    <title>WYD-Operations Dashboard</title>
+    <title>WYD-Operations Profile</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -30,10 +29,9 @@
     
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
-    <!-- main scripts needed -->
+    
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
     <script src="js/fbinit.js"></script>
-
 
 </head>
 
@@ -111,7 +109,7 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a id="logout" class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
@@ -166,7 +164,7 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a id="logout" class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
@@ -179,7 +177,59 @@
             <div class="container-fluid">
 
                 <div class="animated fadeIn">
+                    
+                    <h1>Company Information</h1>
+                    <br>
+                    <label>Company Name</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-addon"><i class="icon-user"></i></span>
+                        <input disabled id="name-input" type="text" class="form-control" placeholder="Company Name">
+                    </div>
 
+                    <label>Address</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-addon"><i class="icon-map"></i></span>
+                        <input disabled id="address-input" type="text" class="form-control" placeholder="Address">
+                    </div>
+
+                    <label>Contact #</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-addon"><i class="icon-phone"></i></span>
+                        <input disabled id="contact-input" type="telephone" class="form-control" placeholder="Contact #">
+                    </div>
+
+                    <label>Fax #</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-addon"><i class="icon-printer"></i></span>
+                        <input disabled id="fax-input" type="telephone" class="form-control" placeholder="Fax #">
+                    </div>
+
+                    <label>Website</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-addon"><i class="icon-globe"></i></span>
+                        <input disabled id="website-input" type="url" class="form-control" placeholder="Website Address">
+                    </div>
+
+                    <label>Standard Lunch Length</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-addon"><i class="icon-cup"></i></span>
+                        <input disabled id="lunch-input" type="number" class="form-control" placeholder="Standard Lunch Length (minutes)">
+                    </div>
+                    
+                    <div id="loading" class="sk-cube-grid" style="display:none">
+                        <div class="sk-cube sk-cube1"></div>
+                        <div class="sk-cube sk-cube2"></div>
+                        <div class="sk-cube sk-cube3"></div>
+                        <div class="sk-cube sk-cube4"></div>
+                        <div class="sk-cube sk-cube5"></div>
+                        <div class="sk-cube sk-cube6"></div>
+                        <div class="sk-cube sk-cube7"></div>
+                        <div class="sk-cube sk-cube8"></div>
+                        <div class="sk-cube sk-cube9"></div>
+                    </div>
+                    <button type="button" class="btn  btn-primary" style="display:none" id="button-edit-company-profile">Edit Company Profile</button>
+                    <button type="button" class="btn  btn-success" style="display:none" id="button-save-company-profile">Save Company Profile</button>
+                    <button type="button" class="btn  btn-danger" style="display:none" id="button-cancel-company-profile">Cancel</button>
                 </div>
 
             </div>
@@ -203,7 +253,6 @@
 
     <!-- Plugins and scripts required by all views -->
     <script src="js/libs/Chart.min.js"></script>
-    
     <script src="js/libs/toastr.min.js"></script>
     
     <!-- Comment out unneeded navbars -->
@@ -225,13 +274,19 @@
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             // User is signed in.
-            if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null) {
-                getUserData();
-            }
+            if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null) getUserData();
+            firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/info").once('value').then(function(snapshot) {
+                document.getElementById("name-input").value = snapshot.val().name;
+                document.getElementById("address-input").value = snapshot.val().address;
+                document.getElementById("contact-input").value = snapshot.val().numContact;
+                document.getElementById("fax-input").value = snapshot.val().numFax;
+                document.getElementById("website-input").value = snapshot.val().website;
+                document.getElementById("lunch-input").value = snapshot.val().lunch;
+            });
+            if(localStorage["WYDuserAccess"] == 1) document.getElementById("button-edit-company-profile").style = "display:true";
           } else {
             // No user is signed in.
             window.location="login.html";
-            toastr["warning"]("User Not Logged In!");
           }
         });
     </script>

@@ -17,7 +17,7 @@
     <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
     <link rel="shortcut icon" href="img/WYD_logo.png">
 
-    <title>WYD - Blank Template</title>
+    <title>WYD-Blank Template</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -27,6 +27,10 @@
     <link href="css/glyphicons.css" rel="stylesheet">
     <link href="css/glyphicons-filetypes.css" rel="stylesheet">
     <link href="css/glyphicons-social.css" rel="stylesheet">
+    
+    <!-- Main styles for this application -->
+    <link href="css/style.css" rel="stylesheet">
+    
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
     <script src="js/fbinit.js"></script>
 
@@ -199,9 +203,6 @@
     <!-- Plugins and scripts required by all views -->
     <script src="js/libs/Chart.min.js"></script>
     <script src="js/libs/toastr.min.js"></script>
-
-    <!-- Main styles for this application -->
-    <link href="css/style.css" rel="stylesheet">
     
     <!-- Comment out unneeded navbars -->
     <script>
@@ -222,12 +223,12 @@
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             // User is signed in.
-            toastr["info"]("user logged in");
-            if(localStorage["WYDuserID"]!=user.uid) getUserData();
+            //toastr["info"]("user logged in");
+            if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
           } else {
             // No user is signed in.
             window.location="login.html";
-            toastr["warning"]("User Not Logged In!");
+            //toastr["warning"]("User Not Logged In!");
           }
         });
     </script>
