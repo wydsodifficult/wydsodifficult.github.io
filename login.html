@@ -87,6 +87,7 @@
             getUserData();
             window.location="operations-dashboard.html";
           } else {
+            getLocalStorage();
             // No user is signed in.
             toastr["warning"]("User Not Logged In!");
           }

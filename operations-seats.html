@@ -1,0 +1,429 @@
+<!--
+ * WYD - blank.html template
+ * @version v0.17.05.31
+ * Copyright (c) 2017 WYD
+ * NOTE: Login redirect is commented out
+ -->
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="WYD - What'd You Do?">
+    <meta name="author" content="Higashi">
+    <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
+    <link rel="shortcut icon" href="img/WYD_logo.png">
+
+    <title>WYD-Company Seats</title>
+
+    <!-- Icons -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/simple-line-icons.css" rel="stylesheet">
+
+    <!-- Premium Icons -->
+    <link href="css/glyphicons.css" rel="stylesheet">
+    <link href="css/glyphicons-filetypes.css" rel="stylesheet">
+    <link href="css/glyphicons-social.css" rel="stylesheet">
+    
+    <!-- Main styles for this application -->
+    <link href="css/style.css" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+    <script src="js/fbinit.js"></script>
+
+</head>
+
+<!-- BODY options, add following classes to body to change options
+
+// Sidebar options
+1. '.sidebar-fixed'					- Fixed Sidebar
+2. '.sidebar-hidden'				- Hidden Sidebar
+3. '.sidebar-off-canvas'		- Off Canvas Sidebar
+4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
+
+-->
+
+<body class="app header-fixed sidebar-fixed">
+    
+    <!-- Navigation -->             
+    <div id="navbar"></div> 
+
+    <div class="app-body">
+        <div class="sidebar">
+
+            <div class="sidebar-header">
+                <div>
+                   <br>
+                    <strong id="full-name">SHANIQUA JONES</strong>
+                </div>
+                <div class="text-muted">
+                    <small id="job-title">Seated User</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- This nav is hidden if employees-navbar is loaded -->
+                <ul class="nav" id="operations-sidebar">
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees-dashboard.html"> Switch to Employee View</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="operations-dashboard.html">
+                        <i class="icon-speedometer"></i>DASHBOARD</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i>REPORTS</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports-new.html"><i class="icon-doc"></i>  New</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports.html"><i class="icon-docs"></i>  View</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports-templates.html"><i class="icon-wrench"></i>  Templates</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-home"></i>HOUSEKEEPING</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-jobs.html"><i class="icon-basket-loaded"></i>  Jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-seats.html"><i class="icon-puzzle"></i>  Seats</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-company.html"><i class="icon-picture"></i>  Company Profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="icon-settings"></i>SETTINGS</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+                
+                <!-- This nav is hidden if operations-navbar is loaded -->
+                <ul class="nav" id="employees-sidebar">
+                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="operations-dashboard.html"> Switch to Operations View</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees-dashboard.html">
+                        <i class="icon-speedometer"></i>DASHBOARD</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i>REPORTS</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports-new.html"><i class="icon-doc"></i>  New</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports-mine.html"><i class="icon-book-open"></i>  View Mine</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports.html"><i class="icon-docs"></i>  View All</a>
+                            </li>
+                        </ul>
+                    </li>
+                   <li class="nav-item">
+                        <a class="nav-link" href="employees-profile.html">
+                        <i class="icon-user"></i>MY PROFILE</a>
+                    </li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-home"></i>OPERATIONAL</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-jobs.html"><i class="icon-basket-loaded"></i>  Jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-list.html"><i class="icon-puzzle"></i>  Employee List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-company.html"><i class="icon-picture"></i>  Company Profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="icon-settings"></i>SETTINGS</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main content -->
+        <main class="main">
+            <!-- Modal Content -->
+            <div class="modal fade" id="add-user-modal" tabindex="-1" role="dialog" aria-labelledby="addUserModalTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addUserModalTitle">Add Seated User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input id="email-input" type="text" class="form-control" placeholder="Email">
+                            </div>
+
+                            <div id="password-hint"></div>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-lock"></i>
+                                </span>
+                                <input id="password-input" type="password" class="form-control" placeholder="Password" onkeyup="passMinCheck(); return false;">
+                            </div>
+
+                            <div id="password-match"></div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-addon"><i class="icon-lock"></i>
+                                </span>
+                                <input id="password-confirm" type="password" class="form-control" disabled placeholder="Repeat password" onkeyup="passCheck(1); return false;">
+                            </div>
+
+                            <div id="loading" class="sk-cube-grid" style="display:none">
+                                <div class="sk-cube sk-cube1"></div>
+                                <div class="sk-cube sk-cube2"></div>
+                                <div class="sk-cube sk-cube3"></div>
+                                <div class="sk-cube sk-cube4"></div>
+                                <div class="sk-cube sk-cube5"></div>
+                                <div class="sk-cube sk-cube6"></div>
+                                <div class="sk-cube sk-cube7"></div>
+                                <div class="sk-cube sk-cube8"></div>
+                                <div class="sk-cube sk-cube9"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button id="button-add-user" type="button" class="btn btn-primary">Add User</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="add-user-info-modal" tabindex="-1" role="dialog" aria-labelledby="addUserInfoModalTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addUserModalTitle">Seated User Info</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button disabled id="button-add-user-info" type="button" class="btn btn-primary">Add User</button>
+                            <br>
+                            <br>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input id="first-input" type="text" class="form-control" placeholder="First Name">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input id="last-input" type="text" class="form-control" placeholder="Last Name">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input id="full-input" type="text" class="form-control" placeholder="Full Name">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input id="initials-input" type="text" class="form-control" placeholder="Initials">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-screen-smartphone"></i></span>
+                                <input id="cell-input" type="telephone" class="form-control" placeholder="Cellular #">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-phone"></i></span>
+                                <input id="contact-input" type="telephone" class="form-control" placeholder="Contact #">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-graduation"></i></span>
+                                <input id="class-input" type="input" class="form-control" placeholder="Classification">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-badge"></i></span>
+                                <input id="title-input" type="text" class="form-control" placeholder="Job Title">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-briefcase"></i></span>
+                                <input id="employee-input" type="text" class="form-control" placeholder="Employee ID #">
+                            </div>
+                            
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-lock"></i></span>
+                                <input id="access-input" type="number" class="form-control" placeholder="Access Level: 2, 3, 4, or 5">
+                            </div>
+
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-layers"></i></span>
+                                <textarea id="additional-input" type="textarea" class="form-control" placeholder=" Additional Information"></textarea>
+                            </div>
+
+                            <div id="loading" class="sk-cube-grid" style="display:none">
+                                <div class="sk-cube sk-cube1"></div>
+                                <div class="sk-cube sk-cube2"></div>
+                                <div class="sk-cube sk-cube3"></div>
+                                <div class="sk-cube sk-cube4"></div>
+                                <div class="sk-cube sk-cube5"></div>
+                                <div class="sk-cube sk-cube6"></div>
+                                <div class="sk-cube sk-cube7"></div>
+                                <div class="sk-cube sk-cube8"></div>
+                                <div class="sk-cube sk-cube9"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            Do Not Close This Modal Or You Will Lose This Information!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Page Content -->
+            <div class="container-fluid">
+
+                <div class="animated fadeIn">
+                    
+                    <h1>Company Seats</h1>
+                    <br>
+                    <label>Overall Seats</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <input disabled id="overall-input" type="number" class="form-control" placeholder="Overall Seats">
+                    </div>
+
+                    <label>Seats Used</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-addon"><i class="icon-people"></i></span>
+                        <input disabled id="used-input" type="number" class="form-control" placeholder="Seats Used">
+                    </div>
+                    <div style="display:none" id="non-access">
+                        <label>Sign-Up Date</label>
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input disabled id="signup-input" type="text" class="form-control" placeholder="Sign Up Date">
+                        </div>
+
+                        <label>Payment Start Date</label>
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-control-play"></i></span>
+                            <input disabled id="start-input" type="text" class="form-control" placeholder="Start Date">
+                        </div>
+
+                        <label>Payment End Date</label>
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="fa fa-square-o"></i></span>
+                            <input disabled id="end-input" type="text" class="form-control" placeholder="End Date">
+                        </div>
+                        
+                        <button type="button" class="btn  btn-primary" style="display:none" id="button-add-user-modal" data-toggle="modal" data-target="#add-user-modal">Add User</button>
+                        
+                        <button type="button" class="btn  btn-danger float-right" style="display:none" id="button-delete-user-modal">Delete Users</button>
+                    </div>
+                    <br>
+                    <label>Seated Users</label>
+                    <div id="seated-users"></div>
+                    
+                    <div id="loading" class="sk-cube-grid" style="display:none">
+                        <div class="sk-cube sk-cube1"></div>
+                        <div class="sk-cube sk-cube2"></div>
+                        <div class="sk-cube sk-cube3"></div>
+                        <div class="sk-cube sk-cube4"></div>
+                        <div class="sk-cube sk-cube5"></div>
+                        <div class="sk-cube sk-cube6"></div>
+                        <div class="sk-cube sk-cube7"></div>
+                        <div class="sk-cube sk-cube8"></div>
+                        <div class="sk-cube sk-cube9"></div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.conainer-fluid -->
+        </main>
+
+    </div>
+    
+    <div id="footer"></div>
+
+    <!-- Load jquery for navs and footer -->
+    <script src="js/libs/jquery.min.js"></script>
+    <!-- Main scripts -->
+    <script src="js/app.js"></script>
+    
+    <!-- Bootstrap and necessary plugins -->
+    <script src="js/libs/tether.min.js"></script>
+    <script src="js/libs/bootstrap.min.js"></script>
+    <script src="js/libs/pace.min.js"></script>
+
+
+    <!-- Plugins and scripts required by all views -->
+    <script src="js/libs/Chart.min.js"></script>
+    <script src="js/libs/toastr.min.js"></script>
+    
+    <!-- Comment out unneeded navbars -->
+    <script>
+        $(document).ready(function () {
+            $("#footer").load("footer.html");
+            $("#navbar").load("operations-navbar.html");
+            //$("#navbar").load("employees-navbar.html");
+            //$("#navbar").load("god-navbar.html");
+            if(localStorage["WYDuserNameFull"]!=null){
+                document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
+                document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
+            }
+            $('input').keyup(userProfileCheck);
+        });
+    </script>
+    
+    <!-- Make sure user is logged in, else send to login -->
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            // User is signed in.
+            //toastr["info"]("user logged in");
+            if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
+            getSeatedUsers();
+          } else {
+            // No user is signed in.
+            window.location="login.html";
+            //toastr["warning"]("User Not Logged In!");
+          }
+        });
+    </script>
+
+</body>
+
+</html>

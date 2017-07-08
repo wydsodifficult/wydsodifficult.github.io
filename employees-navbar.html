@@ -31,11 +31,40 @@
         <i class="fa fa-cube"></i>EMPLOYEES
     </span>
     <span class="nav navbar-toggler-right float-right hidden-md-down">
-        <a id="logout" class="py-1 px-2" href="index.html"><i class="fa fa-sign-out"></i>Logout</a>
+        <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
     </span>
 
 </header>
 
 <script>
     document.getElementById("operations-sidebar").style.display = "none";
+</script>
+
+
+<script>
+    function logout() {
+        firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+            localStorage.removeItem('WYDuserAccess');
+            localStorage.removeItem('WYDuserNameFirst');
+            localStorage.removeItem('WYDuserNameLast');
+            localStorage.removeItem('WYDuserNameFull');
+            localStorage.removeItem('WYDuserInitials');
+            localStorage.removeItem('WYDuserEmail');
+            localStorage.removeItem('WYDuserNumCell');
+            localStorage.removeItem('WYDuserContact');
+            localStorage.removeItem('WYDuserClass');
+            localStorage.removeItem('WYDuserJobTitle');
+            localStorage.removeItem('WYDuserCompanyName');
+            localStorage.removeItem('WYDuserCompanyID');
+            localStorage.removeItem('WYDuserNumID');
+            localStorage.removeItem('WYDuserID');
+            console.log("Logging Out");
+            alert("You Have Successfully Signed Out!");
+            window.location="index.html";
+        }, function(error) {
+          // An error happened.
+            toastr["warning"]("User has not logged out");
+        }); 
+    }
 </script>
