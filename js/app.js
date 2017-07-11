@@ -351,11 +351,11 @@ $('#button-create-company-profile').on('click', function(){
     var loading = document.getElementById('loading').setAttribute('style','display:true');
     // Add Company Information
     // Change the below if seat numbers are changed when making payments
-    updateEverything['company/' + companyKey + '/payment/seats'] = 25;
-    updateEverything['company/' + companyKey + '/payment/used'] = 0;
-    updateEverything['company/' + companyKey + '/payment/signup'] = getTodaysDate();
-    updateEverything['company/' + companyKey + '/payment/payStart'] = getTodaysDate();
-    updateEverything['company/' + companyKey + '/payment/payEnd'] = getTodaysDate();
+    updateEverything['company/' + newCompanyKey + '/payment/seats'] = 25;
+    updateEverything['company/' + newCompanyKey + '/payment/used'] = 0;
+    updateEverything['company/' + newCompanyKey + '/payment/signup'] = getTodaysDate();
+    updateEverything['company/' + newCompanyKey + '/payment/payStart'] = getTodaysDate();
+    updateEverything['company/' + newCompanyKey + '/payment/payEnd'] = getTodaysDate();
     updateEverything['company/' + newCompanyKey + '/info/name'] = document.getElementById('name-input').value;
     updateEverything['company/' + newCompanyKey + '/info/numContact'] = document.getElementById('contact-input').value;
     updateEverything['company/' + newCompanyKey + '/info/address'] = document.getElementById('address-input').value;
