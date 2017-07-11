@@ -443,7 +443,6 @@ $('#button-save-company-profile').on('click', function(){
     var updateEverything = {};
     var loading = document.getElementById('loading').setAttribute('style','display:true');
     // Add Company Information
-    updateEverything['company/' + companyKey + '/payment/used'] = Number(document.getElementById('used-input').value + 1);
     updateEverything['company/' + companyKey + '/info/name'] = document.getElementById('name-input').value;
     updateEverything['company/' + companyKey + '/info/numContact'] = document.getElementById('contact-input').value;
     updateEverything['company/' + companyKey + '/info/address'] = document.getElementById('address-input').value;
@@ -551,9 +550,11 @@ function getSeatedUsers() {
                     confirmSpan.onclick = function() {
                         firebase.database().ref('company/' + localStorage['WYDuserCompanyID'] + '/users/' + childSnapshot.key).remove()
                         firebase.database().ref('user/' + childSnapshot.key).remove().then(function() {
-                            firebase.database().ref('company' + localStorage['WYDuserCompanyID'] + '/payment').update({used:document.getElementById('used-input').value-1}).then(function() {
+                            var minusSeat = Number(document.getElementById('used-input').value)-1;
+                            firebase.database().ref('company/' + localStorage['WYDuserCompanyID'] + '/payment/').update({used:minusSeat}).then(function() {
                                 seatDiv.style = "display:none";    
                                 toastr["User has been deleted"];
+                                document.getElementById('used-input').value = minusSeat;
                             });
                         });
                     };
@@ -628,6 +629,20 @@ $('#button-delete-user-modal').on('click',function(){
     for(i=0; i<seatLengths; i++) {
         document.getElementById('user-delete-'+i).style = "display:true";
     }
+    document.getElementById('button-delete-user-modal').style="display:none";
+    document.getElementById('button-hide-delete-user-modal').style="display:true";
+});
+
+// Function run when "Delete Users" button is clicked again to hide delete prompts
+// hideDeleteUserButton()
+// Operations-seats
+$('#button-hide-delete-user-modal').on('click',function(){
+    var seatLengths = document.getElementsByName('user-delete').length;
+    for(i=0; i<seatLengths; i++) {
+        document.getElementById('user-delete-'+i).style = "display:none";
+    }
+    document.getElementById('button-delete-user-modal').style="display:true";
+    document.getElementById('button-hide-delete-user-modal').style="display:none";
 });
 
 // Function run after creating a new seated user for their info
@@ -640,7 +655,7 @@ $('#button-add-user-info').on('click',function(){
     var companyKey = localStorage["WYDuserCompanyID"];
     var updateEverything = {};
     // Add User Information in Company
-    updateEverything['company/' + companyKey + '/payment/used'] = Number(document.getElementById('used-input').value + 1);
+    updateEverything['company/' + companyKey + '/payment/used'] = Number(document.getElementById('used-input').value) + 1;
     updateEverything['company/' + companyKey + '/users/' + uID + '/nameFirst'] = document.getElementById('first-input').value;
     updateEverything['company/' + companyKey + '/users/' + uID + '/nameLast'] = document.getElementById('last-input').value;
     updateEverything['company/' + companyKey + '/users/' + uID + '/nameFull'] = document.getElementById('full-input').value;
@@ -670,6 +685,7 @@ $('#button-add-user-info').on('click',function(){
         toastr["info"](localStorage["WYDuserNameFull"] + " Information Successfully Saved!");
         loading.setAttribute('style','display:none');
         $('#add-user-modal-info').modal('hide');
+        document.getElementById('used-input').value = Number(document.getElementById('used-input').value) + 1;
         location.reload(true);
     })
     .catch(function(error) {
