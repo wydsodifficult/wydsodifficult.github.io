@@ -187,7 +187,7 @@
                         <div class="modal-body">
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-user"></i></span>
-                                <input id="email-input" type="text" class="form-control" placeholder="Email">
+                                <input id="email-input" type="text" class="form-control" autofocus="autofocus" placeholder="Email">
                             </div>
 
                             <div id="password-hint"></div>
@@ -325,7 +325,7 @@
                         <input disabled id="overall-input" type="number" class="form-control" placeholder="Overall Seats">
                     </div>
 
-                    <label>Seats Used</label>
+                    <label>Seats Used (Does NOT Count Main User)</label>
                     <div class="input-group mb-1">
                         <span class="input-group-addon"><i class="icon-people"></i></span>
                         <input disabled id="used-input" type="number" class="form-control" placeholder="Seats Used">
@@ -352,6 +352,8 @@
                         <button type="button" class="btn  btn-primary" style="display:none" id="button-add-user-modal" data-toggle="modal" data-target="#add-user-modal">Add User</button>
                         
                         <button type="button" class="btn  btn-danger float-right" style="display:none" id="button-delete-user-modal">Delete Users</button>
+                        
+                        <button type="button" class="btn  btn-danger float-right" style="display:none" id="button-hide-delete-user-modal">Delete Users</button>
                     </div>
                     <br>
                     <label>Seated Users</label>
