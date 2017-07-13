@@ -94,6 +94,14 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function(){
+            $('#password').keypress(function(e){
+              if(e.keyCode==13)
+              $('#button-login').click();
+            });
+        });
+    </script>
 
 </body>
 
