@@ -48,8 +48,50 @@
 
 <body class="app header-fixed sidebar-fixed">
     
-    <!-- Navigation -->             
-    <div id="navbar"></div> 
+    <!-- Navigation Header for Operations-->     
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <a class="navbar-brand" href="operations-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header>
+    
+    <!-- Navigation Header for employees
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-paw"></i>EMPLOYEES
+        </span>
+        <a class="navbar-brand" href="employees-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cube"></i>EMPLOYEES
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header>
+    -->
 
     <div class="app-body">
         <div class="sidebar">
@@ -208,9 +250,10 @@
     <script>
         $(document).ready(function () {
             $("#footer").load("footer.html");
-            $("#navbar").load("operations-navbar.html");
-            //$("#navbar").load("employees-navbar.html");
             //$("#navbar").load("god-navbar.html");
+            
+            document.getElementById("employees-sidebar").style.display = "none";
+            //document.getElementById("operations-sidebar").style.display = "none";
             if(localStorage["WYDuserNameFull"]!=null){
                 document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];

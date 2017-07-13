@@ -48,8 +48,27 @@
 
 <body class="app header-fixed sidebar-fixed">
     
-    <!-- Navigation -->             
-    <div id="navbar"></div> 
+    <!-- Navigation -->     
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <a class="navbar-brand" href="operations-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header>
 
     <div class="app-body">
         <div class="sidebar">
@@ -227,13 +246,13 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addUserModalTitle">Seated User Info</h5>
+                            <h5 class="modal-title" id="addUserInfoModalTitle">Seated User Info</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <!--button type="button" class="btn btn-danger" data-dismiss="modal">Close</button-->
                             <button disabled id="button-add-user-info" type="button" class="btn btn-primary">Add User</button>
                             <br>
                             <br>
@@ -306,7 +325,7 @@
                         </div>
                         
                         <div class="modal-footer">
-                            Do Not Close This Modal Or You Will Lose This Information!
+                            Do Not Close Or Click Away From This Modal Or You Will Lose This Information!
                         </div>
                     </div>
                 </div>
@@ -399,9 +418,11 @@
     <script>
         $(document).ready(function () {
             $("#footer").load("footer.html");
-            $("#navbar").load("operations-navbar.html");
+            //$("#navbar").load("operations-navbar.html");
             //$("#navbar").load("employees-navbar.html");
             //$("#navbar").load("god-navbar.html");
+            
+            document.getElementById("employees-sidebar").style.display = "none";
             if(localStorage["WYDuserNameFull"]!=null){
                 document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
