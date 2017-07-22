@@ -1,24 +1,24 @@
 /*****
 * CONFIGURATION
 */
-    //Main navigation
-    $.navigation = $('nav > ul.nav');
+//Main navigation
+$.navigation = $('nav > ul.nav');
 
-	$.panelIconOpened = 'icon-arrow-up';
-	$.panelIconClosed = 'icon-arrow-down';
+$.panelIconOpened = 'icon-arrow-up';
+$.panelIconClosed = 'icon-arrow-down';
 
-	//Default colours
-	$.brandPrimary =  '#20a8d8';
-	$.brandSuccess =  '#4dbd74';
-	$.brandInfo =     '#63c2de';
-	$.brandWarning =  '#f8cb00';
-	$.brandDanger =   '#f86c6b';
+//Default colours
+$.brandPrimary =  '#20a8d8';
+$.brandSuccess =  '#4dbd74';
+$.brandInfo =     '#63c2de';
+$.brandWarning =  '#f8cb00';
+$.brandDanger =   '#f86c6b';
 
-	$.grayDark =      '#2a2c36';
-	$.gray =          '#55595c';
-	$.grayLight =     '#818a91';
-	$.grayLighter =   '#d1d4d7';
-	$.grayLightest =  '#f8f9fa';
+$.grayDark =      '#2a2c36';
+$.gray =          '#55595c';
+$.grayLight =     '#818a91';
+$.grayLighter =   '#d1d4d7';
+$.grayLightest =  '#f8f9fa';
 
 'use strict';``
 
@@ -300,6 +300,7 @@ function companyProfileCheck() {
         document.getElementById('button-create-company-profile').classList.add("disabled");
     }
 }
+
 // Checks to Make sure that User Profile Information is filled in before enabling save button
 // userProfileCheck()
 // Operations-seats
@@ -337,6 +338,25 @@ function userProfileCheck() {
     }
     else {
         document.getElementById('button-add-user-info').disabled = true;
+    }
+}
+
+// Checks to Make sure that User Profile Information is filled in before enabling save button
+// companyJobCheck()
+// Operations-jobs
+function companyJobCheck() {
+    var allFilled = 0;
+    if(document.getElementById('name-input').value == "") {
+        allFilled++;
+    }
+    else if(document.getElementById('number-input').value == "") {
+        allFilled++;
+    }
+    if(allFilled == 0) {
+        document.getElementById('button-add-job-confirm').disabled = false;
+    }
+    else {
+        document.getElementById('button-add-job-confirm').disabled = true;
     }
 }
 
@@ -414,9 +434,9 @@ $('#button-edit-company-profile').on('click', function(){
     document.getElementById("fax-input").removeAttribute("disabled");
     document.getElementById("website-input").removeAttribute("disabled");
     document.getElementById("lunch-input").removeAttribute("disabled");
-    document.getElementById("button-edit-company-profile").style = "display:none";
-    document.getElementById("button-save-company-profile").style = "display:true";
-    document.getElementById("button-cancel-company-profile").style = "display:true";
+    document.getElementById("button-edit-company-profile").style.display="none";
+    document.getElementById("button-save-company-profile").style.display="inline";
+    document.getElementById("button-cancel-company-profile").style.display="inline";
 });
 
 // Function run to cancel the editing of the company profile
@@ -429,9 +449,9 @@ $('#button-cancel-company-profile').on('click', function(){
     document.getElementById("fax-input").setAttribute("disabled", "true");
     document.getElementById("website-input").setAttribute("disabled", "true");
     document.getElementById("lunch-input").setAttribute("disabled", "true");
-    document.getElementById("button-edit-company-profile").style = "display:true";
-    document.getElementById("button-save-company-profile").style = "display:none";
-    document.getElementById("button-cancel-company-profile").style = "display:none";
+    document.getElementById("button-edit-company-profile").style.display="inline";
+    document.getElementById("button-save-company-profile").style.display="none";
+    document.getElementById("button-cancel-company-profile").style.display="none";
 });
 
 // Function run when editing the company profile
@@ -477,10 +497,10 @@ function getSeatedUsers() {
     });
 
     if(localStorage["WYDuserAccess"] < 3) {
-        document.getElementById("non-access").style = "display:true";
+        document.getElementById("non-access").style.display="inline";
         if(localStorage["WYDuserAccess"] == 1) {
-            if(document.getElementById("overall-input").value >= document.getElementById("used-input").value) document.getElementById("button-add-user-modal").style = "display:true";
-            document.getElementById("button-delete-user-modal").style = "display:true";
+            if(document.getElementById("overall-input").value >= document.getElementById("used-input").value) document.getElementById("button-add-user-modal").style.display="inline";
+            document.getElementById("button-delete-user-modal").style.display="inline";
         }
     }
     var seatedPeeps = document.getElementById("seated-users");
@@ -489,7 +509,7 @@ function getSeatedUsers() {
         var numPeeps = 0;
         var access = localStorage["WYDuserAccess"];
         snapshot.forEach(function(childSnapshot){
-            console.log(childSnapshot.val().nameFull);
+            //console.log(childSnapshot.val().nameFull);
             var seatDiv = document.createElement("div");
             seatDiv.className = "input-group mb-1";
             var seatSpan = document.createElement("span");
@@ -508,7 +528,7 @@ function getSeatedUsers() {
                 // Click to bring up delete options
                 var endSpan = document.createElement("span");
                 endSpan.className = "input-group-addon";
-                endSpan.style = "display:none";
+                endSpan.style.display="none";
                 endSpan.setAttribute("name", "user-delete");
                 endSpan.value = numPeeps;
                 endSpan.setAttribute("data-toggle","tooltip");
@@ -517,7 +537,7 @@ function getSeatedUsers() {
                 endSpan.setAttribute("data-trigger","hover focus");
                 endSpan.id = "user-delete-" + numPeeps;
                 endSpan.onclick = function() {
-                    this.style = "display:none";
+                    this.style.display="none";
                     // Click to cancel
                     var cancelSpan = document.createElement("span");
                     var confirmSpan = document.createElement("span");
@@ -530,9 +550,9 @@ function getSeatedUsers() {
                     cancelSpan.setAttribute("data-trigger","hover focus");
                     cancelSpan.id = "user-cancel-" + numPeeps;
                     cancelSpan.onclick = function() {
-                        this.style = "display:none";
-                        confirmSpan.style = "display:none";
-                        endSpan.style = "display:true";
+                        this.style.display="none";
+                        confirmSpan.style.display="none";
+                        endSpan.style.display="inline";
                     };
                     var cancelIt = document.createElement("i");
                     cancelIt.className = "icon-close";
@@ -552,7 +572,7 @@ function getSeatedUsers() {
                         firebase.database().ref('user/' + childSnapshot.key).remove().then(function() {
                             var minusSeat = Number(document.getElementById('used-input').value)-1;
                             firebase.database().ref('company/' + localStorage['WYDuserCompanyID'] + '/payment/').update({used:minusSeat}).then(function() {
-                                seatDiv.style = "display:none";    
+                                seatDiv.style.display="none";
                                 toastr["User has been deleted"];
                                 document.getElementById('used-input').value = minusSeat;
                             });
@@ -627,10 +647,10 @@ $('#button-add-user').on('click',function(){
 $('#button-delete-user-modal').on('click',function(){
     var seatLengths = document.getElementsByName('user-delete').length;
     for(i=0; i<seatLengths; i++) {
-        document.getElementById('user-delete-'+i).style = "display:true";
+        document.getElementById('user-delete-'+i).style.display="inline";
     }
-    document.getElementById('button-delete-user-modal').style="display:none";
-    document.getElementById('button-hide-delete-user-modal').style="display:true";
+    document.getElementById('button-delete-user-modal').style.display="none";
+    document.getElementById('button-hide-delete-user-modal').style.display="inline";
 });
 
 // Function run when "Delete Users" button is clicked again to hide delete prompts
@@ -639,10 +659,10 @@ $('#button-delete-user-modal').on('click',function(){
 $('#button-hide-delete-user-modal').on('click',function(){
     var seatLengths = document.getElementsByName('user-delete').length;
     for(i=0; i<seatLengths; i++) {
-        document.getElementById('user-delete-'+i).style = "display:none";
+        document.getElementById('user-delete-'+i).style.display="none";
     }
-    document.getElementById('button-delete-user-modal').style="display:true";
-    document.getElementById('button-hide-delete-user-modal').style="display:none";
+    document.getElementById('button-delete-user-modal').style.display="inline";
+    document.getElementById('button-hide-delete-user-modal').style.display="none";
 });
 
 // Function run after creating a new seated user for their info
@@ -695,6 +715,441 @@ $('#button-add-user-info').on('click',function(){
         console.log(error);
     });
     toastr[document.getElementById("nameFull").value + " has been added as a user"];
+});
+
+// Function Run to show active jobs
+// getActiveJobs()
+// Operations-jobs
+function getActiveJobs() {
+    var access = localStorage["WYDuserAccess"];
+    //var viewJob = document.getElementById("myTable");
+    //var jobTable = document.getElementById("job-table");
+    var jobCountDiv = document.getElementById("job-count");
+    if(access < 3) {
+        document.getElementById("button-add-job-div").style.display="inline";
+        document.getElementById("button-switch-job-div").style.display="inline";
+    }
+    var query = firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/job/active").orderByChild("jobName");
+    query.once('value').then(function(snapshot) {
+        var tableDiv = document.getElementById("job-div");
+        var jobTable = document.createElement("table");
+        jobTable.id = "job-table";
+        jobTable.className = "table table-striped table-bordered";
+        var jobHead = jobTable.createTHead()
+        var jobHeadRow = jobHead.insertRow();
+        var headerCell0 = document.createElement("th");
+        var headerCell1 = document.createElement("th");
+        var headerCell2 = document.createElement("th");
+        var jobBody = jobTable.createTBody();
+        tableDiv.append(jobTable);
+        snapshot.forEach(function(childSnapshot){
+            var row = jobBody.insertRow();
+            row.id = ("job-" + childSnapshot.key);
+            var cell1 = row.insertCell(0).innerHTML = childSnapshot.val().jobName;
+            var cell2 = row.insertCell(1).innerHTML = childSnapshot.val().jobNum; ;
+            var cell3 = row.insertCell(2);
+            var infoLink = document.createElement("a");
+            infoLink.className = "btn btn-success";
+            infoLink.title = "More Info";
+            infoLink.href = "#";
+            infoLink.onclick = function(){viewJob(childSnapshot,"active")};
+            infoLink.setAttribute("data-toggle","modal");
+            infoLink.setAttribute("data-target","#view-job-modal");
+            var infoImg = document.createElement("i");
+            infoImg.className = "fa fa-search-plus";
+            infoLink.append(infoImg);
+            cell3.append(infoLink);
+            jobCountDiv.value++;
+        });
+        headerCell0.innerHTML = "Job Name";
+        headerCell0.id = "job-sort-0";
+        headerCell0.onclick=function(){sortJobTable(0)};
+        headerCell1.innerHTML = "Job Num";
+        headerCell1.id = "job-sort-1";
+        headerCell2.innerHTML = "Actions";
+        headerCell1.onclick=function(){sortJobTable(1)};
+        jobHeadRow.appendChild(headerCell0);
+        jobHeadRow.appendChild(headerCell1);
+        jobHeadRow.appendChild(headerCell2);
+        tableDiv.append(jobTable);
+    },function(error){
+        document.getElementById("job-div").innerHTML = "An Error Occured! Please Try Again!";
+    });
+}
+
+// Function Run to sort jobs within the table
+// n is the column number that is being sorted
+// sortJobsTable()
+// Operations-jobs
+function sortJobTable(n){
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("job-table");
+    var nameCol = document.getElementById("job-sort-0");
+    var numCol = document.getElementById("job-sort-1");
+    switching = true;
+    //Set the sorting direction to ascending:
+    dir = "asc"; 
+    /*Make a loop that will continue until
+    no switching has been done:*/
+    while (switching) {
+        //start by saying: no switching is done:
+        switching = false;
+        if(dir == "asc") {
+            var upArrow = document.createElement("i");
+            upArrow.className = "fa fa-arrow-up";
+            if(n==0) {
+                nameCol.innerHTML = "Job Name";
+                nameCol.appendChild(upArrow);
+                numCol.innerHTML = "Job Num";
+            }
+            else {
+                nameCol.innerHTML = "Job Name";
+                numCol.innerHTML = "Job Num";
+                numCol.appendChild(upArrow);
+            }
+        }
+        else {
+            var downArrow = document.createElement("i");
+            downArrow.className = "fa fa-arrow-down";
+            if(n==0) {
+                nameCol.innerHTML = "Job Name";
+                nameCol.appendChild(downArrow);
+                numCol.innerHTML = "Job Num";
+            }
+            else {
+                nameCol.innerHTML = "Job Name";
+                numCol.innerHTML = "Job Num";
+                numCol.appendChild(downArrow);
+            }
+        }
+        rows = table.getElementsByTagName("tr");
+        /*Loop through all table rows (except the
+        first, which contains table headers):*/
+        for (i = 1; i < (rows.length - 1); i++) {
+            //start by saying there should be no switching:
+            shouldSwitch = false;
+            /*Get the two elements you want to compare,
+            one from current row and one from the next:*/
+            x = rows[i].getElementsByTagName("td")[n];
+            y = rows[i + 1].getElementsByTagName("td")[n];
+            /*check if the two rows should switch place,
+            based on the direction, asc or desc:*/
+            if (dir == "asc") {
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                  //if so, mark as a switch and break the loop:
+                    shouldSwitch= true;
+                    break;
+                }
+            } 
+            else if (dir == "desc") {
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    //if so, mark as a switch and break the loop:
+                    shouldSwitch= true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            /*If a switch has been marked, make the switch
+            and mark that a switch has been done:*/
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            //Each time a switch is done, increase this count by 1:
+            switchcount ++;      
+        } 
+        else {
+            /*If no switching has been done AND the direction is "asc",
+            set the direction to "desc" and run the while loop again.*/
+            if (switchcount == 0 && dir == "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+}
+
+// Function run when "Add Job" button is clicked to show "add-job-inputs" div
+// addJobButton()
+// Operations-jobs
+$('#button-add-job').on('click',function(){
+    document.getElementById("add-job-inputs").style.display="inline";
+    document.getElementById("button-add-job").style.display="none";
+});
+
+// Function run when "Add Job" button is clicked to save everything in "add-job-inputs" div then hide if successful
+// addJobButton()
+// Operations-jobs
+$('#button-add-job-confirm').on('click',function(){
+    document.getElementById('loading').setAttribute('style','display:true');
+    var active;
+    var companyKey = localStorage["WYDuserCompanyID"];
+    if(document.getElementById("active-input").checked==true) {
+        active = "active";
+    }
+    else {
+        active = "inactive";
+    }
+    var newJob = firebase.database().ref('company/' + companyKey + '/job/' + active).push();
+    var newJobKey = newJob.key;
+    var count = document.getElementById("contact-count").value;
+    var jobRef = 'company/' + companyKey + '/job/' + active + '/' + newJobKey + '/';
+    var updateEverything = {};
+    updateEverything[jobRef + "jobName"] = document.getElementById("name-input").value;
+    updateEverything[jobRef + "jobNum"] = document.getElementById("number-input").value;
+    updateEverything[jobRef + "jobLocation"] = document.getElementById("location-input").value;
+    updateEverything[jobRef + "pmName"] = document.getElementById("pm-name-input").value;
+    updateEverything[jobRef + "pmNum"] = document.getElementById("pm-contact-input").value;
+    updateEverything[jobRef + "jobContractor"] = document.getElementById("contractor-input").value;
+    updateEverything[jobRef + "createdBy/createdName"] = localStorage["WYDuserNameFull"];
+    updateEverything[jobRef + "createdBy/createdID"] = localStorage["WYDuserID"];
+    updateEverything[jobRef + "contacts/0/contactName"] = document.getElementById("name-input-0").value;
+    updateEverything[jobRef + "contacts/0/contactNum"] = document.getElementById("number-input-0").value;
+    if(count>0) {
+        for(i=1;i<=count;i++) {
+            updateEverything[jobRef + "contacts/" + i + "/contactName"] = document.getElementById("name-input-" + i).value;
+            updateEverything[jobRef + "contacts/" + i + "/contactNum"] = document.getElementById("number-input-" + i).value; 
+        }
+    }
+    
+    // Send All Data to Firebase
+    firebase.database().ref().update(updateEverything)
+    .then(function() {
+        var showDiv = document.getElementById("display-jobs");
+        var jobDiv = document.createElement("div");
+        jobDiv.className = "input-group mb-1";
+        var jobSpan = document.createElement("span");
+        jobSpan.className = "input-group-addon";
+        var jobI = document.createElement("i");
+        jobI.className = "icon-user";
+        jobSpan.append(jobI);
+        jobDiv.append(jobSpan);
+        var jobInput = document.createElement("input");
+        jobInput.className = "form-control";
+        jobInput.type = "text";
+        jobInput.id = ("job-" + newJobKey);
+        jobInput.value = document.getElementById("name-input");
+        //jobInput.onClick("viewJob(jobInput.id)");
+        jobDiv.append(jobInput);
+        //showDiv.append(jobDiv);
+        // Use Click of Cancel to clear everything
+        $('#button-add-job-cancel').trigger('click');
+    });
+});
+
+// Function run when "Cancel" button is clicked to unhide "button-add-job" and Hide+Clear "add-job-inputs"
+// cancelAddJobButton()
+// Operations-jobs
+$('#button-add-job-cancel').on('click',function(){
+    document.getElementById("add-job-inputs").style.display="none";
+    document.getElementById("additional-contacts-header").style.display="none";
+    document.getElementById("button-add-job").style.display="inline";
+    document.getElementById("add-contacts").innerHTML="";
+    document.getElementById("name-input").value="";
+    document.getElementById("number-input").value="";
+    document.getElementById("location-input").value="";
+    document.getElementById("active-input").checked="checked";
+    document.getElementById("pm-name-input").value="";
+    document.getElementById("pm-contact-input").value="";
+    document.getElementById("contractor-input").value="";
+    document.getElementById("contact-count").value=0;
+    document.getElementById("name-input-0").value="";
+    document.getElementById("number-input-0").value="";
+    document.getElementById("button-add-job-confirm").disabled="true";
+    document.getElementById("loading").setAttribute('style','display:none');
+});
+
+// Function run when "Add Contractor Contact" button is clicked to add more contacts
+// addJobContactButton()
+// Operations-jobs
+$('#button-add-job-contact').on('click',function(){
+    document.getElementById("additional-contacts-header").style.display="inline";
+    var count = Number(document.getElementById("contact-count").value)+1;
+    console.log(document.getElementById("contact-count").value);
+    var holdingDiv = document.getElementById("add-contacts");
+    var contactDiv = document.createElement("div");
+    contactDiv.className = "input-group mb-1";
+    var contactSpan = document.createElement("span");
+    contactSpan.className = "input-group-addon";
+    var contactI = document.createElement("i");
+    contactI.className = "icon-user";
+    contactSpan.append(contactI);
+    contactDiv.append(contactSpan);
+    var contactInput = document.createElement("input");
+    contactInput.className = "form-control";
+    contactInput.type = "text";
+    contactInput.placeholder = "Contractor Contact Name";
+    contactInput.id = ("name-input-" + count);
+    contactDiv.append(contactInput);
+    holdingDiv.append(contactDiv);
+    var contactNumDiv = document.createElement("div");
+    contactNumDiv.className = "input-group mb-1";
+    var contactNumSpan = document.createElement("span");
+    contactNumSpan.className = "input-group-addon";
+    var contactNumI = document.createElement("i");
+    contactNumI.className = "icon-phone";
+    contactNumSpan.append(contactNumI);
+    contactNumDiv.append(contactNumSpan);
+    var contactNumInput = document.createElement("input");
+    contactNumInput.className = "form-control";
+    contactNumInput.type = "telephone";
+    contactNumInput.placeholder = "Contractor Contact Number";
+    contactNumInput.id = ("number-input-" + count);
+    contactNumDiv.append(contactNumInput);
+    holdingDiv.append(contactNumDiv);
+    document.getElementById("contact-count").value = count;
+});
+
+
+// Function run when a job is clicked to view all relevent information
+// viewJob()
+// Operations-jobs
+function viewJob(thisJob,active) {
+    snapShot = thisJob.val();
+    document.getElementById("viewJobModalTitle").innerHTML = (snapShot.jobName + " - " + snapShot.jobNum);
+    document.getElementById("view-name-input").value = snapShot.jobName;
+    document.getElementById("jobID").value = thisJob.key;
+    document.getElementById("view-number-input").value = snapShot.jobNum;
+    if(snapShot.jobLocation != null)document.getElementById("view-location-input").value = snapShot.jobLocation;
+    if(active == "active") document.getElementById("view-active-input").checked = true;
+    else document.getElementById("view-active-input").checked = false;
+    if(snapShot.pmName != null)document.getElementById("view-pm-name-input").value = snapShot.pmName;
+    if(snapShot.pmNum != null)document.getElementById("view-pm-contact-input").value = snapShot.pmNum;
+    if(snapShot.jobContractor != null)document.getElementById("view-contractor-input").value = snapShot.jobContractor;
+    jobContacts = document.getElementById("view-modal-job-contacts");
+    jobContacts.innerHTML = "";
+    //for(i = 0; i < snapShot.contacts.length; i++) {
+    var count = 0;
+    snapShot.contacts.forEach(function(element){
+        var contactDiv = document.createElement("div");
+        contactDiv.className = "input-group mb-1";
+        var contactSpan = document.createElement("span");
+        contactSpan.className = "input-group-addon";
+        var contactI = document.createElement("i");
+        contactI.className = "icon-user";
+        contactSpan.append(contactI);
+        contactDiv.append(contactSpan);
+        var contactInput = document.createElement("input");
+        contactInput.id = "view-name-input-" + count;
+        contactInput.className = "form-control";
+        contactInput.type = "text";
+        contactInput.placeholder = "Contractor Contact Name";
+        contactInput.value = element.contactName;
+        contactInput.setAttribute("disabled","true");
+        contactDiv.append(contactInput);
+        jobContacts.append(contactDiv);
+        var contactNumDiv = document.createElement("div");
+        contactNumDiv.className = "input-group mb-1";
+        var contactNumSpan = document.createElement("span");
+        contactNumSpan.className = "input-group-addon";
+        var contactNumI = document.createElement("i");
+        contactNumI.className = "icon-phone";
+        contactNumSpan.append(contactNumI);
+        contactNumDiv.append(contactNumSpan);
+        var contactNumInput = document.createElement("input");
+        contactNumInput.id = "view-number-input-" + count;
+        contactNumInput.className = "form-control";
+        contactNumInput.type = "telephone";
+        contactNumInput.placeholder = "Contractor Contact Number";
+        contactNumInput.value = element.contactNum;
+        contactNumInput.setAttribute("disabled","true");
+        contactNumDiv.append(contactNumInput);
+        jobContacts.append(contactNumDiv);
+        count++;
+    });
+    document.getElementById("view-contact-count").value = count;
+}
+
+// Function run when the View Job Modal loses focus then disables all job info inputs
+// dismissViewJobModal
+// Operations-jobs
+$("#view-job-modal").on("hide.bs.modal", function(){
+    document.getElementById("button-job-save").style.display = "none";
+    document.getElementById("button-job-delete").style.display = "none";
+    document.getElementById("button-job-edit").style.display = "inline";
+    document.getElementById("button-job-cancel").innerHTML = "Close";
+    var modal = document.getElementById("view-job-modal");
+    var inputs = modal.getElementsByTagName('input');
+    for(i = 0; i < inputs.length; i++) {
+        inputs[i].disabled=true;
+    }
+});
+
+// Function run when "Edit Job" Button is clicked to enable all job info inputs
+// editJobButton
+// Operations-jobs
+$('#button-job-edit').on('click',function() {
+    document.getElementById("button-job-save").style.display = "inline";
+    document.getElementById("button-job-delete").style.display = "inline";
+    document.getElementById("button-job-cancel").innerHTML = "Cancel";
+    document.getElementById("button-job-edit").style.display = "none";
+    var modal = document.getElementById("view-job-modal");
+    var inputs = modal.getElementsByTagName('input');
+    for(i = 0; i < inputs.length; i++) {
+        inputs[i].disabled=false;
+    }
+});
+
+// Function run when "Delete Job" Button is clicked
+// deleteJobButton
+// Operations-jobs
+$('#button-job-delete').on('click',function() {
+    if(confirm("Are You Sure You Want To Delete This Job?")) {
+        var jobKey = document.getElementById("jobID").value;
+        firebase.database().ref("company/" + localStorage["WYDuserCompanyID"] + "/job/active/" + jobKey).remove();
+        firebase.database().ref("company/" + localStorage["WYDuserCompanyID"] + "/job/inactive/" + jobKey).remove();
+        var row = document.getElementById("job-" + jobKey);
+        row.parentNode.removeChild(row);
+    }
+    else {
+    }
+});
+
+// Function run when "Save Job" Button is clicked
+// saveJobButton
+// Operations-jobs
+$('#button-job-save').on('click',function() {
+    document.getElementById('loading').setAttribute('style','display:true');
+    var active;
+    var companyKey = localStorage["WYDuserCompanyID"];
+    if(document.getElementById("view-active-input").checked==true) {
+        active = "active";
+    }
+    else {
+        active = "inactive";
+    }
+    var jobKey = document.getElementById("jobID").value;
+    var count = document.getElementById("view-contact-count").value;
+    var jobRef = 'company/' + companyKey + '/job/' + active + '/' + jobKey + '/';
+    var newEditJob = firebase.database().ref('company/' + companyKey + '/job/' + active + "/" + jobKey + "/editedBy").push();
+    var newEditJobKey = newEditJob.key;
+    var jobName = document.getElementById("view-name-input").value;
+    var updateEverything = {};
+    updateEverything[jobRef + "jobName"] = document.getElementById("view-name-input").value;
+    updateEverything[jobRef + "jobNum"] = document.getElementById("view-number-input").value;
+    updateEverything[jobRef + "jobLocation"] = document.getElementById("view-location-input").value;
+    updateEverything[jobRef + "pmName"] = document.getElementById("view-pm-name-input").value;
+    updateEverything[jobRef + "pmNum"] = document.getElementById("view-pm-contact-input").value;
+    updateEverything[jobRef + "jobContractor"] = document.getElementById("view-contractor-input").value;
+    updateEverything[jobRef + "editedBy/" + newEditJobKey + "/editedName"] = localStorage["WYDuserNameFull"];
+    updateEverything[jobRef + "editedBy/" + newEditJobKey + "/editedID"] = localStorage["WYDuserID"];
+    updateEverything[jobRef + "contacts/0/contactName"] = document.getElementById("view-name-input-0").value;
+    updateEverything[jobRef + "contacts/0/contactNum"] = document.getElementById("view-number-input-0").value;
+    if(count>1) {
+        for(i=2;i<=count;i++) {
+            updateEverything[jobRef + "contacts/" + i + "/contactName"] = document.getElementById("view-name-input-" + i).value;
+            updateEverything[jobRef + "contacts/" + i + "/contactNum"] = document.getElementById("view-number-input-" + i).value; 
+        }
+    }
+    console.log("UpdateEverything: " + updateEverything);
+    // Send All Data to Firebase
+    firebase.database().ref().update(updateEverything)
+    .then(function() {
+        // Use Click of Cancel to clear everything
+        $('#button-add-job-cancel').trigger('click');
+        toastr["info"](jobName + " has successfully been updated!");
+        // Use Click of Cancel to clear everything
+        $('#button-job-cancel').trigger('click');
+    });
 });
 
 /* =============================================== */
