@@ -16,18 +16,24 @@
 - [X] Make Project Page (this)
 - [ ] Edit Template for Blank Pages
     - [X] Load Footer
-    - [ ] Load Header Navs
+    - [X] Load Header Navs
         - [X] Operations
         - [X] Employees
         - [ ] GodMode
-- [ ] Create Firebase for Project
+- [X] Create Firebase for Project
 - [ ] Finish this list...
-- [ ] Load in Appropriate Header and Footer HTML files
+- [X] Load in Appropriate Header and Footer HTML files
 ___
 # Main Features (Everything that needs to be in the release versions :dog: :cat:)
 - [ ] Blog (JDR)
 - [ ] Landing Page (JDR)
+- [X] Login
+- [X] Register Company
 - [ ] Operations Section (BH)
+    - [X] Company Profile
+    - [ ] Dashboard
+    - [X] Seated Users
+    - [/] Jobs
 - [ ] Employees Section (BH)
 - [ ] GodMode Section (BH)
 ---

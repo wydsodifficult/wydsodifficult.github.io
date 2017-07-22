@@ -193,13 +193,163 @@
 
         <!-- Main content -->
         <main class="main">
+            <!-- Modal Content -->
+            <div class="modal fade" id="view-job-modal" tabindex="-1" role="dialog" aria-labelledby="viewJobModalTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewJobModalTitle">VIEW JOB</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input id="jobID" type="text" disabled style="display:none">
+                            <input id="view-contact-count" type="text" disabled value=0 style="display:none">
+                            <label>Job Name</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-rocket fa-spin"></i></span>
+                                <input id="view-name-input" type="text" class="form-control" autofocus="autofocus" placeholder="Job Name" disabled>
+                            </div>
 
+                            <label>Job Number</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon">#</span>
+                                <input id="view-number-input" type="text" class="form-control" autofocus="autofocus" placeholder="Job Number" disabled>
+                            </div>
+
+                            <label>Job Location</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-location-pin"></i></span>
+                                <input id="view-location-input" type="text" class="form-control" autofocus="autofocus" placeholder="Location / Address" disabled>
+                            </div>
+                            <div>
+                                Active Job?
+                                <label class="switch switch-text switch-pill switch-primary">
+                                    <input disabled id="view-active-input" type="checkbox" class="switch-input" checked="">
+                                    <span class="switch-label"data-on="YES" data-off="NO"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            
+                            <label>Project Manager</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-emotsmile"></i></span>
+                                <input id="view-pm-name-input" type="text" class="form-control" autofocus="autofocus" placeholder="Project Manager Name" disabled>
+                            </div>
+
+                            <label>Project Manager Contact</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-phone"></i></span>
+                                <input id="view-pm-contact-input" type="telephone" class="form-control" autofocus="autofocus" placeholder="Project Manager Contact" disabled>
+                            </div>
+                            Contractor Information
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-wrench"></i></span>
+                                <input id="view-contractor-input" type="text" class="form-control" autofocus="autofocus" placeholder="Contractor" disabled>
+                            </div>
+                            <div id="view-modal-job-contacts"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="button-job-cancel" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button id="button-job-delete" type="button" class="btn btn-warning" data-dismiss="modal" style="display:none">Delete Job</button>
+                            <button id="button-job-edit" type="button" class="btn btn-primary">Edit Job</button>
+                            <button id="button-job-save" type="button" class="btn btn-primary" style="display:none">Save Job</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Page Content -->
             <div class="container-fluid">
 
                 <div class="animated fadeIn">
                     <h1>Company Jobs</h1>
-                    <br>
+                    <hr>
+                    <div id="button-add-job-div">
+                        <button type="button" class="btn  btn-primary btn-block" id="button-add-job">Add Job</button>
+                        <hr>
+                    </div>
+                    <div id="add-job-inputs" style="display:none">
+                        <h3>Add Job</h3>
+                        <hr>
+                        <h6>Job Information</h6>
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-rocket fa-spin"></i></span>
+                            <input id="name-input" type="text" class="form-control" autofocus="autofocus" placeholder="Job Name">
+                        </div>
 
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon">#</span>
+                            <input id="number-input" type="text" class="form-control" autofocus="autofocus" placeholder="Job Number">
+                        </div>
+
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-location-pin"></i></span>
+                            <input id="location-input" type="text" class="form-control" autofocus="autofocus" placeholder="Location / Address">
+                        </div>
+                        <div>
+                            Active Job?
+                            <label class="switch switch-text switch-pill switch-primary">
+                                <input id="active-input" type="checkbox" class="switch-input" checked="">
+                                <span class="switch-label"data-on="YES" data-off="NO"></span>
+                                <span class="switch-handle"></span>
+                            </label>
+                        </div>
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-emotsmile"></i></span>
+                            <input id="pm-name-input" type="text" class="form-control" autofocus="autofocus" placeholder="Project Manager Name">
+                        </div>
+
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-phone"></i></span>
+                            <input id="pm-contact-input" type="telephone" class="form-control" autofocus="autofocus" placeholder="Project Manager Contact">
+                        </div>
+                        Contractor Information
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-wrench"></i></span>
+                            <input id="contractor-input" type="text" class="form-control" autofocus="autofocus" placeholder="Contractor">
+                        </div>
+
+                        <input id="contact-count" type="number" disabled style="display:none" value="0">
+
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-user"></i></span>
+                            <input id="name-input-0" type="text" class="form-control" autofocus="autofocus" placeholder="Contractor Contact Name">
+                        </div>
+
+                        <div class="input-group mb-1">
+                            <span class="input-group-addon"><i class="icon-phone"></i></span>
+                            <input id="number-input-0" type="telephone" class="form-control" autofocus="autofocus" placeholder="Contractor Contact Number">
+                        </div>
+
+                        <button type="button" class="btn btn-primary" id="button-add-job-contact">Add Another Contact</button>
+                        <br>
+                        <h6 id="additional-contacts-header" style="display:none">Additional Contacts</h6>
+                        <div id="add-contacts"></div>
+                        <br>
+                        <div id="loading" class="sk-cube-grid" style="display:none">
+                            <div class="sk-cube sk-cube1"></div>
+                            <div class="sk-cube sk-cube2"></div>
+                            <div class="sk-cube sk-cube3"></div>
+                            <div class="sk-cube sk-cube4"></div>
+                            <div class="sk-cube sk-cube5"></div>
+                            <div class="sk-cube sk-cube6"></div>
+                            <div class="sk-cube sk-cube7"></div>
+                            <div class="sk-cube sk-cube8"></div>
+                            <div class="sk-cube sk-cube9"></div>
+                        </div>
+                        <button id="button-add-job-cancel" type="button" class="btn btn-danger">Cancel</button>
+                        <button id="button-add-job-confirm" type="button" class="btn btn-success" disabled>Add Job</button>
+                    </div>
+                    <div id="button-switch-job-div">
+                        <button type="button" class="btn  btn-primary btn-block" id="button-switch-job">View Inactive Jobs</button>
+                        <hr>
+                    </div>
+                    <input id="job-count" type="number" disabled style="display:none" value="0">
+                    <div class="card">
+                        <div id=job-div class="card-block">
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -225,6 +375,14 @@
     <script src="js/libs/Chart.min.js"></script>
     <script src="js/libs/toastr.min.js"></script>
     
+    <!-- Plugins and scripts required by this views -->
+    <script src="js/libs/jquery.dataTables.min.js"></script>
+    <script src="js/libs/dataTables.bootstrap4.min.js"></script>
+
+
+    <!-- Custom scripts required by this view -->
+    <script src="js/views/tables.js"></script>
+    
     <!-- Comment out unneeded navbars -->
     <script>
         $(document).ready(function () {
@@ -238,6 +396,7 @@
                 document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
             }
+            $('input').keyup(companyJobCheck);
         });
     </script>
     
@@ -248,6 +407,7 @@
             // User is signed in.
             //toastr["info"]("user logged in");
             if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
+            getActiveJobs();
           } else {
             // No user is signed in.
             window.location="login.html";

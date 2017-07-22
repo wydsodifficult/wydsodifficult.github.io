@@ -198,7 +198,7 @@
                 <div class="animated fadeIn">
                     
                     <h1>Company Information</h1>
-                    <br>
+                    <hr>
                     <label>Company Name</label>
                     <div class="input-group mb-1">
                         <span class="input-group-addon"><i class="icon-user"></i></span>
@@ -250,6 +250,7 @@
                     <button type="button" class="btn  btn-success" style="display:none" id="button-save-company-profile">Save Company Profile</button>
                     <button type="button" class="btn  btn-danger" style="display:none" id="button-cancel-company-profile">Cancel</button>
                 </div>
+                <br>
 
             </div>
             <!-- /.conainer-fluid -->
@@ -304,7 +305,7 @@
                 document.getElementById("website-input").value = snapshot.val().website;
                 document.getElementById("lunch-input").value = snapshot.val().lunch;
             });
-            if(localStorage["WYDuserAccess"] == 1) document.getElementById("button-edit-company-profile").style = "display:true";
+            if(localStorage["WYDuserAccess"] == 1) document.getElementById("button-edit-company-profile").style.display="inline";
           } else {
             // No user is signed in.
             window.location="login.html";
