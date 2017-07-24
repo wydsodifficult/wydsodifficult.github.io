@@ -722,8 +722,6 @@ $('#button-add-user-info').on('click',function(){
 // Operations-jobs
 function getActiveJobs() {
     var access = localStorage["WYDuserAccess"];
-    //var viewJob = document.getElementById("myTable");
-    //var jobTable = document.getElementById("job-table");
     var jobCountDiv = document.getElementById("job-count");
     if(access < 3) {
         document.getElementById("button-add-job-div").style.display="inline";
@@ -776,6 +774,69 @@ function getActiveJobs() {
         document.getElementById("job-div").innerHTML = "An Error Occured! Please Try Again!";
     });
 }
+
+// Function Run to show Active/Inactive Jobs when clicked
+// switchJobView()
+// Operations-jobs
+$('#button-switch-job').on('click',function(){
+    var switchButton = document.getElementById("button-switch-job");
+    var tableDiv = document.getElementById("job-div");
+    tableDiv.innerHTML = "";
+    var jobCountDiv = document.getElementById("job-count");
+    var query = firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/job/" + this.value).orderByChild("jobName");
+    query.once('value').then(function(snapshot) {
+        var jobTable = document.createElement("table");
+        jobTable.id = "job-table";
+        jobTable.className = "table table-striped table-bordered";
+        var jobHead = jobTable.createTHead()
+        var jobHeadRow = jobHead.insertRow();
+        var headerCell0 = document.createElement("th");
+        var headerCell1 = document.createElement("th");
+        var headerCell2 = document.createElement("th");
+        var jobBody = jobTable.createTBody();
+        tableDiv.append(jobTable);
+        snapshot.forEach(function(childSnapshot){
+            var row = jobBody.insertRow();
+            row.id = ("job-" + childSnapshot.key);
+            var cell1 = row.insertCell(0).innerHTML = childSnapshot.val().jobName;
+            var cell2 = row.insertCell(1).innerHTML = childSnapshot.val().jobNum; ;
+            var cell3 = row.insertCell(2);
+            var infoLink = document.createElement("a");
+            infoLink.className = "btn btn-success";
+            infoLink.title = "More Info";
+            infoLink.href = "#";
+            infoLink.onclick = function(){viewJob(childSnapshot,"inactive")};
+            infoLink.setAttribute("data-toggle","modal");
+            infoLink.setAttribute("data-target","#view-job-modal");
+            var infoImg = document.createElement("i");
+            infoImg.className = "fa fa-search-plus";
+            infoLink.append(infoImg);
+            cell3.append(infoLink);
+            jobCountDiv.value++;
+        });
+        headerCell0.innerHTML = "Job Name";
+        headerCell0.id = "job-sort-0";
+        headerCell0.onclick=function(){sortJobTable(0)};
+        headerCell1.innerHTML = "Job Num";
+        headerCell1.id = "job-sort-1";
+        headerCell2.innerHTML = "Actions";
+        headerCell1.onclick=function(){sortJobTable(1)};
+        jobHeadRow.appendChild(headerCell0);
+        jobHeadRow.appendChild(headerCell1);
+        jobHeadRow.appendChild(headerCell2);
+        tableDiv.append(jobTable);
+        if(switchButton.value == "inactive") {
+            switchButton.value = "active";
+            switchButton.innerText = "View Active Jobs";
+        }
+        else {
+            switchButton.value = "inactive";
+            switchButton.innerText = "View Inactive Jobs";
+        }
+    },function(error){
+        document.getElementById("job-div").innerHTML = "An Error Occured! Please Try Again!";
+    });
+});
 
 // Function Run to sort jobs within the table
 // n is the column number that is being sorted
@@ -914,23 +975,18 @@ $('#button-add-job-confirm').on('click',function(){
     // Send All Data to Firebase
     firebase.database().ref().update(updateEverything)
     .then(function() {
-        var showDiv = document.getElementById("display-jobs");
-        var jobDiv = document.createElement("div");
-        jobDiv.className = "input-group mb-1";
-        var jobSpan = document.createElement("span");
-        jobSpan.className = "input-group-addon";
-        var jobI = document.createElement("i");
-        jobI.className = "icon-user";
-        jobSpan.append(jobI);
-        jobDiv.append(jobSpan);
-        var jobInput = document.createElement("input");
-        jobInput.className = "form-control";
-        jobInput.type = "text";
-        jobInput.id = ("job-" + newJobKey);
-        jobInput.value = document.getElementById("name-input");
-        //jobInput.onClick("viewJob(jobInput.id)");
-        jobDiv.append(jobInput);
-        //showDiv.append(jobDiv);
+        var showDiv = document.getElementById("job-table");
+        var row = document.createElement('tr');
+        var nameCol = document.createElement('td');
+        var numCol = document.createElement('td');
+        var wordsCol = document.createElement('td');
+        nameCol.innerHTML = document.getElementById("name-input").value;
+        numCol.innerHTML = document.getElementById("number-input").value;
+        wordsCol.innerHTML = "Refresh to view more";
+        row.id = ("job-" + newJobKey);
+        row.appendChild(nameCol);
+        row.appendChild(numCol);
+        showDiv.appendChild(row);
         // Use Click of Cancel to clear everything
         $('#button-add-job-cancel').trigger('click');
     });
@@ -998,7 +1054,6 @@ $('#button-add-job-contact').on('click',function(){
     holdingDiv.append(contactNumDiv);
     document.getElementById("contact-count").value = count;
 });
-
 
 // Function run when a job is clicked to view all relevent information
 // viewJob()
@@ -1099,6 +1154,7 @@ $('#button-job-delete').on('click',function() {
         firebase.database().ref("company/" + localStorage["WYDuserCompanyID"] + "/job/inactive/" + jobKey).remove();
         var row = document.getElementById("job-" + jobKey);
         row.parentNode.removeChild(row);
+        toastr["info"]("Job Successfully Deleted"); 
     }
     else {
     }
