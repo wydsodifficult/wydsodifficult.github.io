@@ -220,6 +220,7 @@ function passMinCheck() {
 }
 
 /* ----- Page Specific Scripts ----- */
+/*************************************/
 
 // Function run when creating a new company account: createCompany()
 // Register
@@ -770,6 +771,7 @@ function getActiveJobs() {
         jobHeadRow.appendChild(headerCell1);
         jobHeadRow.appendChild(headerCell2);
         tableDiv.append(jobTable);
+        document.getElementById("loading-jobs").style.display = "none";
     },function(error){
         document.getElementById("job-div").innerHTML = "An Error Occured! Please Try Again!";
     });
@@ -938,7 +940,7 @@ $('#button-add-job').on('click',function(){
 });
 
 // Function run when "Add Job" button is clicked to save everything in "add-job-inputs" div then hide if successful
-// addJobButton()
+// confirmAddJobButton()
 // Operations-jobs
 $('#button-add-job-confirm').on('click',function(){
     document.getElementById('loading').setAttribute('style','display:true');
@@ -1115,7 +1117,7 @@ function viewJob(thisJob,active) {
 }
 
 // Function run when the View Job Modal loses focus then disables all job info inputs
-// dismissViewJobModal
+// dismissViewJobModal()
 // Operations-jobs
 $("#view-job-modal").on("hide.bs.modal", function(){
     document.getElementById("button-job-save").style.display = "none";
@@ -1130,7 +1132,7 @@ $("#view-job-modal").on("hide.bs.modal", function(){
 });
 
 // Function run when "Edit Job" Button is clicked to enable all job info inputs
-// editJobButton
+// editJobButton()
 // Operations-jobs
 $('#button-job-edit').on('click',function() {
     document.getElementById("button-job-save").style.display = "inline";
@@ -1145,7 +1147,7 @@ $('#button-job-edit').on('click',function() {
 });
 
 // Function run when "Delete Job" Button is clicked
-// deleteJobButton
+// deleteJobButton()
 // Operations-jobs
 $('#button-job-delete').on('click',function() {
     if(confirm("Are You Sure You Want To Delete This Job?")) {
@@ -1161,7 +1163,7 @@ $('#button-job-delete').on('click',function() {
 });
 
 // Function run when "Save Job" Button is clicked
-// saveJobButton
+// saveJobButton()
 // Operations-jobs
 $('#button-job-save').on('click',function() {
     document.getElementById('loading').setAttribute('style','display:true');
@@ -1237,7 +1239,7 @@ function getUserData() {
 
 // When anything with the id "Logout" is clicked LOGOUT
 // userLogout()
-$('#logout').on('click', function() {
+$('#logout').add('#logout-sidebar').on('click', function() {
     firebase.auth().signOut().then(function() {
     // Sign-out successful.
         localStorage.removeItem('WYDuserAccess');
