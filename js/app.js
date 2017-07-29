@@ -772,6 +772,7 @@ function getActiveJobs() {
         jobHeadRow.appendChild(headerCell2);
         tableDiv.append(jobTable);
         document.getElementById("loading-jobs").style.display = "none";
+        if(jobCountDiv.value == 0) tableDiv.innerHTML = "No Active Jobs";
     },function(error){
         document.getElementById("job-div").innerHTML = "An Error Occured! Please Try Again!";
     });
@@ -1208,6 +1209,166 @@ $('#button-job-save').on('click',function() {
         // Use Click of Cancel to clear everything
         $('#button-job-cancel').trigger('click');
     });
+});
+
+// Function run when Template page is loaded
+// viewTemplates()
+// Operations-report-templates
+function viewTemplates() {
+    var access = localStorage["WYDuserAccess"];
+    if(access < 3) {
+        document.getElementById("new-template-div").style.display="inline";
+    }
+}
+
+// Function run when the New Template Btton is clicked
+// newReportTemplate()
+// Operations-report-templates
+$('#button-template-new').on('click',function() {
+    document.getElementById("button-template-new").style.display="none";
+    document.getElementById("button-template-line").style.display="inline"; 
+    document.getElementById("template-new-divider").style.display="block"; 
+    document.getElementById("button-template-save").style.display="inline";
+    document.getElementById("button-template-cancel").style.display="inline";
+    var inputs = document.getElementById("template-inputs");
+    $('#button-template-line').trigger('click');
+});
+
+// Function run when the New Template Add Line Button is clicked
+// newLineReportTemplate()
+// Operations-report-templates
+$('#button-template-line').on('click', function() {
+    var count = document.getElementById("field-count");
+    var showDiv = document.getElementById("template-inputs");
+    var container = document.createElement("div");
+    container.id = ("line-div-" + count.value);
+    var firstLine = document.createElement("div");
+    var secondLine = document.createElement("div");
+    var thirdLine = document.createElement("div");
+    var fourthLine = document.createElement("div");
+    // Fourth Line
+    var titleDiv = document.createElement("div");
+    var titleSpan = document.createElement("span");
+    var titleI = document.createElement("i");
+    var titleInput = document.createElement("input");
+    titleDiv.setAttribute("class", "input-group mb-1");
+    titleSpan.setAttribute("class", "input-group-addon");
+    titleI.setAttribute("class", "icon-book-open");
+    titleInput.id = ("title-input-" + count.value);
+    titleInput.setAttribute("type", "text");
+    titleInput.setAttribute("class", "form-control");
+    titleInput.setAttribute("placeholder", "Title Name");
+    titleSpan.appendChild(titleI);
+    titleDiv.appendChild(titleSpan);
+    titleDiv.appendChild(titleInput);
+    fourthLine.style=("display:none");
+    fourthLine.appendChild(titleDiv);
+    // Third Line
+    var codeDiv = document.createElement("div");
+    var codeSpan = document.createElement("span");
+    var codeI = document.createElement("i");
+    var codeInput = document.createElement("input");
+    codeDiv.setAttribute("class", "input-group mb-1");
+    codeSpan.setAttribute("class", "input-group-addon");
+    codeI.setAttribute("class", "icon-calculator");
+    codeInput.id = ("code-input-" + count.value);
+    codeInput.setAttribute("type", "text");
+    codeInput.setAttribute("class", "form-control");
+    codeInput.setAttribute("placeholder", "Cost Code");
+    codeSpan.appendChild(codeI);
+    codeDiv.appendChild(codeSpan);
+    codeDiv.appendChild(codeInput);
+    thirdLine.appendChild(codeDiv);
+    // Second Line
+    var performedDiv = document.createElement("div");
+    var performedSpan = document.createElement("span");
+    var performedI = document.createElement("i");
+    var performedInput = document.createElement("input");
+    performedDiv.setAttribute("class", "input-group mb-1");
+    performedSpan.setAttribute("class", "input-group-addon");
+    performedI.setAttribute("class", "icon-wrench");
+    performedInput.id = ("performed-input-" + count.value);
+    performedInput.setAttribute("type", "text");
+    performedInput.setAttribute("class", "form-control");
+    performedInput.setAttribute("placeholder", "Work Performed");
+    performedSpan.appendChild(performedI);
+    performedDiv.appendChild(performedSpan);
+    performedDiv.appendChild(performedInput);
+    secondLine.appendChild(performedDiv);
+    // First Line
+    var toggleContainer = document.createElement("label");
+    toggleContainer.setAttribute("class", "switch switch-text switch-pill switch-primary");
+    var toggle = document.createElement("input");
+    toggle.setAttribute("class", "switch-input");
+    toggle.setAttribute("type", "checkbox");
+    toggle.onchange = function(){
+        if(this.checked==false) {
+            secondLine.style.display="inline";
+            thirdLine.style.display="inline";
+            fourthLine.style.display="none";
+        }
+        else {
+            secondLine.style.display="none";
+            thirdLine.style.display="none";
+            fourthLine.style.display="inline";
+        }
+    };
+    var toggleLabels = document.createElement("span");
+    toggleLabels.setAttribute("class", "switch-label");
+    toggleLabels.setAttribute("data-on", "Yes");
+    toggleLabels.setAttribute("data-off", "No");
+    var toggleHandle = document.createElement("span");
+    toggleHandle.setAttribute("class","switch-handle");
+    toggleContainer.appendChild(toggle);
+    toggleContainer.appendChild(toggleLabels);
+    toggleContainer.appendChild(toggleHandle);
+    firstLine.appendChild(toggleContainer);
+    var titleQuestion = document.createElement("label");
+    titleQuestion.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
+    firstLine.appendChild(titleQuestion);
+    var deleteLine = document.createElement("button");
+    deleteLine.setAttribute("class", "btn btn-danger float-right");
+    deleteLine.setAttribute("type", "button");
+    deleteLine.setAttribute("title", "DELETE LINE");
+    deleteLine.innerHTML = "DELETE LINE";
+    deleteLine.onclick = function() {
+        var thisContainer = this.parentElement.parentElement;
+        var divAbove = this.parentElement.parentElement.parentElement;
+        divAbove.removeChild(thisContainer);
+    };
+    firstLine.appendChild(deleteLine);
+    // Add everything to the container  
+    container.appendChild(firstLine);
+    container.appendChild(document.createElement("br"));
+    container.appendChild(secondLine);
+    container.appendChild(thirdLine);
+    container.appendChild(fourthLine);
+    container.appendChild(document.createElement("hr"));
+    showDiv.appendChild(container);
+    count.value++;
+    console.log("Current count: " + count.value);
+});
+
+// Function run when the New Template Save Button is clicked
+// saveNewReportTemplate()
+// Operations-report-templates
+$('#button-template-save').on('click',function() {
+    // Use Click of Cancel to clear everything
+    $('#button-template-cancel').trigger('click');
+});
+
+// Function run when the New Template Cancel Button is clicked
+// cancelNewReportTemplate()
+// Operations-report-templates
+$('#button-template-cancel').on('click',function() {
+    document.getElementById("button-template-new").style.display="inline";
+    document.getElementById("button-template-line").style.display="none";
+    document.getElementById("template-new-divider").style.display="none"; 
+    document.getElementById("button-template-line").style.display="none";
+    document.getElementById("button-template-cancel").style.display="none";
+    document.getElementById("button-template-save").style.display="none";
+    document.getElementById("template-inputs").innerHTML="";
+    document.getElementById("field-count").value=0;
 });
 
 /* =============================================== */
