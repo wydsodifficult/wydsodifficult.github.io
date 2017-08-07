@@ -435,9 +435,9 @@ $('#button-edit-company-profile').on('click', function(){
     document.getElementById("fax-input").removeAttribute("disabled");
     document.getElementById("website-input").removeAttribute("disabled");
     document.getElementById("lunch-input").removeAttribute("disabled");
-    document.getElementById("button-edit-company-profile").style.display="none";
-    document.getElementById("button-save-company-profile").style.display="inline";
-    document.getElementById("button-cancel-company-profile").style.display="inline";
+    document.getElementById("button-edit-company-profile").setAttribute("style", "display:none");
+    document.getElementById("button-save-company-profile").setAttribute("style", "display:inline");
+    document.getElementById("button-cancel-company-profile").setAttribute("style", "display:inline");
 });
 
 // Function run to cancel the editing of the company profile
@@ -450,9 +450,9 @@ $('#button-cancel-company-profile').on('click', function(){
     document.getElementById("fax-input").setAttribute("disabled", "true");
     document.getElementById("website-input").setAttribute("disabled", "true");
     document.getElementById("lunch-input").setAttribute("disabled", "true");
-    document.getElementById("button-edit-company-profile").style.display="inline";
-    document.getElementById("button-save-company-profile").style.display="none";
-    document.getElementById("button-cancel-company-profile").style.display="none";
+    document.getElementById("button-edit-company-profile").setAttribute("style", "display:inline");
+    document.getElementById("button-save-company-profile").setAttribute("style", "display:none");
+    document.getElementById("button-cancel-company-profile").setAttribute("style", "display:none");
 });
 
 // Function run when editing the company profile
@@ -498,10 +498,10 @@ function getSeatedUsers() {
     });
 
     if(localStorage["WYDuserAccess"] < 3) {
-        document.getElementById("non-access").style.display="inline";
+        document.getElementById("non-access").setAttribute("style", "display:inline");
         if(localStorage["WYDuserAccess"] == 1) {
-            if(document.getElementById("overall-input").value >= document.getElementById("used-input").value) document.getElementById("button-add-user-modal").style.display="inline";
-            document.getElementById("button-delete-user-modal").style.display="inline";
+            if(document.getElementById("overall-input").value >= document.getElementById("used-input").value) document.getElementById("button-add-user-modal").setAttribute("style", "display:inline");
+            document.getElementById("button-delete-user-modal").setAttribute("style", "display:inline");
         }
     }
     var seatedPeeps = document.getElementById("seated-users");
@@ -529,7 +529,7 @@ function getSeatedUsers() {
                 // Click to bring up delete options
                 var endSpan = document.createElement("span");
                 endSpan.className = "input-group-addon";
-                endSpan.style.display="none";
+                endSpan.setAttribute("style", "display:none");
                 endSpan.setAttribute("name", "user-delete");
                 endSpan.value = numPeeps;
                 endSpan.setAttribute("data-toggle","tooltip");
@@ -538,7 +538,7 @@ function getSeatedUsers() {
                 endSpan.setAttribute("data-trigger","hover focus");
                 endSpan.id = "user-delete-" + numPeeps;
                 endSpan.onclick = function() {
-                    this.style.display="none";
+                    this.setAttribute("style", "display:none");
                     // Click to cancel
                     var cancelSpan = document.createElement("span");
                     var confirmSpan = document.createElement("span");
@@ -551,9 +551,9 @@ function getSeatedUsers() {
                     cancelSpan.setAttribute("data-trigger","hover focus");
                     cancelSpan.id = "user-cancel-" + numPeeps;
                     cancelSpan.onclick = function() {
-                        this.style.display="none";
-                        confirmSpan.style.display="none";
-                        endSpan.style.display="inline";
+                        this.setAttribute("style", "display:none");
+                        confirmSpan.setAttribute("style", "display:none");
+                        endSpan.setAttribute("style", "display:inline");
                     };
                     var cancelIt = document.createElement("i");
                     cancelIt.className = "icon-close";
@@ -569,11 +569,11 @@ function getSeatedUsers() {
                     confirmSpan.setAttribute("data-trigger","hover focus");
                     confirmSpan.id = "user-delete-" + numPeeps;
                     confirmSpan.onclick = function() {
-                        firebase.database().ref('company/' + localStorage['WYDuserCompanyID'] + '/users/' + childSnapshot.key).remove()
+                        firebase.database().ref('company/' + localStorage['WYDuserCompanyID'] + '/users/' + childSnapshot.key).remove();
                         firebase.database().ref('user/' + childSnapshot.key).remove().then(function() {
                             var minusSeat = Number(document.getElementById('used-input').value)-1;
                             firebase.database().ref('company/' + localStorage['WYDuserCompanyID'] + '/payment/').update({used:minusSeat}).then(function() {
-                                seatDiv.style.display="none";
+                                seatDiv.setAttribute("style", "display:none");
                                 toastr["User has been deleted"];
                                 document.getElementById('used-input').value = minusSeat;
                             });
@@ -648,10 +648,10 @@ $('#button-add-user').on('click',function(){
 $('#button-delete-user-modal').on('click',function(){
     var seatLengths = document.getElementsByName('user-delete').length;
     for(i=0; i<seatLengths; i++) {
-        document.getElementById('user-delete-'+i).style.display="inline";
+        document.getElementById('user-delete-'+i).setAttribute("style", "display:inline");
     }
-    document.getElementById('button-delete-user-modal').style.display="none";
-    document.getElementById('button-hide-delete-user-modal').style.display="inline";
+    document.getElementById('button-delete-user-modal').setAttribute("style", "display:none");
+    document.getElementById('button-hide-delete-user-modal').setAttribute("style", "display:inline");
 });
 
 // Function run when "Delete Users" button is clicked again to hide delete prompts
@@ -660,10 +660,10 @@ $('#button-delete-user-modal').on('click',function(){
 $('#button-hide-delete-user-modal').on('click',function(){
     var seatLengths = document.getElementsByName('user-delete').length;
     for(i=0; i<seatLengths; i++) {
-        document.getElementById('user-delete-'+i).style.display="none";
+        document.getElementById('user-delete-'+i).setAttribute("style", "display:none");
     }
-    document.getElementById('button-delete-user-modal').style.display="inline";
-    document.getElementById('button-hide-delete-user-modal').style.display="none";
+    document.getElementById('button-delete-user-modal').setAttribute("style", "display:inline");
+    document.getElementById('button-hide-delete-user-modal').setAttribute("style", "display:none");
 });
 
 // Function run after creating a new seated user for their info
@@ -725,8 +725,8 @@ function getActiveJobs() {
     var access = localStorage["WYDuserAccess"];
     var jobCountDiv = document.getElementById("job-count");
     if(access < 3) {
-        document.getElementById("button-add-job-div").style.display="inline";
-        document.getElementById("button-switch-job-div").style.display="inline";
+        document.getElementById("button-add-job-div").setAttribute("style", "display:inline");
+        document.getElementById("button-switch-job-div").setAttribute("style", "display:inline");
     }
     var query = firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/job/active").orderByChild("jobName");
     query.once('value').then(function(snapshot) {
@@ -936,8 +936,8 @@ function sortJobTable(n){
 // addJobButton()
 // Operations-jobs
 $('#button-add-job').on('click',function(){
-    document.getElementById("add-job-inputs").style.display="inline";
-    document.getElementById("button-add-job").style.display="none";
+    document.getElementById("add-job-inputs").setAttribute("style", "display:inline");
+    document.getElementById("button-add-job").setAttribute("style", "display:none");
 });
 
 // Function run when "Add Job" button is clicked to save everything in "add-job-inputs" div then hide if successful
@@ -999,9 +999,9 @@ $('#button-add-job-confirm').on('click',function(){
 // cancelAddJobButton()
 // Operations-jobs
 $('#button-add-job-cancel').on('click',function(){
-    document.getElementById("add-job-inputs").style.display="none";
-    document.getElementById("additional-contacts-header").style.display="none";
-    document.getElementById("button-add-job").style.display="inline";
+    document.getElementById("add-job-inputs").setAttribute("style", "display:none");
+    document.getElementById("additional-contacts-header").setAttribute("style", "display:none");
+    document.getElementById("button-add-job").setAttribute("style", "display:inline");
     document.getElementById("add-contacts").innerHTML="";
     document.getElementById("name-input").value="";
     document.getElementById("number-input").value="";
@@ -1021,7 +1021,7 @@ $('#button-add-job-cancel').on('click',function(){
 // addJobContactButton()
 // Operations-jobs
 $('#button-add-job-contact').on('click',function(){
-    document.getElementById("additional-contacts-header").style.display="inline";
+    document.getElementById("additional-contacts-header").setAttribute("style", "display:inline");
     var count = Number(document.getElementById("contact-count").value)+1;
     console.log(document.getElementById("contact-count").value);
     var holdingDiv = document.getElementById("add-contacts");
@@ -1179,7 +1179,7 @@ $('#button-job-save').on('click',function() {
     var jobKey = document.getElementById("jobID").value;
     var count = document.getElementById("view-contact-count").value;
     var jobRef = 'company/' + companyKey + '/job/' + active + '/' + jobKey + '/';
-    var newEditJob = firebase.database().ref('company/' + companyKey + '/job/' + active + "/" + jobKey + "/editedBy").push();
+    var newEditJob = firebase.database().ref('company/' + companyKey + '/job/' + active + '/' + jobKey + '/editedBy').push();
     var newEditJobKey = newEditJob.key;
     var jobName = document.getElementById("view-name-input").value;
     var updateEverything = {};
@@ -1206,8 +1206,6 @@ $('#button-job-save').on('click',function() {
         // Use Click of Cancel to clear everything
         $('#button-add-job-cancel').trigger('click');
         toastr["info"](jobName + " has successfully been updated!");
-        // Use Click of Cancel to clear everything
-        $('#button-job-cancel').trigger('click');
     });
 });
 
@@ -1217,19 +1215,272 @@ $('#button-job-save').on('click',function() {
 function viewTemplates() {
     var access = localStorage["WYDuserAccess"];
     if(access < 3) {
-        document.getElementById("new-template-div").style.display="inline";
+        document.getElementById("new-template-div").setAttribute("style", "display:inline");
     }
+    var query = firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/list").orderByKey();
+    query.once('value').then(function(snapshot) {
+        document.getElementById("view-template-card").style.display="block";
+        var templateList = document.getElementById("view-template-div");
+        snapshot.forEach(function(childSnapshot) {
+            var templateButton = document.createElement("button");
+            templateButton.innerHTML = childSnapshot.key;
+            templateButton.id = childSnapshot.key;
+            templateButton.className = "btn btn-secondary btn-block btn-lg";
+            templateButton.onclick = function() {
+                toastr["info"]("Viewing: " + childSnapshot.key);
+                if(access < 3) document.getElementById("button-template-modal-edit").setAttribute("style", "display:inline");
+                var templateFields = document.getElementById("view-modal-template-fields");
+                templateFields.innerHTML = "<h5 id='template-modal-title'>" + childSnapshot.key + "</h5><input id='template-modal-title-value' value='" + childSnapshot.key + "' style='display:none'><input id='template-modal-count' value='" + childSnapshot.val().length + "' style='display:none'><hr>";
+                var count = document.getElementById("template-modal-count");
+                for(var i = 0; i < childSnapshot.val().length; i++) {
+                    (function(i){
+                        if(childSnapshot.val()[i].title==true) {
+                            var tempDiv = document.createElement("div");
+                            tempDiv.id = "line-modal-div-" + i;
+                            var switchDiv = document.createElement("label");
+                            var titleDiv = document.createElement("div");
+                            var workDiv = document.createElement("div");
+                            var codeDiv = document.createElement("div");
+                            titleDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-book-open'></i></span> <input disabled type='text' class='form-control' placeholder='Template Title' value='" + childSnapshot.val()[i].work + "' id='title-modal-input-" + i + "'> </div><hr>";
+                            workDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-calculator'></i></span> <input disabled type='text' class='form-control' id='work-modal-input-" + i + "' placeholder='Work Performed'> </div>";
+                            codeDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-wrench'></i></span> <input disabled type='text' class='form-control' placeholder='Cost Code' id='code-modal-input-" + i + "'> </div><hr>";
+                            switchDiv.className = "switch switch-text switch-pill switch-primary";
+                            var switchSpanA = document.createElement("span");
+                            var switchSpanB = document.createElement("span");
+                            switchSpanA.className = "switch-label";
+                            switchSpanA.setAttribute("data-on", "Yes");
+                            switchSpanA.setAttribute("data-off", "No");
+                            switchSpanB.className = "switch-handle";
+                            var switchInput = document.createElement("input");
+                            switchInput.className = "switch-input";
+                            switchInput.id = "view-template-checked-" + i;
+                            switchInput.type = "checkbox";
+                            switchInput.checked = true;
+                            switchInput.disabled = true;
+                            switchInput.onchange=function() {
+                                if(this.checked==false) {
+                                    titleDiv.setAttribute("style", "display:none");
+                                    workDiv.setAttribute("style", "display:inline");
+                                    codeDiv.setAttribute("style", "display:inline");
+                                }
+                                else {
+                                    titleDiv.setAttribute("style", "display:inline");
+                                    workDiv.setAttribute("style", "display:none");
+                                    codeDiv.setAttribute("style", "display:none");
+                                }
+                            }
+                            workDiv.setAttribute("style", "display:none");
+                            codeDiv.setAttribute("style", "display:none");
+                            var switchLabel = document.createElement("label");
+                            switchLabel.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
+                            var deleteLine = document.createElement("button");
+                            deleteLine.setAttribute("class", "btn btn-danger float-right");
+                            deleteLine.setAttribute("type", "button");
+                            deleteLine.setAttribute("title", "DELETE LINE");
+                            deleteLine.setAttribute("style", "display:none");
+                            deleteLine.setAttribute("name", "delete-modal-line");
+                            deleteLine.innerHTML = "DELETE LINE";
+                            deleteLine.onclick = function() {
+                                var thisContainer = this.parentElement.parentElement;
+                                var divAbove = this.parentElement.parentElement.parentElement;
+                                divAbove.removeChild(thisContainer);
+                                count.value--;
+            console.log("Count: " + document.getElementById("view-contact-count").value);
+                            };
+                            var lineDiv = document.createElement("div");
+                            switchDiv.appendChild(switchInput);
+                            switchDiv.appendChild(switchSpanA);
+                            switchDiv.appendChild(switchSpanB);
+                            lineDiv.appendChild(switchDiv);
+                            lineDiv.appendChild(switchLabel);
+                            lineDiv.appendChild(deleteLine);
+                            tempDiv.appendChild(lineDiv);
+                            tempDiv.appendChild(document.createElement("br"));
+                            tempDiv.appendChild(titleDiv);
+                            tempDiv.appendChild(workDiv);
+                            tempDiv.appendChild(codeDiv);
+                            templateFields.appendChild(tempDiv);
+                        }
+                        else {
+                            var tempDiv = document.createElement("div");
+                            tempDiv.id = "line-modal-div-" + i;
+                            var switchDiv = document.createElement("label");
+                            var titleDiv = document.createElement("div");
+                            var workDiv = document.createElement("div");
+                            var codeDiv = document.createElement("div");
+                            titleDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-book-open'></i></span> <input disabled type='text' class='form-control' placeholder='Template Title' id='title-modal-input-" + i + "'> </div><hr>";
+                            workDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-calculator'></i></span> <input disabled type='text' class='form-control' placeholder='Work Performed' value='" + childSnapshot.val()[i].work + "' id='work-modal-input-" + i + "'> </div>";
+                            codeDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-wrench'></i></span> <input disabled type='text' class='form-control' placeholder='Cost Code' id='code-modal-input-" + i + "' value='" + childSnapshot.val()[i].code + "'> </div><hr>";
+                            switchDiv.className = "switch switch-text switch-pill switch-primary";
+                            var switchSpanA = document.createElement("span");
+                            var switchSpanB = document.createElement("span");
+                            switchSpanA.className = "switch-label";
+                            switchSpanA.setAttribute("data-on", "Yes");
+                            switchSpanA.setAttribute("data-off", "No");
+                            switchSpanB.className = "switch-handle";
+                            var switchInput = document.createElement("input");
+                            switchInput.className = "switch-input";
+                            switchInput.id = "view-template-checked-" + i;
+                            switchInput.type = "checkbox";
+                            switchInput.checked = false;
+                            switchInput.disabled = true;
+                            switchInput.onchange=function() {
+                                if(this.checked==false) {
+                                    titleDiv.setAttribute("style", "display:none");
+                                    workDiv.setAttribute("style", "display:inline");
+                                    codeDiv.setAttribute("style", "display:inline");
+                                }
+                                else {
+                                    titleDiv.setAttribute("style", "display:inline");
+                                    workDiv.setAttribute("style", "display:none");
+                                    codeDiv.setAttribute("style", "display:none");
+                                }
+                            }
+                            titleDiv.setAttribute("style", "display:none");
+                            var switchLabel = document.createElement("label");
+                            switchLabel.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
+                            var deleteLine = document.createElement("button");
+                            deleteLine.setAttribute("class", "btn btn-danger float-right");
+                            deleteLine.setAttribute("type", "button");
+                            deleteLine.setAttribute("title", "DELETE LINE");
+                            deleteLine.setAttribute("style", "display:none");
+                            deleteLine.setAttribute("name", "delete-modal-line");
+                            deleteLine.innerHTML = "DELETE LINE";
+                            deleteLine.onclick = function() {
+                                var thisContainer = this.parentElement.parentElement;
+                                var divAbove = this.parentElement.parentElement.parentElement;
+                                divAbove.removeChild(thisContainer);
+                                count.value--;
+            console.log("Count: " + document.getElementById("view-contact-count").value);
+                            };
+                            var lineDiv = document.createElement("div");
+                            switchDiv.appendChild(switchInput);
+                            switchDiv.appendChild(switchSpanA);
+                            switchDiv.appendChild(switchSpanB);
+                            lineDiv.appendChild(switchDiv);
+                            lineDiv.appendChild(switchLabel);
+                            lineDiv.appendChild(deleteLine);
+                            tempDiv.appendChild(lineDiv);
+                            tempDiv.appendChild(document.createElement("br"));
+                            tempDiv.appendChild(titleDiv);
+                            tempDiv.appendChild(workDiv);
+                            tempDiv.appendChild(codeDiv);
+                            templateFields.append(tempDiv);
+                        }
+                    }).call(this,i);
+                }
+                $("#view-template-modal").modal('show');
+            }
+            templateList.appendChild(templateButton);
+            
+        });
+    });
 }
 
-// Function run when the New Template Btton is clicked
+// Function run when the View Template Modal loses focus then disables all job info inputs
+// dismissViewTemplateModal()
+// Operations-report-templates
+$("#view-template-modal").on("hide.bs.modal", function(){
+    document.getElementById("button-template-modal-cancel").innerHTML = "Close";
+    document.getElementById("button-template-modal-save").style.display = "none";
+    document.getElementById("button-template-modal-delete").style.display = "none";
+    document.getElementById("button-template-modal-edit").style.display = "none";
+    document.getElementById("button-template-modal-line").style.display = "none";
+    enableInputs(false, "view-template-modal");
+    document.getElementById("template-modal-inputs").innerHTML="";
+    document.getElementById("modal-loading").setAttribute("style", "display:none");
+});
+
+// Function run when the Edit View Templates Button is clicked
+// editViewTemplate()
+// Operations-report-templates
+$('#button-template-modal-edit').on('click', function() {
+    enableInputs(true, "view-template-modal");
+    document.getElementById("button-template-modal-edit").setAttribute("style", "display:none");
+    document.getElementById("button-template-modal-save").setAttribute("style", "display:inline");
+    document.getElementById("button-template-modal-delete").setAttribute("style", "display:inline");
+    document.getElementById("button-template-modal-cancel").innerText="Cancel";
+    document.getElementById("button-template-modal-line").style.display = "block";
+    document.getElementById("template-modal-title").innerHTML = "<div class='input-group mb-1' id='view-name-title'><span class='input-group-addon'> <i class='icon-book-open'></i></span> <input id='template-modal-title-input' type='text' class='form-control' placeholder='Template Title' value='" + document.getElementById("template-modal-title-value").value + "'> </div>";
+    var deleteLines = document.getElementsByName("delete-modal-line");
+    for(i = 0; i < deleteLines.length; i++) {
+        deleteLines[i].setAttribute("style", "display:inline");
+    }
+});
+
+// Function run when the Save View Templates Button is clicked
+// saveViewTemplate()
+// Operations-report-templates
+$('#button-template-modal-save').on('click', function() {
+    // Delete Old Template
+    var oldTitle = document.getElementById("template-modal-title-value").value;
+    firebase.database().ref('company/' + localStorage['WYDuserCompanyID'] + '/list/' + oldTitle).remove();
+    
+    var updateEverything = {};
+    document.getElementById('modal-loading').setAttribute('style','display:true');
+    var actualCount = 0;
+    var companyKey = localStorage["WYDuserCompanyID"];
+    var count = document.getElementById("template-modal-count").value;
+    var title = document.getElementById("template-modal-title-input").value;
+    if(title == "") {
+        d = new Date();
+        title = "template_" + getTodaysDate() + "_" + d.getHours() + "-" + d.getMinutes();
+    }
+    var templatePath = 'company/' + companyKey + '/list/' + title + '/';
+    for(var i = 0; i < count; i++){
+        if(document.getElementById("line-modal-div-" + i) != null) {
+            if(document.getElementById("view-template-checked-" + i).checked==false) {
+                updateEverything[templatePath + actualCount + "/title"] = false;
+                updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-modal-input-" + i).value;
+                updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-modal-input-" + i).value;
+            }
+            else {
+                updateEverything[templatePath + actualCount + "/title"] = true;
+                updateEverything[templatePath + actualCount + "/work"] = document.getElementById("title-modal-input-" + i).value;
+            }
+            actualCount++;
+        }
+    }
+    // Send All Data to Firebase
+    firebase.database().ref().update(updateEverything)
+    .then(function() {
+        // Use Click of Cancel to clear everything
+        $('#button-template-modal-cancel').trigger('click');
+        toastr["info"](title + " has successfully been updated!");
+        var renameButton = document.getElementById(oldTitle);
+        location.reload();
+    });
+});
+
+// Function run when the New Template Delete Button is clicked
+// deleteViewTemplate()
+// Operations-report-templates
+$('#button-template-modal-delete').on('click',function() {
+    // Delete Old Template
+    var title = document.getElementById("template-modal-title-value").value;
+    var confirmDelete = confirm("Are You Sure You Would Like To Delete " + title + "?");
+    if(confirmDelete) {
+        firebase.database().ref('company/' + localStorage['WYDuserCompanyID'] + '/list/' + title).remove()
+        .then(function() {
+            // Use Click of Cancel to clear everything
+            $('#button-template-modal-cancel').trigger('click');
+            toastr["info"](title + " has successfully been deleted!");
+        });
+        document.getElementById(title).setAttribute("style", "display:none");
+    }
+});
+
+// Function run when the New Template Button is clicked
 // newReportTemplate()
 // Operations-report-templates
 $('#button-template-new').on('click',function() {
-    document.getElementById("button-template-new").style.display="none";
-    document.getElementById("button-template-line").style.display="inline"; 
-    document.getElementById("template-new-divider").style.display="block"; 
-    document.getElementById("button-template-save").style.display="inline";
-    document.getElementById("button-template-cancel").style.display="inline";
+    document.getElementById("button-template-new").setAttribute("style", "display:none");
+    document.getElementById("template-card").style.display="block";
+    document.getElementById("template-title-div").setAttribute("style", "display:inline");
+    document.getElementById("button-template-line").setAttribute("style", "display:inline");
+    document.getElementById("template-new-divider").setAttribute("style", "display:block");
+    document.getElementById("button-template-save").setAttribute("style", "display:inline");
+    document.getElementById("button-template-cancel").setAttribute("style", "display:inline");
     var inputs = document.getElementById("template-inputs");
     $('#button-template-line').trigger('click');
 });
@@ -1301,16 +1552,17 @@ $('#button-template-line').on('click', function() {
     var toggle = document.createElement("input");
     toggle.setAttribute("class", "switch-input");
     toggle.setAttribute("type", "checkbox");
+    toggle.id = ("toggle-input-" + count.value);
     toggle.onchange = function(){
         if(this.checked==false) {
-            secondLine.style.display="inline";
-            thirdLine.style.display="inline";
-            fourthLine.style.display="none";
+            secondLine.setAttribute("style", "display:inline");
+            thirdLine.setAttribute("style", "display:inline");
+            fourthLine.setAttribute("style", "display:none");
         }
         else {
-            secondLine.style.display="none";
-            thirdLine.style.display="none";
-            fourthLine.style.display="inline";
+            secondLine.setAttribute("style", "display:none");
+            thirdLine.setAttribute("style", "display:none");
+            fourthLine.setAttribute("style", "display:inline");
         }
     };
     var toggleLabels = document.createElement("span");
@@ -1346,27 +1598,177 @@ $('#button-template-line').on('click', function() {
     container.appendChild(document.createElement("hr"));
     showDiv.appendChild(container);
     count.value++;
-    console.log("Current count: " + count.value);
+});
+
+// Function run when the New Modal Template Add Line Button is clicked
+// newModalLineReportTemplate()
+// Operations-report-templates
+$('#button-template-modal-line').on('click', function() {
+    var count = document.getElementById("template-modal-count");
+    var showDiv = document.getElementById("template-modal-inputs");
+    var container = document.createElement("div");
+    container.id = ("line-modal-div-" + count.value);
+    var firstLine = document.createElement("div");
+    var secondLine = document.createElement("div");
+    var thirdLine = document.createElement("div");
+    var fourthLine = document.createElement("div");
+    // Fourth Line
+    var titleDiv = document.createElement("div");
+    var titleSpan = document.createElement("span");
+    var titleI = document.createElement("i");
+    var titleInput = document.createElement("input");
+    titleDiv.setAttribute("class", "input-group mb-1");
+    titleSpan.setAttribute("class", "input-group-addon");
+    titleI.setAttribute("class", "icon-book-open");
+    titleInput.id = ("title-modal-input-" + count.value);
+    titleInput.setAttribute("type", "text");
+    titleInput.setAttribute("class", "form-control");
+    titleInput.setAttribute("placeholder", "Title Name");
+    titleSpan.appendChild(titleI);
+    titleDiv.appendChild(titleSpan);
+    titleDiv.appendChild(titleInput);
+    fourthLine.style=("display:none");
+    fourthLine.appendChild(titleDiv);
+    // Third Line
+    var codeDiv = document.createElement("div");
+    var codeSpan = document.createElement("span");
+    var codeI = document.createElement("i");
+    var codeInput = document.createElement("input");
+    codeDiv.setAttribute("class", "input-group mb-1");
+    codeSpan.setAttribute("class", "input-group-addon");
+    codeI.setAttribute("class", "icon-calculator");
+    codeInput.id = ("code-modal-input-" + count.value);
+    codeInput.setAttribute("type", "text");
+    codeInput.setAttribute("class", "form-control");
+    codeInput.setAttribute("placeholder", "Cost Code");
+    codeSpan.appendChild(codeI);
+    codeDiv.appendChild(codeSpan);
+    codeDiv.appendChild(codeInput);
+    thirdLine.appendChild(codeDiv);
+    // Second Line
+    var performedDiv = document.createElement("div");
+    var performedSpan = document.createElement("span");
+    var performedI = document.createElement("i");
+    var performedInput = document.createElement("input");
+    performedDiv.setAttribute("class", "input-group mb-1");
+    performedSpan.setAttribute("class", "input-group-addon");
+    performedI.setAttribute("class", "icon-wrench");
+    performedInput.id = ("work-modal-input-" + count.value);
+    performedInput.setAttribute("type", "text");
+    performedInput.setAttribute("class", "form-control");
+    performedInput.setAttribute("placeholder", "Work Performed");
+    performedSpan.appendChild(performedI);
+    performedDiv.appendChild(performedSpan);
+    performedDiv.appendChild(performedInput);
+    secondLine.appendChild(performedDiv);
+    // First Line
+    var toggleContainer = document.createElement("label");
+    toggleContainer.setAttribute("class", "switch switch-text switch-pill switch-primary");
+    var toggle = document.createElement("input");
+    toggle.setAttribute("class", "switch-input");
+    toggle.setAttribute("type", "checkbox");
+    toggle.id = ("view-template-checked-" + count.value);
+    toggle.onchange = function(){
+        if(this.checked==false) {
+            secondLine.setAttribute("style", "display:inline");
+            thirdLine.setAttribute("style", "display:inline");
+            fourthLine.setAttribute("style", "display:none");
+        }
+        else {
+            secondLine.setAttribute("style", "display:none");
+            thirdLine.setAttribute("style", "display:none");
+            fourthLine.setAttribute("style", "display:inline");
+        }
+    };
+    var toggleLabels = document.createElement("span");
+    toggleLabels.setAttribute("class", "switch-label");
+    toggleLabels.setAttribute("data-on", "Yes");
+    toggleLabels.setAttribute("data-off", "No");
+    var toggleHandle = document.createElement("span");
+    toggleHandle.setAttribute("class","switch-handle");
+    toggleContainer.appendChild(toggle);
+    toggleContainer.appendChild(toggleLabels);
+    toggleContainer.appendChild(toggleHandle);
+    firstLine.appendChild(toggleContainer);
+    var titleQuestion = document.createElement("label");
+    titleQuestion.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
+    firstLine.appendChild(titleQuestion);
+    var deleteLine = document.createElement("button");
+    deleteLine.setAttribute("class", "btn btn-danger float-right");
+    deleteLine.setAttribute("type", "button");
+    deleteLine.setAttribute("title", "DELETE LINE");
+    deleteLine.innerHTML = "DELETE LINE";
+    deleteLine.onclick = function() {
+        var thisContainer = this.parentElement.parentElement;
+        var divAbove = this.parentElement.parentElement.parentElement;
+        divAbove.removeChild(thisContainer);
+        count.value--;
+    };
+    firstLine.appendChild(deleteLine);
+    // Add everything to the container  
+    container.appendChild(firstLine);
+    container.appendChild(document.createElement("br"));
+    container.appendChild(secondLine);
+    container.appendChild(thirdLine);
+    container.appendChild(fourthLine);
+    container.appendChild(document.createElement("hr"));
+    showDiv.appendChild(container);
+    count.value++;
 });
 
 // Function run when the New Template Save Button is clicked
 // saveNewReportTemplate()
 // Operations-report-templates
-$('#button-template-save').on('click',function() {
-    // Use Click of Cancel to clear everything
-    $('#button-template-cancel').trigger('click');
+$('#button-template-save').on('click',function() {    
+    document.getElementById('loading').setAttribute('style','display:true');
+    var actualCount = 0;
+    var companyKey = localStorage["WYDuserCompanyID"];
+    var count = document.getElementById("field-count").value;
+    var title = document.getElementById("template-title").value;
+    if(title == "") {
+        d = new Date();
+        title = "template_" + getTodaysDate() + "_" + d.getHours() + "-" + d.getMinutes();
+    }
+    console.log("Template Title: " + title);
+    var templatePath = 'company/' + companyKey + '/list/' + title + '/';
+    var updateEverything = {};
+    for(var i = 0; i < count; i++){
+        if(document.getElementById("line-div-" + i) != null) {
+            if(document.getElementById("toggle-input-" + i).checked==false) {
+                updateEverything[templatePath + actualCount + "/title"] = false;
+                updateEverything[templatePath + actualCount + "/work"] = document.getElementById("performed-input-" + i).value;
+                updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-input-" + i).value;
+            }
+            else {
+                updateEverything[templatePath + actualCount + "/title"] = true;
+                updateEverything[templatePath + actualCount + "/work"] = document.getElementById("title-input-" + i).value;
+            }
+            actualCount++;
+        }
+    }
+    // Send All Data to Firebase
+    firebase.database().ref().update(updateEverything)
+    .then(function() {
+        // Use Click of Cancel to clear everything
+        $('#button-template-cancel').trigger('click');
+        toastr["info"](title + " has successfully been created!");
+        location.reload();
+    });
 });
 
 // Function run when the New Template Cancel Button is clicked
 // cancelNewReportTemplate()
 // Operations-report-templates
 $('#button-template-cancel').on('click',function() {
-    document.getElementById("button-template-new").style.display="inline";
-    document.getElementById("button-template-line").style.display="none";
-    document.getElementById("template-new-divider").style.display="none"; 
-    document.getElementById("button-template-line").style.display="none";
-    document.getElementById("button-template-cancel").style.display="none";
-    document.getElementById("button-template-save").style.display="none";
+    document.getElementById("button-template-new").setAttribute("style", "display:inline");
+    document.getElementById("template-card").setAttribute("style", "display:none");
+    document.getElementById("template-title-div").setAttribute("style", "display:none");
+    document.getElementById("button-template-line").setAttribute("style", "display:none");
+    document.getElementById("template-new-divider").setAttribute("style", "display:none"); 
+    document.getElementById("button-template-line").setAttribute("style", "display:none");
+    document.getElementById("button-template-cancel").setAttribute("style", "display:none");
+    document.getElementById("button-template-save").setAttribute("style", "display:none");
+    document.getElementById("loading").setAttribute("style", "display:none");
     document.getElementById("template-inputs").innerHTML="";
     document.getElementById("field-count").value=0;
 });
@@ -1396,6 +1798,16 @@ function getUserData() {
             location.reload();
         });
     });
+}
+
+// Function to Enable/disable user inputs in a given div
+function enableInputs(enable, divName) {
+    var div = document.getElementById(divName);
+    var inputs = div.getElementsByTagName('input');
+    for(i=0; i<inputs.length; i++){
+        inputs[i].disabled = !enable;
+    }
+    
 }
 
 // When anything with the id "Logout" is clicked LOGOUT
