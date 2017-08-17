@@ -1773,6 +1773,86 @@ $('#button-template-cancel').on('click',function() {
     document.getElementById("field-count").value=0;
 });
 
+// Function run when the New Report Template Page is loaded
+// viewNewTemplates()
+// Operations-reports-new
+function viewNewTemplates() {
+    var buttonDiv = document.getElementById("template-select");
+    // Fill in buttons for templates
+    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/list').once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            var newButton = document.createElement("button");
+            newButton.type="button";
+            newButton.className="btn btn-secondary btn-block btn-lg";
+            newButton.onclick = function () {newReportSelect(childSnapshot.key)};
+            newButton.innerText=childSnapshot.key;
+            buttonDiv.append(newButton);
+       }) ;
+    });
+    // Fill in dropdown for job
+    var selectJob = document.getElementById("report-select-job-name");
+    var selectJobNum = document.getElementById("report-select-job-num");
+    //document.getElementById("report-date").value = getTodaysDate();
+    //document.getElementById("report-time-start").value = (getTodaysDate() + " 08:00");
+    //document.getElementById("report-time-end").value = (getTodaysDate() + " 16:00");
+    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/job/active/').once('value').then(function(snapshot) {
+        var i = 0;
+        snapshot.forEach(function(childSnapshot) {
+            var el = document.createElement("option");
+            el.textContent = childSnapshot.val().jobName;
+            el.value = childSnapshot.val().jobContractor;
+            selectJob.appendChild(el);
+            var elNum = document.createElement("option");
+            elNum.textContent = childSnapshot.val().jobNum;
+            elNum.value = childSnapshot.val().jobContractor;
+            selectJobNum.appendChild(elNum);
+            if(i==0) document.getElementById("report-contractor").value = childSnapshot.val().jobContractor;
+            i++;
+        });
+    });
+}
+
+// Functions run when a specic Job Name/Num is selected to set the values of the current job
+$("#report-select-job-name").change(function(){
+    $("#report-select-job-num option").eq($(this).prop("selectedIndex")).prop("selected", "selected");
+    $("#report-contractor").val($(this).val());
+});
+
+$("#report-select-job-num").change(function(){
+    console.log("changing job num : contractor : " + $(this).val());
+    $("#report-select-job-name option").eq($(this).prop("selectedIndex")).prop("selected", "selected");
+    $("#report-contractor").val($(this).val());
+});
+
+
+function calculateTimeDiff(template) {
+    // If template is 0 then being used in New Report
+    if(template==0) {
+        var start = document.getElementById("report-time-start");
+        var end = document.getElementById("report-time-end");
+        var total = document.getElementById("report-time-total");
+        //total.value = end.value - start.value;
+        console.log("Computating: " + end.value + " - " + start.value);
+    }
+}
+
+// Function run when a specific template button is clicked
+// newReportSelect()
+// Operations-reports-new
+function newReportSelect(name) {
+    console.log("Hello there: " + name);
+    document.getElementById("template-type").value = name;
+    document.getElementById("template-type-title").innerText = name;
+    if(name == "DPR") {
+        console.log("lol dumpit");
+    }
+    else {
+        firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/list/' + name).once('value').then(function(snapshot) {
+            
+        });
+    }
+}
+
 /* =============================================== */
 /* USEFUL SCRIPTS USED ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
@@ -1838,6 +1918,7 @@ $('#logout').add('#logout-sidebar').on('click', function() {
     }); 
 });
 
+// Returns today's Date as year-month-day
 function getTodaysDate() {
     date =  new Date();
     year = date.getFullYear();
