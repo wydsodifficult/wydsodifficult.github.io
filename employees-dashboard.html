@@ -1,6 +1,6 @@
 <!--
- * WYD - blank.html template
- * @version v0.17.07.24
+ * WYD - Employees Dashboard
+ * @version v0.17.08.08
  * Copyright (c) 2017 WYD
  * NOTE: Login redirect is commented out
  -->
@@ -17,7 +17,7 @@
     <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
     <link rel="shortcut icon" href="img/WYD_logo.png">
 
-    <title>WYD-Report Templates</title>
+    <title>WYD-Employees Dashboard</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -30,9 +30,10 @@
     
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
-    
+    <!-- main scripts needed -->
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
     <script src="js/fbinit.js"></script>
+
 
 </head>
 
@@ -48,33 +49,11 @@
 
 <body class="app header-fixed sidebar-fixed">
     
-    <!-- Navigation Header for Operations-->     
+    <!-- Navigation -->     
     <header class="app-header navbar">
         <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
         <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
-            <i class="fa fa-cubes"></i>OPERATIONS
-        </span>
-        <a class="navbar-brand" href="operations-dashboard.html"></a>
-        <ul class="nav navbar-nav hidden-md-down b-r-1">
-            <li class="nav-item">
-                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
-            </li>
-
-        </ul>
-        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
-            <i class="fa fa-cubes"></i>OPERATIONS
-        </span>
-        <span class="nav navbar-toggler-right float-right hidden-md-down">
-            <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
-        </span>
-
-    </header>
-    
-    <!-- Navigation Header for employees
-    <header class="app-header navbar">
-        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
-        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
-            <i class="fa fa-paw"></i>EMPLOYEES
+            <i class="fa fa-cube"></i>EMPLOYEES
         </span>
         <a class="navbar-brand" href="employees-dashboard.html"></a>
         <ul class="nav navbar-nav hidden-md-down b-r-1">
@@ -87,11 +66,10 @@
             <i class="fa fa-cube"></i>EMPLOYEES
         </span>
         <span class="nav navbar-toggler-right float-right hidden-md-down">
-            <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
+            <a id="logout-sidebar" class="py-1 px-2" href="#"><i class="fa fa-sign-out"></i>Logout</a>
         </span>
 
     </header>
-    -->
 
     <div class="app-body">
         <div class="sidebar">
@@ -107,7 +85,7 @@
             </div>
 
             <nav class="sidebar-nav">
-                <!-- This nav is hidden if employees-navbar is loaded -->
+                <!-- This nav is hidden if employees-navbar is loaded
                 <ul class="nav" id="operations-sidebar">
                     <li class="divider"></li>
                     <li class="nav-item">
@@ -152,11 +130,11 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a id="logout-sidebar" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                        <a id="logout" class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
-                
+                -->
                 <!-- This nav is hidden if operations-navbar is loaded -->
                 <ul class="nav" id="employees-sidebar">
                    
@@ -207,7 +185,7 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a id="logout-sidebar" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                        <a id="logout" class="nav-link" href="index.html"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
@@ -216,92 +194,11 @@
 
         <!-- Main content -->
         <main class="main">
-            <!-- Modal Content -->
-            <div class="modal fade" id="view-template-modal" tabindex="-1" role="dialog" aria-labelledby="viewTemplateModalTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="viewTemplateModalTitle">VIEW TEMPLATE</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <input id="field-modal-count" type="number" disabled style="display:none" value="0"> 
-                            <div id="view-modal-template-fields"></div>
-                            <!-- New Lines Will be shown in this Div -->
-                            <div id="template-modal-inputs"></div>
-                            <button id="button-template-modal-line" type="button" class="btn btn-primary btn-block" style="display:none">New Line</button>
-                           <div id="modal-loading" class="sk-cube-grid" style="display:none">
-                                <div class="sk-cube sk-cube1"></div>
-                                <div class="sk-cube sk-cube2"></div>
-                                <div class="sk-cube sk-cube3"></div>
-                                <div class="sk-cube sk-cube4"></div>
-                                <div class="sk-cube sk-cube5"></div>
-                                <div class="sk-cube sk-cube6"></div>
-                                <div class="sk-cube sk-cube7"></div>
-                                <div class="sk-cube sk-cube8"></div>
-                                <div class="sk-cube sk-cube9"></div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="button-template-modal-cancel" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button id="button-template-modal-delete" type="button" class="btn btn-warning" data-dismiss="modal" style="display:none">Delete Job</button>
-                            <button id="button-template-modal-edit" type="button" class="btn btn-primary" style="display:none">Edit Template</button>
-                            <button id="button-template-modal-save" type="button" class="btn btn-success" style="display:none">Save Template</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <div class="container-fluid">
 
                 <div class="animated fadeIn">
-                    <h1>Report Templates</h1>
-                    <hr>
-                    <div class="ui left icon input loading"></div>
-                    <div class="ui slider checkbox"></div>
-                    <div id="new-template-div" style="display:none">
-                        <button id="button-template-new" type="button" class="btn btn-primary btn-block btn-lg">New Template</button>
-                        <input id="field-count" type="number" disabled style="display:none" value="0"> 
-                        <div id="template-card" class="card" style="display:none">
-                            <div class="card-block">
-                                <div id="template-title-div" style="display:none">
-                                    <label>Template Title</label>
-                                    <div class="input-group mb-1">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-star"></i>
-                                        </span>
-                                        <input id="template-title" type="text" class="form-control" placeholder="Template Title">
-                                    </div>
-                                    <hr>
-                                </div>
-                                <!-- New Lines Will be shown in this Div -->
-                                <div id="template-inputs"></div>
-                                <button id="button-template-line" type="button" class="btn btn-primary btn-block" style="display:none">New Line</button>
-                                <div id="template-new-divider" style="display:none">
-                                    <br>
-                                </div>
-                               <div id="loading" class="sk-cube-grid" style="display:none">
-                                    <div class="sk-cube sk-cube1"></div>
-                                    <div class="sk-cube sk-cube2"></div>
-                                    <div class="sk-cube sk-cube3"></div>
-                                    <div class="sk-cube sk-cube4"></div>
-                                    <div class="sk-cube sk-cube5"></div>
-                                    <div class="sk-cube sk-cube6"></div>
-                                    <div class="sk-cube sk-cube7"></div>
-                                    <div class="sk-cube sk-cube8"></div>
-                                    <div class="sk-cube sk-cube9"></div>
-                                </div>
-                                <button id="button-template-cancel" type="button" class="btn btn-danger" style="display:none">Cancel</button>
-                                <button id="button-template-save" type="button" class="btn btn-success" style="display:none">Save</button>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                    <div id="view-template-card" class="card" style="display:none">
-                        <div class="card-block" id="view-template-div">
-                        </div>
-                    </div>
+
                 </div>
 
             </div>
@@ -325,16 +222,18 @@
 
     <!-- Plugins and scripts required by all views -->
     <script src="js/libs/Chart.min.js"></script>
+    
     <script src="js/libs/toastr.min.js"></script>
     
     <!-- Comment out unneeded navbars -->
     <script>
         $(document).ready(function () {
             $("#footer").load("footer.html");
+            //$("#navbar").load("operations-navbar.html");
+            //$("#navbar").load("employees-navbar.html");
             //$("#navbar").load("god-navbar.html");
-            
-            document.getElementById("employees-sidebar").style.display = "none";
-            //document.getElementById("operations-sidebar").style.display = "none";
+                
+            document.getElementById("operations-sidebar").style.display = "none";
             if(localStorage["WYDuserNameFull"]!=null){
                 document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
@@ -347,13 +246,13 @@
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             // User is signed in.
-            //toastr["info"]("user logged in");
-            if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
-            viewTemplates();
+            if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null) {
+                getUserData();
+            }
           } else {
             // No user is signed in.
             window.location="login.html";
-            //toastr["warning"]("User Not Logged In!");
+            toastr["warning"]("User Not Logged In!");
           }
         });
     </script>

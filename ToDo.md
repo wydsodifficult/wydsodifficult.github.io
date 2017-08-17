@@ -33,7 +33,8 @@ ___
     - [X] Company Profile
     - [ ] Dashboard
     - [X] Seated Users
-    - [/] Jobs
+    - [X] Jobs
+    - [X] Report Templates
 - [ ] Employees Section (BH)
 - [ ] GodMode Section (BH)
 ---
