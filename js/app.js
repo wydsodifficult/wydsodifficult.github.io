@@ -1792,7 +1792,7 @@ function viewNewTemplates() {
     // Fill in dropdown for job
     var selectJob = document.getElementById("report-select-job-name");
     var selectJobNum = document.getElementById("report-select-job-num");
-    //document.getElementById("report-date").value = getTodaysDate();
+    document.getElementById("report-date").innerHTML = Date();
     //document.getElementById("report-time-start").value = (getTodaysDate() + " 08:00");
     //document.getElementById("report-time-end").value = (getTodaysDate() + " 16:00");
     firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/job/active/').once('value').then(function(snapshot) {
@@ -1828,11 +1828,21 @@ $("#report-select-job-num").change(function(){
 function calculateTimeDiff(template) {
     // If template is 0 then being used in New Report
     if(template==0) {
-        var start = document.getElementById("report-time-start");
-        var end = document.getElementById("report-time-end");
+        var start = document.getElementById("report-time-start-input");
+        var end = document.getElementById("report-time-end-input");
         var total = document.getElementById("report-time-total");
-        //total.value = end.value - start.value;
-        console.log("Computating: " + end.value + " - " + start.value);
+        var startDate = new Date(start.value);
+        var endDate = new Date(end.value);
+        var totalDate = endDate - startDate; // Number in ms
+        totalDate = totalDate/1000; // 1000ms per s
+        var totalSec = Math.floor(totalDate%60);
+        totalDate = totalDate/60; // 60 s per min
+        var totalMin = Math.floor(totalDate%60);
+        totalDate = totalDate/60; // 60 min per hour
+        var totalHour = Math.floor(totalDate%24);
+        totalDate = totalDate/24;
+        var totalDay = Math.floor(totalDate);
+        total.value = (totalDay + " days " + totalHour + " hours " + totalMin + " minutes");
     }
 }
 

@@ -244,20 +244,20 @@
                             <label for="report-date">Date</label>
                             <div class="input-group mb-1 date" id="report-date">
                                 <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                <input type="text" class="form-control"></input>
+                                <input type="datetime" class="form-control"></input>
                             </div>
                             <label for="report-time-start">Start Time</label>
-                            <div class="input-group mb-1 date" id='report-time-start'>
+                            <div class="input-group mb-1 date" id='report-time-start' onblur="calculateTimeDiff(0)"  onfocus="blur();">
                                 <span class="input-group-addon"><i class="icon-clock"></i></span>
-                                <input type="text" class="form-control"/>
+                                <input type="datetime" class="form-control" id="report-time-start-input"/>
                                 <span class="input-group-addon">
                                     <i class="fa fa-hourglass-start"></i>Click Me!
                                 </span>
                             </div>
                             <label for="report-time-end">End Time</label>
-                            <div class="input-group mb-1 date" id='report-time-end' onblur="calculateTimeDiff(0)">
+                            <div class="input-group mb-1 date" id='report-time-end' onblur="calculateTimeDiff(0)" onfocus="blur();">
                                 <span class="input-group-addon"><i class="icon-clock"></i></span>
-                                <input type="text" class="form-control"/>
+                                <input type="datetime" class="form-control" id="report-time-end-input"/>
                                 <span class="input-group-addon">
                                     <i class="fa fa-hourglass-end"></i>Click Me!
                                 </span>
@@ -265,7 +265,7 @@
                             <label for="report-time-total">Total Time (Auto-Calculated)</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-calculator"></i></span>
-                                <input type="number" class="form-control"  id="report-time-total" value="8" readonly></input>
+                                <input type="text" class="form-control"  id="report-time-total" value="8" readonly></input>
                             </div>
                             <label for="report-contractor">Job Contractor (Uneditable)</label>
                             <div class="input-group mb-1">
@@ -305,6 +305,7 @@
     <!-- Plugins and scripts required by this page -->
     <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <!--script type="text/javascript" src="/bower_components/tempusdominus-core/build/js/core.min.js"></script-->
 
 
     <!-- Plugins and scripts required by all views -->
@@ -351,10 +352,8 @@
             });
             $('#report-time-end').datetimepicker({
                 //inline: true,
-                sideBySide: true
-            });
-            $('#report-date').datetimepicker({
-                useCurrent: true
+                sideBySide: true,
+                showTodayButton: true
             });
        });
     </script>
