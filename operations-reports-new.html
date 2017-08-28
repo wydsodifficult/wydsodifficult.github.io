@@ -222,124 +222,124 @@
                 <div class="animated fadeIn">
                     <h1>New Report</h1>
                     <hr>
-                    <div class="card">
-                        <div class="card-block" id="template-select">
-                            <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportSelect('DPR')">Daily Project Report</button> 
+                    <div class="col-sm-6 col-md">
+                        <div class="card">
+                            <div class="card-block" id="template-select">
+                                <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportSelect('DPR')">Daily Project Report</button> 
+                            </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-block" id="template-reselect">
-                            <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportReselect()">Choose A Different Template</button> 
+                        <div class="card">
+                            <div class="card-block" id="template-reselect">
+                                <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportReselect()">Choose A Different Template</button> 
+                            </div>
+                            <div class="card-block" id="template-hide-select">
+                                <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportHideSelect()">Hide Templates</button> 
+                            </div>
                         </div>
-                        <div class="card-block" id="template-hide-select">
-                            <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportHideSelect()">Hide Templates</button> 
-                        </div>
-                    </div>
-                    <div id="template-holder" class="card card-accent-primary" style="diplay:none">
-                        <div class="card-header" id="template-type-title"></div>
-                        <div id="template-hidden-fields" style="display:none">
-                            <input id="template-type" type="text">
-                            <input id="template-short" type="text">
-                            <select id="report-select-job-id"></select>
-                        </div>
-                        <div class="card-block" id="template-defaults">
-                            <h5>Job Info</h5>
-                            <hr>
-                            <label for="report-select-job-name">Job Name</label>
-                            <div class="input-group mb-1">
-                                <span class="input-group-addon"><i class="icon-briefcase"></i></span>
-                                <select class="form-control"  id="report-select-job-name"></select>
+                        <div id="template-holder" class="card card-accent-primary" style="diplay:none">
+                            <div class="card-header" id="template-type-title"></div>
+                            <div id="template-hidden-fields" style="display:none">
+                                <input id="template-type" type="text">
+                                <input id="template-short" type="text">
+                                <select id="report-select-job-id"></select>
                             </div>
-                            <label for="report-select-job-num">Job Number</label>
-                            <div class="input-group mb-1">
-                                <span class="input-group-addon">#</span>
-                                <select class="form-control"  id="report-select-job-num"></select>
-                            </div>
-                            <label for="report-date">Date</label>
-                            <div class="input-group mb-1 date" id="report-date">
-                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                <input type="datetime" class="form-control"></input>
-                            </div>
-                            <label for="report-time-start">Start Time</label>
-                            <div class="input-group mb-1 date" id='report-time-start' onblur="calculateTimeDiff(0)"  onfocus="blur();">
-                                <span class="input-group-addon"><i class="icon-clock"></i></span>
-                                <input type="datetime" class="form-control" id="report-time-start-input"/>
-                                <span class="input-group-addon">
-                                    <i class="fa fa-hourglass-start"></i>Click Me!
-                                </span>
-                            </div>
-                            <label for="report-time-end">End Time</label>
-                            <div class="input-group mb-1 date" id='report-time-end' onblur="calculateTimeDiff(0)" onfocus="blur();">
-                                <span class="input-group-addon"><i class="icon-clock"></i></span>
-                                <input type="datetime" class="form-control" id="report-time-end-input"/>
-                                <span class="input-group-addon">
-                                    <i class="fa fa-hourglass-end"></i>Click Me!
-                                </span>
-                            </div>
-                            <label for="report-time-test">Test Time</label>
-                            <div class="input-group mb-1 date" id='report-time-test'>
-                                <span class="input-group-addon"><i class="icon-clock"></i></span>
-                                <input type="datetime" class="form-control" id="report-time-test-input"/>
-                                <span class="input-group-addon">
-                                    <i class="fa fa-hourglass-end"></i>Click Me!
-                                </span>
-                            </div>
-                            <label for="report-time-total">Total Time (Auto-Calculated)</label>
-                            <div class="input-group mb-1">
-                                <span class="input-group-addon"><i class="icon-calculator"></i></span>
-                                <input type="text" class="form-control"  id="report-time-total" value="8" readonly></input>
-                            </div>
-                            <label for="report-contractor">Job Contractor (Uneditable)</label>
-                            <div class="input-group mb-1">
-                                <span class="input-group-addon"><i class="icon-wrench"></i></span>
-                                <input readonly class="form-control"  id="report-contractor"></input>
-                            </div>
-                            <label for="report-foreman">Foreman</label>
-                            <div class="input-group mb-1">
-                                <span class="input-group-addon"><i class="fa fa-fort-awesome"></i></span>
-                                <input class="form-control"  id="report-foreman" placeholder="Foreman"></input>
-                            </div>
-                            <div id="div-report-dpr" style="display:none">
-                                <label for="report-dpr-techs">Select Techs</label>
+                            <div class="card-block" id="template-defaults">
+                                <h5>Job Info</h5>
+                                <hr>
+                                <label for="report-select-job-name">Job Name</label>
                                 <div class="input-group mb-1">
-                                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                    <select id="report-dpr-techs" class="form-control select2-multiple" multiple="multiple">
-
-                                    </select>
+                                    <span class="input-group-addon"><i class="icon-briefcase"></i></span>
+                                    <select class="form-control"  id="report-select-job-name"></select>
                                 </div>
-                                <button id="report-tech-hours" type="button" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Techs</button>
-                                <div id = "report-dpr-techs-hours">
+                                <label for="report-select-job-num">Job Number</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon">#</span>
+                                    <select class="form-control"  id="report-select-job-num"></select>
                                 </div>
-                                
-                            </div>
-                            <label for="report-iqr">Issues / Questions / Remarks</label>
-                            <div class="input-group mb-1">
-                                <span class="input-group-addon"><i class="icon-emotsmile"></i></span>
-                                <textarea class="form-control"  id="report-iqr" placeholder="Any Issues Should Be Reported IMMEDIATELY"></textarea>
-                            </div>
-                            <hr>
-                            <div id="template-fields">
+                                <label for="report-date">Date</label>
+                                <div class="input-group mb-1 date" id="report-date">
+                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                    <input type="datetime" class="form-control"></input>
+                                </div>
+                                <label for="report-time-start">Start Time</label>
+                                <div class="input-group mb-1 date" id='report-time-start' onblur="calculateTimeDiff(0)">
+                                    <span class="input-group-addon"><i class="icon-clock"></i></span>
+                                    <input type="datetime" class="form-control" id="report-time-start-input"/>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-hourglass-start"  onfocus="blur();"></i>Click Me!
+                                    </span>
+                                </div>
+                                <label for="report-time-end">End Time</label>
+                                <div class="input-group mb-1 date" id='report-time-end' onblur="calculateTimeDiff(0)">
+                                    <span class="input-group-addon"><i class="icon-clock"></i></span>
+                                    <input type="datetime" class="form-control" id="report-time-end-input"/>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-hourglass-end"  onfocus="blur();"></i>Click Me!
+                                    </span>
+                                </div>
+                                <label for="report-time-test">Test Time</label>
+                                <div class="input-group mb-1 date" id='report-time-test'>
+                                    <span class="input-group-addon"><i class="icon-clock"></i></span>
+                                    <input type="datetime" class="form-control" id="report-time-test-input"/>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-hourglass-end"></i>Click Me!
+                                    </span>
+                                </div>
+                                <label for="report-time-total">Total Time (Auto-Calculated)</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-calculator"></i></span>
+                                    <input type="text" class="form-control"  id="report-time-total" value="8" readonly></input>
+                                </div>
+                                <label for="report-contractor">Job Contractor (Uneditable)</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-wrench"></i></span>
+                                    <input readonly class="form-control"  id="report-contractor"></input>
+                                </div>
+                                <label for="report-foreman">Foreman</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="fa fa-fort-awesome"></i></span>
+                                    <input class="form-control"  id="report-foreman" placeholder="Foreman"></input>
+                                </div>
+                                <div id="div-report-dpr" style="display:none">
+                                    <label for="report-dpr-techs">Select Techs</label>
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                        <select id="report-dpr-techs" class="form-control select2-multiple" multiple="multiple">
 
+                                        </select>
+                                    </div>
+                                    <button id="report-tech-hours" type="button" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Techs</button>
+                                    <div id = "report-dpr-techs-hours">
+                                    </div>
+
+                                </div>
+                                <label for="report-iqr">Issues / Questions / Remarks</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-emotsmile"></i></span>
+                                    <textarea class="form-control"  id="report-iqr" placeholder="Any Issues Should Be Reported IMMEDIATELY"></textarea>
+                                </div>
+                                <hr>
+                                <div id="template-fields">
+
+                                </div>
+                               <div id="loading" class="sk-cube-grid" style="display:none">
+                                    <div class="sk-cube sk-cube1"></div>
+                                    <div class="sk-cube sk-cube2"></div>
+                                    <div class="sk-cube sk-cube3"></div>
+                                    <div class="sk-cube sk-cube4"></div>
+                                    <div class="sk-cube sk-cube5"></div>
+                                    <div class="sk-cube sk-cube6"></div>
+                                    <div class="sk-cube sk-cube7"></div>
+                                    <div class="sk-cube sk-cube8"></div>
+                                    <div class="sk-cube sk-cube9"></div>
+                                </div>
                             </div>
-                           <div id="loading" class="sk-cube-grid" style="display:none">
-                                <div class="sk-cube sk-cube1"></div>
-                                <div class="sk-cube sk-cube2"></div>
-                                <div class="sk-cube sk-cube3"></div>
-                                <div class="sk-cube sk-cube4"></div>
-                                <div class="sk-cube sk-cube5"></div>
-                                <div class="sk-cube sk-cube6"></div>
-                                <div class="sk-cube sk-cube7"></div>
-                                <div class="sk-cube sk-cube8"></div>
-                                <div class="sk-cube sk-cube9"></div>
+                            <div class="card-footer">
+                                <button id="button-cancel-report" type="button" class="btn btn-danger" >Cancel</button> 
+                                <button disabled id="button-save-report" type="button" class="btn btn-success" >Save</button> 
                             </div>
-                        </div>
-                        <div class="card-footer">
-                            <button id="button-cancel-report" type="button" class="btn btn-danger" >Cancel</button> 
-                            <button disabled id="button-save-report" type="button" class="btn btn-success" >Save</button> 
                         </div>
                     </div>
-                </div>
-
             </div>
             <!-- /.conainer-fluid -->
         </main>
