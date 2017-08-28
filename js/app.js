@@ -1230,10 +1230,10 @@ function viewTemplates() {
                 toastr["info"]("Viewing: " + childSnapshot.key);
                 if(access < 3) document.getElementById("button-template-modal-edit").setAttribute("style", "display:inline");
                 var templateFields = document.getElementById("view-modal-template-fields");
-                templateFields.innerHTML = "<h5 id='template-modal-title'>" + childSnapshot.key + "</h5><input id='template-modal-title-value' value='" + childSnapshot.key + "' style='display:none'><input id='template-modal-count' value='" + childSnapshot.val().length + "' style='display:none'><hr>";
-                var count = document.getElementById("template-modal-count");
-                for(var i = 0; i < childSnapshot.val().length; i++) {
+                templateFields.innerHTML = "<h5 id='template-modal-title'>" + childSnapshot.key + "</h5><input id='template-modal-title-value' value='" + childSnapshot.key + "' style='display:none'><input id='template-modal-count' value='" + (childSnapshot.numChildren()-1) + "' style='display:none'><div class='input-group mb-1'><span class='input-group-addon'><i class='fa fa-star'></i></span><input disabled id='template-modal-short-title' class='form-control' value='" + childSnapshot.val().short + "'></div><hr>";
+                for(var i = 0; i < childSnapshot.numChildren()-1; i++) {
                     (function(i){
+                        console.log("i: " + i + " is " + childSnapshot.val()[i].work);
                         if(childSnapshot.val()[i].title==true) {
                             var tempDiv = document.createElement("div");
                             tempDiv.id = "line-modal-div-" + i;
@@ -1427,6 +1427,7 @@ $('#button-template-modal-save').on('click', function() {
         title = "template_" + getTodaysDate() + "_" + d.getHours() + "-" + d.getMinutes();
     }
     var templatePath = 'company/' + companyKey + '/list/' + title + '/';
+    updateEverything[templatePath + 'short'] = document.getElementById("template-modal-short-title").value;
     for(var i = 0; i < count; i++){
         if(document.getElementById("line-modal-div-" + i) != null) {
             if(document.getElementById("view-template-checked-" + i).checked==false) {
@@ -1732,6 +1733,7 @@ $('#button-template-save').on('click',function() {
     console.log("Template Title: " + title);
     var templatePath = 'company/' + companyKey + '/list/' + title + '/';
     var updateEverything = {};
+    updateEverything[templatePath + 'short'] = document.getElementById("template-short-title").value;
     for(var i = 0; i < count; i++){
         if(document.getElementById("line-div-" + i) != null) {
             if(document.getElementById("toggle-input-" + i).checked==false) {
@@ -1773,9 +1775,9 @@ $('#button-template-cancel').on('click',function() {
     document.getElementById("field-count").value=0;
 });
 
-// Function run when the New Report Template Page is loaded
+// Function run when the New Report Page is loaded
 // viewNewTemplates()
-// Operations-reports-new
+// Operations-reports-new & Employees-reports-new
 function viewNewTemplates() {
     var buttonDiv = document.getElementById("template-select");
     // Fill in buttons for templates
@@ -1792,7 +1794,7 @@ function viewNewTemplates() {
     // Fill in dropdown for job
     var selectJob = document.getElementById("report-select-job-name");
     var selectJobNum = document.getElementById("report-select-job-num");
-    document.getElementById("report-date").innerHTML = Date();
+    var selectJobId = document.getElementById("report-select-job-id");
     //document.getElementById("report-time-start").value = (getTodaysDate() + " 08:00");
     //document.getElementById("report-time-end").value = (getTodaysDate() + " 16:00");
     firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/job/active/').once('value').then(function(snapshot) {
@@ -1806,24 +1808,41 @@ function viewNewTemplates() {
             elNum.textContent = childSnapshot.val().jobNum;
             elNum.value = childSnapshot.val().jobContractor;
             selectJobNum.appendChild(elNum);
+            var elId = document.createElement("option");
+            elId.textContent = childSnapshot.key;
+            elId.value = childSnapshot.key;
+            selectJobId.appendChild(elId);
             if(i==0) document.getElementById("report-contractor").value = childSnapshot.val().jobContractor;
             i++;
         });
+        /* Uncomment this for other option for job name/number
+        var el = document.createElement("option");
+        el.textContent = "Other";
+        el.value = "Other";
+        selectJob.appendChild(el);
+        var elNum = document.createElement("option");
+        elNum.textContent = "Other";
+        elNum.value = "Other";
+        selectJobNum.appendChild(elNum); */
     });
 }
 
 // Functions run when a specic Job Name/Num is selected to set the values of the current job
+// onChangeReportSelectJobName()
+// onChangeReportSelectJobNum()
+// Operations-reports-new & Employees-reports-new
 $("#report-select-job-name").change(function(){
     $("#report-select-job-num option").eq($(this).prop("selectedIndex")).prop("selected", "selected");
+    $("#report-select-job-id option").eq($(this).prop("selectedIndex")).prop("selected", "selected");
     $("#report-contractor").val($(this).val());
 });
 
 $("#report-select-job-num").change(function(){
     console.log("changing job num : contractor : " + $(this).val());
     $("#report-select-job-name option").eq($(this).prop("selectedIndex")).prop("selected", "selected");
+    $("#report-select-job-id option").eq($(this).prop("selectedIndex")).prop("selected", "selected");
     $("#report-contractor").val($(this).val());
 });
-
 
 function calculateTimeDiff(template) {
     // If template is 0 then being used in New Report
@@ -1843,28 +1862,258 @@ function calculateTimeDiff(template) {
         totalDate = totalDate/24;
         var totalDay = Math.floor(totalDate);
         total.value = (totalDay + " days " + totalHour + " hours " + totalMin + " minutes");
+        
+        // Enables the Save Button   
+        if(!isNaN(totalMin))document.getElementById("button-save-report").disabled = false;
     }
 }
 
+// Function run when the Cancel Button for New Report is clicked
+// cancelNewReport()
+// Operations-reports-new & Employees-reports-new
+$('#button-cancel-report').on('click', function() {
+    document.getElementById("report-time-start-input").value = "";
+    document.getElementById("report-time-end-input").value = "";
+    document.getElementById("report-time-total").value = "8";
+    document.getElementById("template-holder").setAttribute('style', 'display:none');
+    document.getElementById("template-reselect").setAttribute('style', 'display:none');
+    document.getElementById("template-hide-select").setAttribute('style', 'display:none');
+    document.getElementById("template-select").setAttribute('style', 'display:true');
+    document.getElementById("loading").setAttribute('style', 'display:none');
+});
+
+// Function run when the Save Button for New Report is clicked
+// saveNewReport()
+// Operations-reports-new & Employees-reports-new
+$('#button-save-report').on('click', function() {
+    console.log("submittedDate: " + document.getElementById('report-date').innerText);
+    document.getElementById('loading').setAttribute('style', 'display:true');
+    var counts = 0;
+    var companyKey = localStorage["WYDuserCompanyID"];
+    var updateEverything = {};
+    var newReport = firebase.database().ref('company/' + companyKey + '/report').push();
+    var path = 'company/' + companyKey + '/report/' + newReport.key + '/';
+    var userPath = 'user/' + localStorage["WYDuserID"] +    '/history/' + newReport.key + '/';
+    updateEverything[userPath + 'reportId'] = newReport.key;
+    updateEverything[path + 'submittedBy'] = localStorage["WYDuserNameFull"];
+    updateEverything[path + 'submittedUID'] = localStorage["WYDuserID"];
+    updateEverything[path + 'submittedDate'] = document.getElementById('report-date').innerText;
+    updateEverything[path + 'submittedInitials'] = localStorage["WYDuserInitials"];
+    updateEverything[path + 'type'] = document.getElementById('template-type-title').innerText;
+    updateEverything[path + 'short'] = document.getElementById('template-short').value;
+    updateEverything[userPath + 'type'] = document.getElementById('template-short').value;
+    var selectedName = document.getElementById('report-select-job-name');
+    updateEverything[path + 'jobName'] = selectedName.options[selectedName.selectedIndex].text;
+    var selectedNum = document.getElementById('report-select-job-num');
+    updateEverything[path + 'jobNum'] = selectedNum.options[selectedNum.selectedIndex].text;
+    updateEverything[userPath + 'jobNum'] = selectedNum.options[selectedNum.selectedIndex].text;
+    updateEverything[path + 'jobId'] = document.getElementById('report-select-job-id').value;
+    updateEverything[userPath + 'jobId'] = document.getElementById('report-select-job-id').value;
+    if(document.getElementById('report-select-job-name').value != 'option') {
+        updateEverything[path + 'linked'] = true;
+    }
+    else {
+        
+    }
+    updateEverything[path + 'timeStart'] = document.getElementById('report-time-start-input').value;
+    updateEverything[userPath + 'date'] = convertDate(document.getElementById('report-time-start-input').value);
+    updateEverything[path + 'timeEnd'] = document.getElementById('report-time-end-input').value;
+    updateEverything[path + 'timeTotal'] = document.getElementById('report-time-total').value;
+    updateEverything[path + 'contractor'] = document.getElementById('report-contractor').value;
+    updateEverything[path + 'foreman'] = document.getElementById('report-foreman').value;
+    if(document.getElementById('report-iqr').value=="") {
+        updateEverything[path + 'iqr'] = "Nothing to Report";
+    }
+    var i = 0;
+    var templateLines = document.getElementById('report-' + i);
+    while(templateLines != null) {
+        if(templateLines.tagName == 'H5') {
+            updateEverything[path + 'list/' + i + '/title'] = true;
+            updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
+        }
+        else {
+            updateEverything[path + 'list/' + i + '/title'] = false;
+            updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
+            updateEverything[path + 'list/' + i + '/code'] = document.getElementById("report-code-" + i).value;
+            updateEverything[path + 'list/' + i + '/hours'] = document.getElementById("report-hours-" + i).value;
+            updateEverything[path + 'list/' + i + '/ot'] = document.getElementById("report-ot-" + i).value;
+            updateEverything[path + 'list/' + i + '/issued'] = document.getElementById("report-issued-" + i).value;
+            updateEverything[path + 'list/' + i + '/installed'] = document.getElementById("report-installed-" + i).value;
+        }
+        i++;
+        templateLines = document.getElementById('report-' + i);
+    }
+    //updateEverything[path + ''] = 
+    //updateEverything[path + ''] = 
+    //updateEverything[path + ''] = 
+    //updateEverything[path + ''] = 
+    //updateEverything[path + ''] = 
+    
+    // Send All Date to Firebase
+    firebase.database().ref().update(updateEverything).then(function() {
+       $('#button-cancel-report').trigger('click');
+        toastr["info"](newReport.key + " has successfully been submitted!");
+    });
+});
+
 // Function run when a specific template button is clicked
 // newReportSelect()
-// Operations-reports-new
+// Operations-reports-new & Employees-reports-new
 function newReportSelect(name) {
     console.log("Hello there: " + name);
+    document.getElementById("template-holder").setAttribute('style', 'display:true');
+    document.getElementById("template-reselect").setAttribute('style', 'display:true');
+    document.getElementById("template-hide-select").setAttribute('style', 'display:none');
+    document.getElementById("template-select").setAttribute('style', 'display:none');
+    document.getElementById("report-date").innerHTML = Date();
     document.getElementById("template-type").value = name;
     document.getElementById("template-type-title").innerText = name;
     if(name == "DPR") {
         console.log("lol dumpit");
+        var templateFields = document.getElementById("template-fields");
+        var reportTechs = document.getElementById("report-dpr-techs");
+        document.getElementById("div-report-dpr").setAttribute('style', 'display:true');
+        templateFields.innerHTML = "";
+        firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/users').once('value').then(function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+                var opt = document.createElement("option");
+                opt.innerText = childSnapshot.val().nameFull;
+                opt.value = childSnapshot.key;
+                reportTechs.appendChild(opt);
+            });
+        });
     }
     else {
+        var templateFields = document.getElementById("template-fields");
+        templateFields.innerHTML = "";
+        document.getElementById("div-report-dpr").setAttribute('style', 'display:none');
         firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/list/' + name).once('value').then(function(snapshot) {
-            
+            var fields = snapshot.val();
+            document.getElementById("template-short").value = fields.short;
+            for(i=0; i < snapshot.numChildren()-1; i++) {
+                if(fields[i].title) {
+                    var titleDiv = document.createElement("h5");
+                    titleDiv.id = "report-" + i;
+                    titleDiv.innerText = fields[i].work;
+                    templateFields.append(titleDiv);
+                    templateFields.append(document.createElement("hr"));
+                }
+                else {
+                    var reportRowA = document.createElement("div");
+                    reportRowA.className = "row";
+                    var reportRowB = document.createElement("div");
+                    reportRowB.className = "row";
+                    var reportColA = document.createElement("div");
+                    reportColA.className = "col";
+                    reportColA.innerText = fields[i].work;
+                    reportColA.id = "report-" + i;
+                    var reportColB = document.createElement("div");
+                    reportColB.className = "col";
+                    reportColB.innerText = "Cost Code: " + fields[i].code;
+                    reportColB.value = fields[i].code;
+                    reportColB.id = "report-code-" + i;
+                    reportRowA.append(reportColA);
+                    reportRowA.append(reportColB);
+                    var reportColC = document.createElement("div");
+                    reportColC.className = "col-6 col-md-3 mb-1";
+                    var reportColD = document.createElement("div");
+                    reportColD.className = "col-6 col-md-3 mb-1";
+                    var reportColE = document.createElement("div");
+                    reportColE.className = "col-6 col-md-3 mb-1";
+                    var reportColF = document.createElement("div");
+                    reportColF.className = "col-6 col-md-3 mb-1";
+                    var reportInputA = document.createElement("input");
+                    reportInputA.className = "input-group";
+                    reportInputA.id = "report-hours-" + i;
+                    reportInputA.type = "number";
+                    reportInputA.placeholder = "Hours";
+                    reportColC.append(reportInputA);
+                    var reportInputB = document.createElement("input");
+                    reportInputB.className = "input-group";
+                    reportInputB.id = "report-ot-" + i;
+                    reportInputB.type = "number";
+                    reportInputB.placeholder = "Overtime Hours";
+                    reportColD.append(reportInputB);
+                    var reportInputC = document.createElement("input");
+                    reportInputC.className = "input-group";
+                    reportInputC.id = "report-issued-" + i;
+                    reportInputC.type = "text";
+                    reportInputC.placeholder = "Issued Materials";
+                    reportColE.append(reportInputC);
+                    var reportInputD = document.createElement("input");
+                    reportInputD.className = "input-group";
+                    reportInputD.id = "report-installed-" + i;
+                    reportInputD.type = "text";
+                    reportInputD.placeholder = "Installed Materials";
+                    reportColF.append(reportInputD);
+                    reportRowB.append(reportColC);
+                    reportRowB.append(reportColD);
+                    reportRowB.append(reportColE);
+                    reportRowB.append(reportColF);
+                    templateFields.append(reportRowA);
+                    templateFields.append(reportRowB);
+                }
+            }
         });
     }
 }
 
-/* =============================================== */
-/* USEFUL SCRIPTS USED ON ALL PAGES WHEN LOGGED IN */
+// Function run when a the Report Reselect Button is clicked
+// newReportReselect()
+// Operations-reports-new & Employees-reports-new
+function newReportReselect() {
+    document.getElementById("template-select").setAttribute('style', 'display:true');
+    document.getElementById("template-hide-select").setAttribute('style', 'display:true');
+    document.getElementById("template-reselect").setAttribute('style', 'display:none');
+}
+
+// Function run when a the Report Hide Select Button is clicked
+// newReportHideSelect()
+// Operations-reports-new & Employees-reports-new
+function newReportHideSelect() {
+    document.getElementById("template-select").setAttribute('style', 'display:none');
+    document.getElementById("template-hide-select").setAttribute('style', 'display:none');
+    document.getElementById("template-reselect").setAttribute('style', 'display:true');
+}
+
+// Function run to show input fields for Tech Hours
+// reportSetTechHours()
+// Operations-report-new & Employees-reports-new
+function reportSetTechHours() {
+    var selectedTechs = document.getElementById('report-dpr-techs');
+    //var selectedArray = selectedTechs.val();
+    var techsHoursDiv = document.getElementById('report-dpr-techs-hours');
+    techsHoursDiv.innerHTML = "";
+    for(var i = 0; i < selectedTechs.length; i++) {
+        if(selectedTechs.options[i].selected) {
+            var hoursDiv = document.createElement('div');
+            hoursDiv.className = "input-group mb-1";
+            var hoursLabel = document.createElement('label');
+            hoursLabel.id = 'report-tech-' + i;
+            hoursLabel.value = 
+            selectedTechs.options[i].value;
+            hoursLabel.innerText = 
+            selectedTechs.options[i].text;
+            var hoursSpan = document.createElement('span');
+            hoursSpan.className = 'input-group-addon';
+            var hoursI = document.createElement('i');
+            hoursI.className = "fa fa-user";
+            var hoursInput = document.createElement('input');
+            hoursInput.className = "form-control";
+            hoursInput.id = 'report-tech-hours-' + i;
+            hoursInput.type = 'number';
+            hoursInput.placeHolder = "Hours Worked";
+            hoursSpan.appendChild(hoursI);
+            hoursDiv.append(hoursSpan);
+            hoursDiv.append(hoursInput);
+            techsHoursDiv.append(hoursLabel);
+            techsHoursDiv.append(hoursDiv);
+        }
+    }
+}
+
+/* ================================================== */
+/* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
 function getUserData() {
     localStorage["WYDuserID"] = firebase.auth().currentUser.uid;
@@ -1894,7 +2143,7 @@ function getUserData() {
 function enableInputs(enable, divName) {
     var div = document.getElementById(divName);
     var inputs = div.getElementsByTagName('input');
-    for(i=0; i<inputs.length; i++){
+    for(var i=0; i<inputs.length; i++){
         inputs[i].disabled = !enable;
     }
     
@@ -1930,13 +2179,25 @@ $('#logout').add('#logout-sidebar').on('click', function() {
 
 // Returns today's Date as year-month-day
 function getTodaysDate() {
-    date =  new Date();
-    year = date.getFullYear();
-    month = date.getMonth() + 1;
+    var date =  new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
     if(month < 10) {
         month = "0" + month;   
     }
-    day = date.getDate();
+    var day = date.getDate();
+    return year + "-" + month + "-" + day;
+}
+
+// Returns a date as year-month-day
+function convertDate(given) {
+    var date = new Date(given);
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    if(month < 10) {
+        month = "0" + month;   
+    }
+    var day = date.getDate();
     return year + "-" + month + "-" + day;
 }
 
