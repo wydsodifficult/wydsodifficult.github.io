@@ -48,7 +48,7 @@
 
 <body class="app header-fixed sidebar-fixed">
     
-    <!-- Navigation Header for Operations   
+    <!-- Navigation Header for Operations     
     <header class="app-header navbar">
         <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
         <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
@@ -221,12 +221,14 @@
                 <div class="animated fadeIn">
                     <h1>New Report</h1>
                     <hr>
-                    <div class="col-sm-6 col-md">
+                    <div class="col-sm">
                         <div class="card">
                             <div class="card-block" id="template-select">
                                 <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportSelect('DPR')">Daily Project Report</button> 
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm">
                         <div class="card">
                             <div class="card-block" id="template-reselect">
                                 <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportReselect()">Choose A Different Template</button> 
@@ -235,6 +237,8 @@
                                 <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportHideSelect()">Hide Templates</button> 
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm">
                         <div id="template-holder" class="card card-accent-primary" style="diplay:none">
                             <div class="card-header" id="template-type-title"></div>
                             <div id="template-hidden-fields" style="display:none">
@@ -265,7 +269,7 @@
                                     <span class="input-group-addon"><i class="icon-clock"></i></span>
                                     <input type="datetime" class="form-control" id="report-time-start-input"/>
                                     <span class="input-group-addon">
-                                        <i class="fa fa-hourglass-start"></i>Click Me!
+                                    <i class="fa fa-hourglass-start"  onfocus="blur();"></i>Click Me!
                                     </span>
                                 </div>
                                 <label for="report-time-end">End Time</label>
@@ -273,7 +277,7 @@
                                     <span class="input-group-addon"><i class="icon-clock"></i></span>
                                     <input type="datetime" class="form-control" id="report-time-end-input"/>
                                     <span class="input-group-addon">
-                                        <i class="fa fa-hourglass-end"></i>Click Me!
+                                        <i class="fa fa-hourglass-end"  onfocus="blur();"></i>Click Me!
                                     </span>
                                 </div>
                                 <label for="report-time-total">Total Time (Auto-Calculated)</label>
@@ -291,18 +295,80 @@
                                     <span class="input-group-addon"><i class="fa fa-fort-awesome"></i></span>
                                     <input class="form-control"  id="report-foreman" placeholder="Foreman"></input>
                                 </div>
+                                <!-- Input Fields for DPR -->
                                 <div id="div-report-dpr" style="display:none">
-                                    <label for="report-dpr-techs">Select Techs</label>
+                                    <label for="report-dpr-techs">Select Employees</label>
                                     <div class="input-group mb-1">
                                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                        <select id="report-dpr-techs" class="form-control select2-multiple" multiple="multiple">
-
+                                        <select id="report-dpr-techs" placeholder="Select Your Employees" class="form-control select2-multiple" multiple="multiple">
                                         </select>
                                     </div>
-                                    <button id="report-tech-hours" type="button" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Techs</button>
+                                    <button id="report-tech-hours" type="button" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Employees</button>
                                     <div id = "report-dpr-techs-hours">
                                     </div>
-
+                                    <label for="report-materials-0">Materials / Equipment Needed</label>
+                                    <div class="row">
+                                        <div class="input-group mb-1 col-sm">
+                                            <span class="input-group-addon"><i class="fa fa-shopping-basket"></i></span>
+                                            <input id="report-materials-0" placeholder="Materials Needed" class="form-control">
+                                        </div>
+                                        <div class="input-group mb-1 col-sm">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input id="report-materials-date-0" type="date" placeholder="Date Needed" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div id = "report-dpr-materials">
+                                        <input id="report-dpr-materials-count" style="display:none" value=0></input>
+                                    </div>  
+                                    <button type="button" class="btn btn-primary" onclick="newDPRLine('materials')">Add Another Materials Line</button>
+                                    <div class="row">
+                                        <div class="col-sm mb-1">
+                                            <label for="report-performed-0">Work Performed</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-like"></i></span>
+                                                <input id="report-performed-0" placeholder="Work Performed" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-location-0">Location</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-map"></i></span>
+                                                <input id="report-location-0" placeholder="Location" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id = "report-dpr-performed">
+                                        <input id="report-dpr-performed-count" style="display:none" value=0></input>
+                                    </div>  
+                                    <button  type="button" class="btn btn-primary mb-1" onclick="newDPRLine('performed')">Add Another Work Performed Line</button>
+                                    <h5>Progress</h5>
+                                    <div class="row">
+                                        <div class="col-sm mb-1">
+                                            <label for="report-progress-0">Location</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-globe-alt"></i></span>
+                                                <input id="report-progress-0" placeholder="Progress Location" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-description--0">Description</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-map"></i></span>
+                                                <input id="report-description-0" placeholder="Progress Description" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-percent--0">Percentage</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-equalizer"></i></span>
+                                                <input id="report-percent-0" type="number" placeholder="Progress Percentage" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id = "report-dpr-progress">
+                                        <input id="report-dpr-progress-count" style="display:none" value=0></input>
+                                    </div>  
+                                    <button  type="button" class="btn btn-primary mb-1" onclick="newDPRLine('progress')">Add Another Progress Line</button>
                                 </div>
                                 <label for="report-iqr">Issues / Questions / Remarks</label>
                                 <div class="input-group mb-1">
@@ -332,7 +398,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <!-- /.conainer-fluid -->
         </main>
@@ -398,7 +463,7 @@
     <script>
        $(function () {
             $('#report-dpr-techs').select2({
-                placeholder: 'Select Your Techs'
+                placeholder: "Select Your Techs"
             });
             $('#report-time-start').datetimepicker({
                 //inline: true,

@@ -1924,24 +1924,64 @@ $('#button-save-report').on('click', function() {
     if(document.getElementById('report-iqr').value=="") {
         updateEverything[path + 'iqr'] = "Nothing to Report";
     }
-    var i = 0;
-    var templateLines = document.getElementById('report-' + i);
-    while(templateLines != null) {
-        if(templateLines.tagName == 'H5') {
-            updateEverything[path + 'list/' + i + '/title'] = true;
-            updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
+    // If DPR Report
+    if(document.getElementById('template-type-title').innerText == 'DPR') {
+        updateEverything[path + 'short'] = "DPR";
+        var tempDiv = document.getElementById("report-tech-0");
+        var tempCount = 0;
+        while (tempDiv != null) {
+            updateEverything[path + 'employees/' + tempCount + '/name'] = tempDiv.innerText;
+            updateEverything[path + 'employees/' + tempCount + '/id'] = tempDiv.value;
+            updateEverything[path + 'employees/' + tempCount + '/hours'] = document.getElementById('report-tech-hours-' + tempCount).value;
+            tempCount++;
+            tempDiv = document.getElementById("report-tech-" + tempCount);
         }
-        else {
-            updateEverything[path + 'list/' + i + '/title'] = false;
-            updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
-            updateEverything[path + 'list/' + i + '/code'] = document.getElementById("report-code-" + i).value;
-            updateEverything[path + 'list/' + i + '/hours'] = document.getElementById("report-hours-" + i).value;
-            updateEverything[path + 'list/' + i + '/ot'] = document.getElementById("report-ot-" + i).value;
-            updateEverything[path + 'list/' + i + '/issued'] = document.getElementById("report-issued-" + i).value;
-            updateEverything[path + 'list/' + i + '/installed'] = document.getElementById("report-installed-" + i).value;
+        tempDiv = document.getElementById("report-materials-0");
+        tempCount = 0;
+        while (tempDiv != null) {
+            updateEverything[path + 'materials/' + tempCount + '/needed'] = tempDiv.value;
+            updateEverything[path + 'materials/' + tempCount + '/by'] = document.getElementById('report-materials-date-' + tempCount).value;
+            tempCount++;
+            tempDiv = document.getElementById("report-materials-" + tempCount);
         }
-        i++;
-        templateLines = document.getElementById('report-' + i);
+        tempDiv = document.getElementById("report-performed-0");
+        tempCount = 0;
+        while (tempDiv != null) {
+            updateEverything[path + 'work/' + tempCount + '/performed'] = tempDiv.value;
+            updateEverything[path + 'work/' + tempCount + '/location'] = document.getElementById('report-location-' + tempCount).value;
+            tempCount++;
+            tempDiv = document.getElementById("report-performed-" + tempCount);
+        }
+        tempDiv = document.getElementById("report-progress-0");
+        tempCount = 0;
+        while (tempDiv != null) {
+            updateEverything[path + 'progress/' + tempCount + '/location'] = tempDiv.value;
+            updateEverything[path + 'progress/' + tempCount + '/description'] = document.getElementById('report-description-' + tempCount).value;
+            updateEverything[path + 'progress/' + tempCount + '/percent'] = document.getElementById('report-percent-' + tempCount).value;
+            tempCount++;
+            tempDiv = document.getElementById("report-progress-" + tempCount);
+        }
+    }
+    else {
+        var i = 0;
+        var templateLines = document.getElementById('report-' + i);
+        while(templateLines != null) {
+            if(templateLines.tagName == 'H5') {
+                updateEverything[path + 'list/' + i + '/title'] = true;
+                updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
+            }
+            else {
+                updateEverything[path + 'list/' + i + '/title'] = false;
+                updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
+                updateEverything[path + 'list/' + i + '/code'] = document.getElementById("report-code-" + i).value;
+                updateEverything[path + 'list/' + i + '/hours'] = document.getElementById("report-hours-" + i).value;
+                updateEverything[path + 'list/' + i + '/ot'] = document.getElementById("report-ot-" + i).value;
+                updateEverything[path + 'list/' + i + '/issued'] = document.getElementById("report-issued-" + i).value;
+                updateEverything[path + 'list/' + i + '/installed'] = document.getElementById("report-installed-" + i).value;
+            }
+            i++;
+            templateLines = document.getElementById('report-' + i);
+        }
     }
     //updateEverything[path + ''] = 
     //updateEverything[path + ''] = 
@@ -2108,7 +2148,45 @@ function reportSetTechHours() {
             hoursDiv.append(hoursInput);
             techsHoursDiv.append(hoursLabel);
             techsHoursDiv.append(hoursDiv);
+            console.log(hoursLabel.value + ": " + hoursLabel.innerText);
         }
+    }
+}
+
+// Function run when a button is clicked and will add a new line for that specific button (used in DPR reports unless specified otherwise)
+// newDPRLine()
+// Operations-report-new & Employees-reports-new
+function newDPRLine(section) {
+    switch (section) {
+        case 'materials':
+            var materialsLine = document.getElementById("report-dpr-materials");
+            var count = document.getElementById("report-dpr-materials-count").value;
+            count++;
+            document.getElementById('report-dpr-materials-count').value = count;
+            var holdingDiv = document.createElement("div");
+            holdingDiv.innerHTML = '<label for="report-materials-' + count + '">Materials / Equipment Needed</label><div class="row"><div class="input-group mb-1 col-sm"><span class="input-group-addon"><i class="fa fa-shopping-basket"></i></span><input id="report-materials-' + count + '" placeholder="Materials Needed" class="form-control"></div><div class="input-group mb-1 col-sm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="report-materials-date-' + count + '" type="date" placeholder="Date Needed" class="form-control"></div></div>';
+            materialsLine.append(holdingDiv);
+            break;
+        case 'performed':
+            var performedLine =  document.getElementById("report-dpr-performed");
+            var count = document.getElementById("report-dpr-performed-count").value;
+            count++;
+            document.getElementById("report-dpr-performed-count").value = count;
+            var holdingDiv = document.createElement("div");
+            holdingDiv.innerHTML = '<div class="row"><div class="col-sm mb-1"><label for="report-performed-' + count + '">Work Performed</label><div class="input-group"><span class="input-group-addon"><i class="icon-like"></i></span><input id="report-performed-' + count + '" placeholder="Work Performed" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-location-' + count + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input id="report-location-' + count + '" placeholder="Location" class="form-control"></div></div></div>';
+            performedLine.append(holdingDiv);
+            break;
+        case 'progress':
+            var progressLine =  document.getElementById("report-dpr-progress");
+            var count = document.getElementById("report-dpr-progress-count").value;
+            count++;
+            document.getElementById("report-dpr-progress-count").value = count;
+            var holdingDiv = document.createElement("div");
+            holdingDiv.innerHTML = '<div class="row"><div class="col-sm mb-1"><label for="report-progress-' + count + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input id="report-progress-' + count + '" placeholder="Progress Location" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-description--' + count + '">Description</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input id="report-description-' + count + '" placeholder="Progress Description" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-percent--' + count + '">Percentage</label><div class="input-group"><span class="input-group-addon"><i class="icon-equalizer"></i></span><input id="report-percent-' + count + '" placeholder="Progress Percentage" class="form-control"></div></div></div>';
+            progressLine.append(holdingDiv);
+            break;
+        default:
+            alert("How did you even get this??");
     }
 }
 
