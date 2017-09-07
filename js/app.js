@@ -1844,6 +1844,9 @@ $("#report-select-job-num").change(function(){
     $("#report-contractor").val($(this).val());
 });
 
+// Function run to calculate the difference between start and end times in "x days y hours z min"
+// calculateTimeDiff(template)
+// Operations-reports-new & Employees-reports-new
 function calculateTimeDiff(template) {
     // If template is 0 then being used in New Report
     if(template==0) {
@@ -1924,6 +1927,7 @@ $('#button-save-report').on('click', function() {
     if(document.getElementById('report-iqr').value=="") {
         updateEverything[path + 'iqr'] = "Nothing to Report";
     }
+    else updateEverything[path + 'iqr'] = document.getElementById('report-iqr').value;
     // If DPR Report
     if(document.getElementById('template-type-title').innerText == 'DPR') {
         updateEverything[path + 'short'] = "DPR";
@@ -2217,6 +2221,7 @@ function getUserData() {
     });
 }
 
+
 // Function to Enable/disable user inputs in a given div
 function enableInputs(enable, divName) {
     var div = document.getElementById(divName);
@@ -2264,6 +2269,9 @@ function getTodaysDate() {
         month = "0" + month;   
     }
     var day = date.getDate();
+    if(day < 10) {
+        day = "0" + day;   
+    }
     return year + "-" + month + "-" + day;
 }
 
@@ -2276,6 +2284,9 @@ function convertDate(given) {
         month = "0" + month;   
     }
     var day = date.getDate();
+    if(day < 10) {
+        day = "0" + day;   
+    }
     return year + "-" + month + "-" + day;
 }
 
