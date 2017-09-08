@@ -30,6 +30,8 @@
     
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="css/responsive.bootstrap4.min.js" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
     <script src="js/fbinit.js"></script>
@@ -328,8 +330,9 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-danger" style="display:none">Delete</button>
-                                <button class="btn btn-warning" style="display:none">Edit</button>
+                                <button id="button-view-close" class="btn btn-info float-left">Close View</button>
+                                <button class="btn btn-warning float-right" style="display:none">Edit</button>
+                                <button class="btn btn-danger float-right" style="display:none">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -339,21 +342,22 @@
                                 Viewing: <b id="view-viewing">25 Most Recent</b>
                             </div>
                             <div class="card-block">
-                                <table class="table table-striped datatable table-bordered" id="view-table">
+                                Show/Hide: <a href='#' class="toggle-vis" data-column="0">Type</a> - <a  href='#' class="toggle-vis" data-column="1">Job #</a> - <a href='#'  class="toggle-vis" data-column="2">Date</a> - <a  href='#' class="toggle-vis" data-column="3">Submitted By</a>
+                                <table class="table table-striped datatable table-bordered table-hover display nowrap dt-responsive" id="view-table" cellspace="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Type</th>
                                             <th>Job Number</th>
                                             <th>Date</th>
                                             <th>Submitted By</th>
-                                            <th>Actions</th>
+                                            <!-- Uncomment if button wanted
+                                            <th data-priority="1">Actions</th-->
                                         </tr>
                                     </thead> 
                                 </table>
                             </div>
                             <div class="card-footer">
                                 <button id="button-view-increase" class="btn btn-primary float-right">Increase by 25</button>
-                                <button id="button-view-close" class="btn btn-warning float-left">Close View</button>
                                 <input id="view-search-count" value=25 style="display:none"></input>
                                 <input id="view-search-last" style="display:none"></input>
                             </div>
@@ -383,6 +387,7 @@
     <script src="js/libs/toastr.min.js"></script>
     <script src="js/libs/jquery.dataTables.min.js"></script>
     <script src="js/libs/dataTables.bootstrap4.min.js"></script>
+    <script src="js/libs/dataTables.responsive.min.js"></script>
     
     <!-- Main scripts -->
     <script src="js/app.js"></script>
@@ -406,14 +411,34 @@
             // Initialize data table
             $('#view-table').DataTable().destroy();
             var dataTable = $('#view-table').DataTable({
-                "columnDefs": [
-                    {
-                        "data":null,
+                autoWidth: false,
+                columnDefs: [
+                    //{
+                        //"data":null
+                        // Uncomment if button wanted
+                        /*,
                         "defaultContent": "<button class='btn btn-primary'>View</button>",
                         "targets": -1
-                    }
+                        */
+                    //},
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 0}, // Type
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 1}, // Job
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 2}, // Date
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 3} // Submitted By
                 ]
             });
+            
+            // Toggle Visibility of a Column
+            $('a.toggle-vis').on( 'click', function (e) {
+                e.preventDefault();
+
+                // Get the column API object
+                var column = dataTable.column( $(this).attr('data-column') );
+
+                // Toggle the visibility
+                column.visible( !column.visible() );
+            } );
+            
             // Functions for loading reports
             if(localStorage["WYDuserAccess"] == 6) {
                 document.getElementById("view-table").setAttribute('style', 'display:none');
@@ -447,8 +472,13 @@
             });
             
             // Load report data into the view on click
-            $('#view-table tbody').on( 'click', 'button', function () {
-                var data = $('#view-table').DataTable().row( $(this).parents('tr') ).data();
+            
+            // Used to be
+            /* $('#view-table tbody').on( 'click', 'button', function () {
+                var data = $('#view-table').DataTable().row($(this).parents('tr')).data();
+            */
+            $('#view-table tbody').on( 'click', 'tr', function () {
+                var data = $('#view-table').DataTable().row($(this)).data();
                 console.log(data);
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + data[4]).once('value').then(function(snapshot) {
                     document.getElementById("view-report").innerText = snapshot.val().short;
