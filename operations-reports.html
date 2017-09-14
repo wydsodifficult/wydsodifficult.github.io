@@ -32,6 +32,7 @@
     <link href="css/style.css" rel="stylesheet">
     <link href="css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="css/responsive.bootstrap4.min.js" rel="stylesheet">
+    <link rel='stylesheet' type='text/css' href='http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'/>
     
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
     <script src="js/fbinit.js"></script>
@@ -330,9 +331,63 @@
                                 </div>
                             </div>
                             <div class="card-footer">
+                                <input id="view-hidden-id" style="display:none"></input>
                                 <button id="button-view-close" class="btn btn-info float-left">Close View</button>
-                                <button class="btn btn-warning float-right" style="display:none">Edit</button>
-                                <button class="btn btn-danger float-right" style="display:none">Delete</button>
+                                <button id="button-view-edit" type="button" class="btn btn-warning float-right" style="display:none">Edit</button>
+                                <button id="button-view-delete" type="button" class="btn btn-danger float-right" style="display:none">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="card card-accecnt-info">
+                            <div class="card-header">
+                                <b>Search All Reports By Category (CASE SENSITIVE)</b>
+                            </div>
+                            <div class="card-block">
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input id="view-search" class="form-control" type="text" placeholder="What are you looking for?">
+                                    </input>
+                                </div>
+                                <div class="row">
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-search-type" class="btn btn-block btn-info">Report Type</button>
+                                    </div>
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-search-num" class="btn btn-block btn-info" >Job Number</button>
+                                    </div>
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-search-by" class="btn btn-block btn-info">Submitted By</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col mb-1">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                            <input readonly class="form-control" id="input-search-date" placeholder="Click Me To Select A Date"></input>
+                                            <input id="input-search-date-alt" style="display:none">
+                                        </input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-search-date-submitted" class="btn btn-block btn-info">Search By Submitted Date</button>
+                                    </div>
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-search-date-report" class="btn btn-block btn-info">Search By Report Date</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-search-normal" class="btn btn-block btn-primary">Reshow 25 Most Recent</button>
+                                    </div>
+                                </div>
+                                <div style="display:none">
+                                    <input id="view-search-last-input"></input>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -342,14 +397,15 @@
                                 Viewing: <b id="view-viewing">25 Most Recent</b>
                             </div>
                             <div class="card-block">
-                                Show/Hide: <a href='#' class="toggle-vis" data-column="0">Type</a> - <a  href='#' class="toggle-vis" data-column="1">Job #</a> - <a href='#'  class="toggle-vis" data-column="2">Date</a> - <a  href='#' class="toggle-vis" data-column="3">Submitted By</a>
+                                Show/Hide: <a href='#' class="toggle-vis" data-column="0">Type</a> - <a  href='#' class="toggle-vis" data-column="1">Job #</a> - <a href='#'  class="toggle-vis" data-column="2">Submitted Date</a> - <a  href='#' class="toggle-vis" data-column="3">Report Date/Time</a> - <a  href='#' class="toggle-vis" data-column="4">By</a>
                                 <table class="table table-striped datatable table-bordered table-hover display nowrap dt-responsive" id="view-table" cellspace="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Type</th>
                                             <th>Job Number</th>
-                                            <th>Date</th>
-                                            <th>Submitted By</th>
+                                            <th>Submitted Date</th>
+                                            <th>Report Date/Time</th>
+                                            <th>By</th>
                                             <!-- Uncomment if button wanted
                                             <th data-priority="1">Actions</th-->
                                         </tr>
@@ -358,6 +414,10 @@
                             </div>
                             <div class="card-footer">
                                 <button id="button-view-increase" class="btn btn-primary float-right">Increase by 25</button>
+                                <button id="button-view-increase-type" class="btn btn-primary float-right" style="display:none">Increase Type Search by 25</button>
+                                <button id="button-view-increase-num" class="btn btn-primary float-right" style="display:none">Increase Job Number Search by 25</button>
+                                <button id="button-view-increase-date" class="btn btn-primary float-right" style="display:none">Increase Date Search by 25</button>
+                                <button id="button-view-increase-by" class="btn btn-primary float-right" style="display:none">Increase Submitted By Search by 25</button>
                                 <input id="view-search-count" value=25 style="display:none"></input>
                                 <input id="view-search-last" style="display:none"></input>
                             </div>
@@ -380,6 +440,7 @@
     <script src="js/libs/tether.min.js"></script>
     <script src="js/libs/bootstrap.min.js"></script>
     <script src="js/libs/pace.min.js"></script>
+    <script src="js/libs/moment.js"></script>
 
 
     <!-- Plugins and scripts required by all views -->
@@ -394,6 +455,7 @@
     
     <!-- Custom scripts required by this view -->
     <script src="js/views/tables.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     
     <!-- Comment out unneeded navbars -->
     <script>
@@ -423,10 +485,14 @@
                     //},
                     {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 0}, // Type
                     {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 1}, // Job
-                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 2}, // Date
-                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 3} // Submitted By
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 2}, // Submitted Date
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 3}, // Report Date
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 4}, // Submitted By
+                    
                 ]
             });
+            // Hide Submitted Date Column
+            dataTable.column(2).visible(false);
             
             // Toggle Visibility of a Column
             $('a.toggle-vis').on( 'click', function (e) {
@@ -442,28 +508,89 @@
             // Functions for loading reports
             if(localStorage["WYDuserAccess"] == 6) {
                 document.getElementById("view-table").setAttribute('style', 'display:none');
+                document.getElementById("button-view-increase").setAttribute('style', 'display:none');
             }
             else {
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByKey().limitToFirst(25).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                        dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
+                    document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
                 });
+                if(localStorage["WYDuserAccess"]<=3) document.getElementById("button-view-delete").setAttribute("style", "display:true");
                 //dataTable.row.add(["DPR", "69-001", convertDate(Date()), "Shaniqua Jones"]).draw(false);
             }
             
             // Increase view by 25
             $('#button-view-increase').on('click', function() {
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByKey().startAt(document.getElementById("view-search-last").value).limitToFirst(25).once('value').then(function(snapshot) {
+                    var i = 2;
                     snapshot.forEach(function(childSnapshot){
-                       dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().submittedBy, childSnapshot.key]).draw();
-                        document.getElementById("view-search-last").value = childSnapshot.key;
+                        if(i!=0){
+                           dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                            document.getElementById("view-search-last").value = childSnapshot.key;
+                        }
+                    });
+                    document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
+                });
+            });
+            
+            // Increase view for searched
+            // Increase for Report Type
+            $('#button-view-increase-type').on('click', function() {
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild("type").startAt(document.getElementById("view-search-last").value).endAt(document.getElementById("view-search-last-input").value + "\uf8ff").limitToFirst(25).once('value').then(function(snapshot) {
+                    var i = 0;
+                    snapshot.forEach(function(childSnapshot){
+                        if(i != 0) {
+                           dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                            document.getElementById("view-search-last").value = childSnapshot.key;
+                        }
+                        i++;
                     });
                 });
                 var count = document.getElementById("view-search-count");
                 count.value = Number(count.value) + 25;
-                document.getElementById("view-viewing").innerText = count.value + " Most Recent";
+                document.getElementById("view-viewing").innerText = count.value + " Reports Types Searched from: " + document.getElementById("view-search-last-input").value;
+            });
+            
+            // Increase for Job Number
+            $('#button-view-increase-num').on('click', function() {
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild("jobNum").startAt(document.getElementById("view-search-last").value).endAt(document.getElementById("view-search-last-input").value + "\uf8ff").limitToFirst(25).once('value').then(function(snapshot) {
+                    console.log("starting at:" + document.getElementById("view-search-last").value);
+                    console.log("ending at:" + document.getElementById("view-search-last-input").value);
+                    var i = 0;
+                    var length = snapshot.numChildren();
+                    console.log(length);
+                    snapshot.forEach(function(childSnapshot){
+                        if(i != 0) {
+                           dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                            document.getElementById("view-search-last").value = childSnapshot.key;
+                            console.log("adding: " + childSnapshot.val().jobNum);
+                        }
+                        i++;
+                    });
+                });
+                var count = document.getElementById("view-search-count");
+                count.value = Number(count.value) + 25;
+                document.getElementById("view-viewing").innerText = count.value + " Job Numbers Searched from: " + document.getElementById("view-search-last-input").value;
+            });
+            
+            // Increase for Submitted By
+            $('#button-view-increase-by').on('click', function() {
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild("submittedBy").startAt(document.getElementById("view-search-last").value).endAt(document.getElementById("view-search-last-input").value + "\uf8ff").limitToFirst(25).once('value').then(function(snapshot) {
+                    var i = 0;
+                    snapshot.forEach(function(childSnapshot){
+                        if(i != 0) {
+                           dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                            document.getElementById("view-search-last").value = childSnapshot.key;
+                        }
+                        i++;
+                    });
+                });
+                var count = document.getElementById("view-search-count");
+                count.value = Number(count.value) + 25;
+                document.getElementById("view-viewing").innerText = count.value + " Reports Types Searched from: " + document.getElementById("view-search-last-input").value;
             });
             
             // Close currently Viewed Report
@@ -472,15 +599,17 @@
             });
             
             // Load report data into the view on click
-            
             // Used to be
             /* $('#view-table tbody').on( 'click', 'button', function () {
                 var data = $('#view-table').DataTable().row($(this).parents('tr')).data();
             */
+            var currentDataRow;
             $('#view-table tbody').on( 'click', 'tr', function () {
                 var data = $('#view-table').DataTable().row($(this)).data();
+                currentDataRow = $('#view-table').DataTable().row($(this));
                 console.log(data);
-                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + data[4]).once('value').then(function(snapshot) {
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + data[5]).once('value').then(function(snapshot) {
+                    document.getElementById("view-hidden-id").value = snapshot.key;
                     document.getElementById("view-report").innerText = snapshot.val().short;
                     document.getElementById("view-report-job-name").value = snapshot.val().jobName;
                     document.getElementById("view-report-job-num").value = snapshot.val().jobNum;
@@ -495,6 +624,10 @@
                     viewList.innerHTML = "";
                     // Load Data if Report is a DPR
                     if(snapshot.val().short=="DPR") {
+                        document.getElementById("view-report-dpr-performed").innerHTML = "";
+                        document.getElementById("view-report-dpr-progress").innerHTML = "";
+                        document.getElementById("view-report-dpr-materials").innerHTML = "";
+                        document.getElementById("view-report-dpr-techs-hours").innerHTML = "";
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:true');
                         // Data for DPR employees and their hours
                         var hours = document.getElementById("view-report-dpr-techs-hours");
@@ -502,16 +635,18 @@
                         var sectionTitleText = document.createTextNode("Employee Hours");
                         sectionTitle.append(sectionTitleText);
                         hours.append(sectionTitle);
-                        for(var i=0; i < snapshot.val().employees.length; i++) {
-                            var label = document.createElement("label");
-                            label.id = "view-tech-label-" + i;
-                            label.textContent = snapshot.val().employees[i].name;
-                            var div = document.createElement("div");
-                            div.id = "view-tech-hours-" + i;
-                            div.className = "input-group mb-1";
-                            div.innerHTML = '<span class="input-group-addon"><i class="fa fa-user"></i></span><input readonly id="view-tech-' + i + '" placeholder="Hours" class="form-control" value="' + snapshot.val().employees[i].hours + '"><input id="view-tech-id-' + i + '" style="display:none" value="' + snapshot.val().employees[i].id + '>';
-                            hours.append(label);
-                            hours.append(div);
+                        if(snapshot.val().employees != null) {
+                            for(var i=0; i < snapshot.val().employees.length; i++) {
+                                var label = document.createElement("label");
+                                label.id = "view-tech-label-" + i;
+                                label.textContent = snapshot.val().employees[i].name;
+                                var div = document.createElement("div");
+                                div.id = "view-tech-hours-" + i;
+                                div.className = "input-group mb-1";
+                                div.innerHTML = '<span class="input-group-addon"><i class="fa fa-user"></i></span><input readonly id="view-tech-' + i + '" placeholder="Hours" class="form-control" value="' + snapshot.val().employees[i].hours + '"><input id="view-tech-id-' + i + '" style="display:none" value="' + snapshot.val().employees[i].id + '>';
+                                hours.append(label);
+                                hours.append(div);
+                            }
                         }
                         // Data for DPR Materials
                         var materials = document.getElementById("view-report-dpr-materials");
@@ -519,36 +654,42 @@
                         sectionTitleText = document.createTextNode("Materials / Equipment Needed");
                         sectionTitle.append(sectionTitleText);
                         materials.append(sectionTitle);
-                        for(var i=0; i < snapshot.val().materials.length; i++) {
-                            var div = document.createElement("div");
-                            div.id = "view-report-dpr-materials-row-" + i;
-                            div.className = "row";
-                            div.innerHTML = '<div class="input-group mb-1 col-sm"><span class="input-group-addon"><i class="fa fa-shopping-basket"></i></span><input id="view-report-materials-' + i + '" placeholder="Materials Needed" readonly value="' + snapshot.val().materials[i].needed + '" class="form-control"></div><div class="input-group mb-1 col-sm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="view-report-materials-date-' + i + '" type="date" placeholder="Date Needed" readonly value="' + snapshot.val().materials[i].by + '" class="form-control"></div>';
-                            materials.append(div);
+                        if(snapshot.val().materials != null){
+                            for(var i=0; i < snapshot.val().materials.length; i++) {
+                                var div = document.createElement("div");
+                                div.id = "view-report-dpr-materials-row-" + i;
+                                div.className = "row";
+                                div.innerHTML = '<div class="input-group mb-1 col-sm"><span class="input-group-addon"><i class="fa fa-shopping-basket"></i></span><input id="view-report-materials-' + i + '" placeholder="Materials Needed" readonly value="' + snapshot.val().materials[i].needed + '" class="form-control"></div><div class="input-group mb-1 col-sm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="view-report-materials-date-' + i + '" type="date" placeholder="Date Needed" readonly value="' + snapshot.val().materials[i].by + '" class="form-control"></div>';
+                                materials.append(div);
+                            }
                         }
                         // Data for DPR Work Performed
                         var performed = document.getElementById("view-report-dpr-performed");
                         sectionTitle = document.createElement("H6");
                         sectionTitleText = document.createTextNode("Work Performed"); sectionTitle.append(sectionTitleText);
                         performed.append(sectionTitle);
-                        for(var i=0; i < snapshot.val().work.length; i++) {
-                            var div = document.createElement("div");
-                            div.id = "view-report-dpr-materials-row-" + i;
-                            div.className = "row";
-                            div.innerHTML = '<div class="col-sm mb-1"><label for="report-performed-0">Work Performed</label><div class="input-group"><span class="input-group-addon"><i class="icon-like"></i></span><input readonly id="view-report-performed-' + i + '" placeholder="Work Performed" value="' + snapshot.val().work[i].performed + '" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-location-0">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="view-report-location-' + i + '" placeholder="Location"  value="' + snapshot.val().work[i].location + '" class="form-control"></div></div>';
-                            performed.append(div);
+                        if(snapshot.val().work != null) {
+                            for(var i=0; i < snapshot.val().work.length; i++) {
+                                var div = document.createElement("div");
+                                div.id = "view-report-dpr-materials-row-" + i;
+                                div.className = "row";
+                                div.innerHTML = '<div class="col-sm mb-1"><label for="report-performed-0">Work Performed</label><div class="input-group"><span class="input-group-addon"><i class="icon-like"></i></span><input readonly id="view-report-performed-' + i + '" placeholder="Work Performed" value="' + snapshot.val().work[i].performed + '" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-location-0">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="view-report-location-' + i + '" placeholder="Location"  value="' + snapshot.val().work[i].location + '" class="form-control"></div></div>';
+                                performed.append(div);
+                            }
                         }
                         // Data for DPR Work Performed
                         var progress = document.getElementById("view-report-dpr-progress");
                         sectionTitle = document.createElement("H6");
                         sectionTitleText = document.createTextNode("Progress"); sectionTitle.append(sectionTitleText);
                         performed.append(sectionTitle);
-                        for(var i=0; i < snapshot.val().progress.length; i++) {
-                            var div = document.createElement("div");
-                            div.id = "view-report-dpr-materials-row-" + i;
-                            div.className = "row";
-                            div.innerHTML = '<div class="col-sm mb-1"><label for="report-progress-' + i + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input readonly id="report-progress-' + i + '" placeholder="Progress Location" class="form-control" value="' + snapshot.val().progress[i].location + '"></div></div><div class="col-sm mb-1"><label for="report-description--' + i + '">Description</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="report-description-' + i + '" placeholder="Progress Description" class="form-control" value="' + snapshot.val().progress[i].description + '"></div></div><div class="col-sm mb-1"><label for="report-percent-' + i + '">Percentage</label><div class="input-group"><span class="input-group-addon"><i class="icon-equalizer"></i></span><input readonly id="report-percent-' + i + '" type="number" placeholder="Progress Percentage" class="form-control" value="' + snapshot.val().progress[i].percent + '"></div></div>';
-                            progress.append(div);
+                        if(snapshot.val().progress != null) {
+                            for(var i=0; i < snapshot.val().progress.length; i++) {
+                                var div = document.createElement("div");
+                                div.id = "view-report-dpr-materials-row-" + i;
+                                div.className = "row";
+                                div.innerHTML = '<div class="col-sm mb-1"><label for="report-progress-' + i + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input readonly id="report-progress-' + i + '" placeholder="Progress Location" class="form-control" value="' + snapshot.val().progress[i].location + '"></div></div><div class="col-sm mb-1"><label for="report-description--' + i + '">Description</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="report-description-' + i + '" placeholder="Progress Description" class="form-control" value="' + snapshot.val().progress[i].description + '"></div></div><div class="col-sm mb-1"><label for="report-percent-' + i + '">Percentage</label><div class="input-group"><span class="input-group-addon"><i class="icon-equalizer"></i></span><input readonly id="report-percent-' + i + '" type="number" placeholder="Progress Percentage" class="form-control" value="' + snapshot.val().progress[i].percent + '"></div></div>';
+                                progress.append(div);
+                            }
                         }
                     }
                     else {
@@ -648,6 +789,157 @@
                 });
                 document.getElementById("view-card").setAttribute("style", "display:true");
             } );
+            
+            // Custom Search Buttons
+            // Report Type
+            $('#button-search-type').on('click', function() {
+                var search = document.getElementById("view-search");
+                document.getElementById("view-search-count").value = 100;
+                document.getElementById("view-search-last-input").value = search.value;
+                dataTable.clear()
+                    .draw();
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild("type").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot){
+                        dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        document.getElementById("view-search-last").value = childSnapshot.key;
+                    });
+                    document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Reports Types Searched from: " + search.value;
+                });
+                document.getElementById("button-view-increase").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-num").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-date").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-by").setAttribute("style", "display:none");
+            });
+            
+            // Job Number
+            $('#button-search-num').on('click', function() {
+                var search = document.getElementById("view-search");
+                document.getElementById("view-search-count").value = 100;
+                document.getElementById("view-search-last-input").value = search.value;
+                dataTable.clear()
+                    .draw();
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild("jobNum").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot){
+                        dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        document.getElementById("view-search-last").value = childSnapshot.key;
+                    });
+                    document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Job Numbers Searched from: " + search.value;
+                });
+                document.getElementById("button-view-increase").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-num").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-date").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-by").setAttribute("style", "display:none");
+            });
+            
+            // Submitted By
+            $('#button-search-by').on('click', function() {
+                var search = document.getElementById("view-search");
+                document.getElementById("view-search-count").value = 100;
+                document.getElementById("view-search-last-input").value = search.value;
+                dataTable.clear()
+                    .draw();
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild("submittedBy").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot){
+                        dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        document.getElementById("view-search-last").value = childSnapshot.key;
+                    });
+                    document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted By: " + search.value;
+                });
+                document.getElementById("button-view-increase").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-num").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-date").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-by").setAttribute("style", "display:none");
+            });
+            
+            // Submitted Date
+            $('#button-search-date-submitted').on('click', function() {
+                var search = document.getElementById("input-search-date");
+                console.log(search.value);
+                console.log(Date(search.value));
+                document.getElementById("view-search-count").value = 100;
+                document.getElementById("view-search-last-input").value = search.value;
+                dataTable.clear()
+                    .draw();
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild("submittedDate").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot){
+                        dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        document.getElementById("view-search-last").value = childSnapshot.key;
+                    });
+                    document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted On: " + search.value;
+                });
+                document.getElementById("button-view-increase").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-num").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-date").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-by").setAttribute("style", "display:none");
+            });
+            
+            // Report Date
+            $('#button-search-date-report').on('click', function() {
+                var search = document.getElementById("input-search-date-alt");
+                console.log(search.value);
+                console.log(Date(search.value));
+                document.getElementById("view-search-count").value = 100;
+                document.getElementById("view-search-last-input").value = search.value;
+                dataTable.clear()
+                    .draw();
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild("timeStart").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot){
+                        dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        document.getElementById("view-search-last").value = childSnapshot.key;
+                    });
+                    document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Reports For: " + search.value;
+                });
+                document.getElementById("button-view-increase").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-num").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-date").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-by").setAttribute("style", "display:none");
+            });
+            
+            // Back to Default
+            $('#button-search-normal').on('click', function() {
+                var search = document.getElementById("view-search");
+                document.getElementById("view-search-count").value = 25;
+                dataTable.clear()
+                    .draw();
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByKey().limitToFirst(25).once('value').then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot){
+                        dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        document.getElementById("view-search-last").value = childSnapshot.key;
+                    });
+                    document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Most Recent";
+                });
+                document.getElementById("button-view-increase").setAttribute("style", "display:true");
+                document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-num").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-date").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-by").setAttribute("style", "display:none");
+            });
+            
+            $('#input-search-date').datepicker({
+                dateFormat: "D M d yy",
+                showOtherMonths: true,
+                selectOtherMonths: true
+            })
+                .change(function() {
+                    $('#input-search-date-alt').val(moment($(this).val()).format('MM/DD/Y'));
+                });
+            
+            $('#button-view-delete').on('click', function() {
+                var confirmDelete = confirm("Are You Sure You Would Like To Delete This Report?");
+                if(confirmDelete) {
+                    var deleteVal = document.getElementById("view-hidden-id").value;
+                    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + document.getElementById("view-hidden-id").value).remove().then(function() {
+                        toastr["info"](deleteVal + " Report has successfully been deleted!");
+                    currentDataRow.remove().draw();
+                        $('#button-view-close').trigger('click');
+                    });
+                }
+            });
         });
     </script>
     
