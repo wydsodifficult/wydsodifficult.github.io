@@ -301,7 +301,7 @@
                                     <label for="report-dpr-techs">Select Employees</label>
                                     <div class="input-group mb-1">
                                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                        <select id="report-dpr-techs" placeholder="Select Your Employees" class="form-control select2-multiple" multiple="multiple">
+                                        <select id="report-dpr-techs" placeholder="Select Your Employees" class="form-control select2-multiple" multiple="">
                                         </select>
                                     </div>
                                     <button id="report-tech-hours" type="button" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Employees</button>
@@ -441,6 +441,7 @@
                 document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
             }
+            $('#report-dpr-techs').select2();
         });
     </script>
     
@@ -463,9 +464,6 @@
     
     <script>
        $(function () {
-            $('#report-dpr-techs').select2({
-                placeholder: "Select Your Techs"
-            });
             $('#report-time-start').datetimepicker({
                 //inline: true,
                 sideBySide: true,
