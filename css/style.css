@@ -11158,6 +11158,9 @@ app-root {
       text-transform: uppercase; }
     .sidebar .nav .divider {
       height: 10px; }
+    .sidebar .nav .nav-dropdown .nav-dropdown-items {
+        margin-left: 20px;
+    }
     .sidebar .nav .nav-item {
       position: relative;
       margin: 0;
