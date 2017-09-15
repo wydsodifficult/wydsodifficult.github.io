@@ -525,7 +525,7 @@
             // Increase view by 25
             $('#button-view-increase').on('click', function() {
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByKey().startAt(document.getElementById("view-search-last").value).limitToFirst(25).once('value').then(function(snapshot) {
-                    var i = 2;
+                    var i = 0;
                     snapshot.forEach(function(childSnapshot){
                         if(i!=0){
                            dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
