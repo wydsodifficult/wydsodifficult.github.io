@@ -1121,10 +1121,12 @@ function viewJob(thisJob,active) {
 // dismissViewJobModal()
 // Operations-jobs
 $("#view-job-modal").on("hide.bs.modal", function(){
-    document.getElementById("button-job-save").style.display = "none";
-    document.getElementById("button-job-delete").style.display = "none";
-    document.getElementById("button-job-edit").style.display = "inline";
-    document.getElementById("button-job-cancel").innerHTML = "Close";
+    if(document.getElementById("button-job-delete") != null) {
+        document.getElementById("button-job-save").style.display = "none";
+        document.getElementById("button-job-delete").style.display = "none";
+        document.getElementById("button-job-edit").style.display = "inline";
+        document.getElementById("button-job-cancel").innerHTML = "Close";
+    }
     var modal = document.getElementById("view-job-modal");
     var inputs = modal.getElementsByTagName('input');
     for(i = 0; i < inputs.length; i++) {
@@ -1901,6 +1903,7 @@ $('#button-save-report').on('click', function() {
     updateEverything[path + 'submittedBy'] = localStorage["WYDuserNameFull"];
     updateEverything[path + 'submittedUID'] = localStorage["WYDuserID"];
     updateEverything[path + 'submittedDate'] = document.getElementById('report-date').innerText;
+    updateEverything[userPath + 'date'] = document.getElementById('report-date').innerText;
     updateEverything[path + 'submittedInitials'] = localStorage["WYDuserInitials"];
     updateEverything[path + 'type'] = document.getElementById('template-type-title').innerText;
     updateEverything[path + 'short'] = document.getElementById('template-short').value;
@@ -1919,7 +1922,7 @@ $('#button-save-report').on('click', function() {
         
     }
     updateEverything[path + 'timeStart'] = document.getElementById('report-time-start-input').value;
-    updateEverything[userPath + 'date'] = convertDate(document.getElementById('report-time-start-input').value);
+    updateEverything[userPath + 'timeStart'] = document.getElementById('report-time-start-input').value;
     updateEverything[path + 'timeEnd'] = document.getElementById('report-time-end-input').value;
     updateEverything[path + 'timeTotal'] = document.getElementById('report-time-total').value;
     updateEverything[path + 'contractor'] = document.getElementById('report-contractor').value;
@@ -1931,6 +1934,7 @@ $('#button-save-report').on('click', function() {
     // If DPR Report
     if(document.getElementById('template-type-title').innerText == 'DPR') {
         updateEverything[path + 'short'] = "DPR";
+        updateEverything[userPath + 'type'] = "DPR";
         var tempDiv = document.getElementById("report-tech-0");
         var tempCount = 0;
         while (tempDiv != null) {
