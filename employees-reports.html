@@ -17,7 +17,7 @@
     <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
     <link rel="shortcut icon" href="img/WYD_logo.png">
 
-    <title>WYD-Operations Reports</title>
+    <title>WYD-Employees Reports</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@
 
 <body class="app header-fixed sidebar-fixed">
     
-    <!-- Navigation Header for Operations-->     
+    <!-- Navigation Header for Operations>     
     <header class="app-header navbar">
         <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
         <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
@@ -71,9 +71,9 @@
             <a id="logout-sidebar" class="py-1 px-2" href="#" ><i class="fa fa-sign-out"></i>Logout</a>
         </span>
 
-    </header>
+    </header-->
     
-    <!-- Navigation Header for employees
+    <!-- Navigation Header for employees -->
     <header class="app-header navbar">
         <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
         <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
@@ -94,7 +94,6 @@
         </span>
 
     </header>
-    -->
 
     <div class="app-body">
         <div class="sidebar">
@@ -333,8 +332,6 @@
                             <div class="card-footer">
                                 <input id="view-hidden-id" style="display:none"></input>
                                 <button id="button-view-close" class="btn btn-info float-left">Close View</button>
-                                <button id="button-view-edit" type="button" class="btn btn-warning float-right" style="display:none">Edit</button>
-                                <button id="button-view-delete" type="button" class="btn btn-danger float-right" style="display:none">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -463,8 +460,8 @@
             $("#footer").load("footer.html");
             //$("#navbar").load("god-navbar.html");
             
-            document.getElementById("employees-sidebar").style.display = "none";
-            //document.getElementById("operations-sidebar").style.display = "none";
+            //document.getElementById("employees-sidebar").style.display = "none";
+            document.getElementById("operations-sidebar").style.display = "none";
             if(localStorage["WYDuserNameFull"]!=null){
                 document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
@@ -518,7 +515,6 @@
                     });
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
                 });
-                if(localStorage["WYDuserAccess"]<=3) document.getElementById("button-view-delete").setAttribute("style", "display:true");
                 //dataTable.row.add(["DPR", "69-001", convertDate(Date()), "Shaniqua Jones"]).draw(false);
             }
             
@@ -928,21 +924,6 @@
                 .change(function() {
                     $('#input-search-date-alt').val(moment($(this).val()).format('MM/DD/Y'));
                 });
-            
-            $('#button-view-delete').on('click', function() {
-                var confirmDelete = confirm("Are You Sure You Would Like To Delete This Report?");
-                if(confirmDelete) {
-                    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + document.getElementById("view-hidden-id").value + '/submittedUID').once('value').then(function(snapshot) {
-                        firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history/' + document.getElementById("view-hidden-id").value).remove()
-                    });
-                    var deleteVal = document.getElementById("view-hidden-id").value;
-                    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + document.getElementById("view-hidden-id").value).remove().then(function() {
-                        toastr["info"](deleteVal + " Report has successfully been deleted!");
-                        currentDataRow.remove().draw();
-                        $('#button-view-close').trigger('click');
-                    });
-                }
-            });
         });
     </script>
     

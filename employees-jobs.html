@@ -1,0 +1,440 @@
+<!--
+ * WYD - blank.html template
+ * @version v0.17.05.31
+ * Copyright (c) 2017 WYD
+ * NOTE: Login redirect is commented out
+ -->
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="WYD - What'd You Do?">
+    <meta name="author" content="Higashi">
+    <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
+    <link rel="shortcut icon" href="img/WYD_logo.png">
+
+    <title>WYD-Employees Jobs</title>
+
+    <!-- Icons -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/simple-line-icons.css" rel="stylesheet">
+
+    <!-- Premium Icons -->
+    <link href="css/glyphicons.css" rel="stylesheet">
+    <link href="css/glyphicons-filetypes.css" rel="stylesheet">
+    <link href="css/glyphicons-social.css" rel="stylesheet">
+    
+    <!-- Main styles for this application -->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="css/responsive.bootstrap4.min.js" rel="stylesheet">
+    <link rel='stylesheet' type='text/css' href='http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'/>
+    
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+    <script src="js/fbinit.js"></script>
+
+</head>
+
+<!-- BODY options, add following classes to body to change options
+
+// Sidebar options
+1. '.sidebar-fixed'					- Fixed Sidebar
+2. '.sidebar-hidden'				- Hidden Sidebar
+3. '.sidebar-off-canvas'		- Off Canvas Sidebar
+4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
+
+-->
+
+<body class="app header-fixed sidebar-fixed">
+    
+    <!-- Navigation Header for Operations>     
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <a class="navbar-brand" href="operations-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout-sidebar" class="py-1 px-2" href="#" ><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header-->
+    
+    <!-- Navigation Header for employees -->
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-paw"></i>EMPLOYEES
+        </span>
+        <a class="navbar-brand" href="employees-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cube"></i>EMPLOYEES
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header>
+
+    <div class="app-body">
+        <div class="sidebar">
+
+            <div class="sidebar-header">
+                <div>
+                   <br>
+                    <strong id="full-name">SHANIQUA JONES</strong>
+                </div>
+                <div class="text-muted">
+                    <small id="job-title">Seated User</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- This nav is hidden if employees-navbar is loaded -->
+                <ul class="nav" id="operations-sidebar">
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees-dashboard.html"> Switch to Employee View</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="operations-dashboard.html">
+                        <i class="icon-speedometer"></i>DASHBOARD</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i>REPORTS</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports-new.html"><i class="icon-doc"></i>  New</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports.html"><i class="icon-docs"></i>  View</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports-templates.html"><i class="icon-wrench"></i>  Templates</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-home"></i>HOUSEKEEPING</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-jobs.html"><i class="icon-basket-loaded"></i>  Jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-seats.html"><i class="icon-puzzle"></i>  Seats</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-company.html"><i class="icon-picture"></i>  Company Profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="icon-settings"></i>SETTINGS</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+                
+                <!-- This nav is hidden if operations-navbar is loaded -->
+                <ul class="nav" id="employees-sidebar">
+                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="operations-dashboard.html"> Switch to Operations View</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees-dashboard.html">
+                        <i class="icon-speedometer"></i>DASHBOARD</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i>REPORTS</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports-new.html"><i class="icon-doc"></i>  New</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports-mine.html"><i class="icon-book-open"></i>  View Mine</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports.html"><i class="icon-docs"></i>  View All</a>
+                            </li>
+                        </ul>
+                    </li>
+                   <li class="nav-item">
+                        <a class="nav-link" href="employees-profile.html">
+                        <i class="icon-user"></i>MY PROFILE</a>
+                    </li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-home"></i>OPERATIONAL</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-jobs.html"><i class="icon-basket-loaded"></i>  Jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-list.html"><i class="icon-puzzle"></i>  Employee List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-company.html"><i class="icon-picture"></i>  Company Profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="icon-settings"></i>SETTINGS</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main content -->
+        <main class="main">
+
+            <!-- Modal Content -->
+            <div class="modal fade" id="view-job-modal" tabindex="-1" role="dialog" aria-labelledby="viewJobModalTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewJobModalTitle">VIEW JOB</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input id="jobID" type="text" disabled style="display:none">
+                            <input id="view-contact-count" type="text" disabled value=0 style="display:none">
+                            <label>Job Name</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-rocket fa-spin"></i></span>
+                                <input id="view-name-input" type="text" class="form-control" autofocus="autofocus" placeholder="Job Name" disabled>
+                            </div>
+
+                            <label>Job Number</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon">#</span>
+                                <input id="view-number-input" type="text" class="form-control" autofocus="autofocus" placeholder="Job Number" disabled>
+                            </div>
+
+                            <label>Job Location</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-location-pin"></i></span>
+                                <input id="view-location-input" type="text" class="form-control" autofocus="autofocus" placeholder="Location / Address" disabled>
+                            </div>
+                            <div>
+                                Active Job?
+                                <label class="switch switch-text switch-pill switch-primary">
+                                    <input disabled id="view-active-input" type="checkbox" class="switch-input" checked="">
+                                    <span class="switch-label"data-on="YES" data-off="NO"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            
+                            <label>Project Manager</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-emotsmile"></i></span>
+                                <input id="view-pm-name-input" type="text" class="form-control" autofocus="autofocus" placeholder="Project Manager Name" disabled>
+                            </div>
+
+                            <label>Project Manager Contact</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-phone"></i></span>
+                                <input id="view-pm-contact-input" type="telephone" class="form-control" autofocus="autofocus" placeholder="Project Manager Contact" disabled>
+                            </div>
+                            Contractor Information
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-wrench"></i></span>
+                                <input id="view-contractor-input" type="text" class="form-control" autofocus="autofocus" placeholder="Contractor" disabled>
+                            </div>
+                            <div id="view-modal-job-contacts"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="button-job-cancel" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Page Content -->
+            <div class="container-fluid">
+
+                <div class="animated fadeIn">
+                    <h1>Jobs</h1>
+                    <hr>
+                    <div class="col-sm">
+                        <button type="button" class="btn  btn-primary btn-block" id="employee-button-switch-job" value="inactive">View Inactive Jobs</button>
+                        <hr>
+                        <div class="card card-accent-info">
+                            <div class="card-header">
+                                Viewing: <b id="view-viewing">Active</b>
+                            </div>
+                            <div class="card-block">
+                                <table class="table table-striped datatable table-bordered table-hover display nowrap dt-responsive" id="view-table" cellspace="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Job Name</th>
+                                            <th>Job Number</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.conainer-fluid -->
+        </main>
+
+    </div>
+    
+    <div id="footer"></div>
+
+    <!-- Load jquery for navs and footer -->
+    <script src="js/libs/jquery.min.js"></script>
+    
+    <!-- Main scripts -->
+    <script src="js/app.js"></script>
+    
+    <!-- Bootstrap and necessary plugins -->
+    <script src="js/libs/tether.min.js"></script>
+    <script src="js/libs/bootstrap.min.js"></script>
+    <script src="js/libs/pace.min.js"></script>
+    <script src="js/libs/moment.js"></script>
+
+
+    <!-- Plugins and scripts required by all views -->
+    <script src="js/libs/Chart.min.js"></script>
+    <script src="js/libs/toastr.min.js"></script>
+    <script src="js/libs/jquery.dataTables.min.js"></script>
+    <script src="js/libs/dataTables.bootstrap4.min.js"></script>
+    <script src="js/libs/dataTables.responsive.min.js"></script>
+    
+    <!-- Custom scripts required by this view -->
+    <script src="js/views/tables.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    
+    <!-- Comment out unneeded navbars -->
+    <script>
+        $(document).ready(function () {
+            $("#footer").load("footer.html");
+            //$("#navbar").load("god-navbar.html");
+            
+            //document.getElementById("employees-sidebar").style.display = "none";
+            document.getElementById("operations-sidebar").style.display = "none";
+            if(localStorage["WYDuserNameFull"]!=null){
+                document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
+                document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
+            }
+             // Initialize data table
+            $('#view-table').DataTable().destroy();
+            var dataTable = $('#view-table').DataTable({
+                autoWidth: false,
+                columnDefs: [
+                    //{
+                        //"data":null
+                        // Uncomment if button wanted
+                        /*,
+                        "defaultContent": "<button class='btn btn-primary'>View</button>",
+                        "targets": -1
+                        */
+                    //},
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 0}, // Job Name
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 1}, // Job NUmber
+                ]
+            });
+            firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/job/active').orderByKey().once('value').then(function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                    dataTable.row.add([childSnapshot.val().jobName, childSnapshot.val().jobNum, childSnapshot.key]).draw();
+                });
+            });
+            $('#employee-button-switch-job').on('click', function() {
+                if(document.getElementById("employee-button-switch-job").value == "inactive") {
+                    document.getElementById("employee-button-switch-job").innerText = "View Active Jobs";
+                    document.getElementById("view-viewing").innerText = "Inactive";
+                    document.getElementById("employee-button-switch-job").value = "active";
+                    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/job/inactive').orderByKey().once('value').then(function(snapshot) {
+                        dataTable.clear()
+                            .draw();
+                        snapshot.forEach(function(childSnapshot){
+                            dataTable.row.add([childSnapshot.val().jobName, childSnapshot.val().jobNum, childSnapshot.key]).draw();
+                        });
+                    });
+                }
+                else {
+                    document.getElementById("employee-button-switch-job").innerText = "View Inactive Jobs";
+                    document.getElementById("employee-button-switch-job").value = "inactive";
+                    document.getElementById("view-viewing").innerText = "Active";
+                    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/job/active').orderByKey().once('value').then(function(snapshot) {
+                        dataTable.clear()
+                            .draw();
+                        snapshot.forEach(function(childSnapshot){
+                            dataTable.row.add([childSnapshot.val().jobName, childSnapshot.val().jobNum, childSnapshot.key]).draw();
+                        });
+                    });
+                }
+                
+            });
+            
+            $('#view-table tbody').on('click', 'tr', function () {
+                var data = $('#view-table').DataTable().row($(this)).data();
+                var active;
+                if(document.getElementById("employee-button-switch-job").value == "inactive") active = "active";
+                else active = "inactive";
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/job/' + active + "/" + data[2]).once('value').then(function(snapshot) {
+                    viewJob(snapshot, active);
+                    $('#view-job-modal').modal();
+                });
+            });
+        });
+    </script>
+    
+    <!-- Make sure user is logged in, else send to login -->
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            // User is signed in.
+            //toastr["info"]("user logged in");
+            if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
+          } else {
+            // No user is signed in.
+            window.location="login.html";
+            //toastr["warning"]("User Not Logged In!");
+          }
+        });
+    </script>
+
+</body>
+
+</html>
