@@ -156,10 +156,17 @@ function progressBar(progressDiv, incrementVal) {
 // Login a User
 // Login
 // userLogin
-$('#button-login').on('click',function(){
+$('#button-login').on('click', function(){
     firebase.auth().signInWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).catch(function(error) {
         toastr["warning", "Error:" + error.message];
     });
+});
+
+// Register a Company
+// Login
+// userRegister
+$('#button-register').on('click', function() {
+    window.location="register.html";
 });
 
 
