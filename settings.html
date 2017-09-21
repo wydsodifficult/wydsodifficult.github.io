@@ -1,0 +1,194 @@
+<!--
+ * WYD - blank.html template
+ * @version v0.17.05.31
+ * Copyright (c) 2017 WYD
+ * NOTE: Login redirect is commented out
+ -->
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="WYD - What'd You Do?">
+    <meta name="author" content="Higashi">
+    <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
+    <link rel="shortcut icon" href="img/WYD_logo.png">
+
+    <title>WYD-SETTINGS</title>
+
+    <!-- Icons -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/simple-line-icons.css" rel="stylesheet">
+
+    <!-- Premium Icons -->
+    <link href="css/glyphicons.css" rel="stylesheet">
+    <link href="css/glyphicons-filetypes.css" rel="stylesheet">
+    <link href="css/glyphicons-social.css" rel="stylesheet">
+    
+    <!-- Main styles for this application -->
+    <link href="css/style.css" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+    <script src="js/fbinit.js"></script>
+
+</head>
+
+<!-- BODY options, add following classes to body to change options
+
+// Sidebar options
+1. '.sidebar-fixed'					- Fixed Sidebar
+2. '.sidebar-hidden'				- Hidden Sidebar
+3. '.sidebar-off-canvas'		- Off Canvas Sidebar
+4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
+
+-->
+
+<body class="app header-fixed sidebar-fixed">
+    
+    <!-- Navigation Header for Settings-->     
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-cog"></i>SETTINGS
+        </span>
+        <a class="navbar-brand" href="employees-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cog"></i>SETTINGS
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout-sidebar" class="py-1 px-2" href="#" ><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header>
+
+    <div class="app-body">
+        <div class="sidebar">
+
+            <div class="sidebar-header">
+                <div>
+                   <br>
+                    <strong id="full-name">SHANIQUA JONES</strong>
+                </div>
+                <div class="text-muted">
+                    <small id="job-title">Seated User</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul class="nav" id="settings-sidebar">
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees-dashboard.html">
+                        <i class="fa fa-cube"></i>EMPLOYEES DASHBOARD</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="operations-dashboard.html">
+                        <i class="fa fa-cubes"></i>OPERATIONS DASHBOARD</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="icon-settings"></i>SETTINGS</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main content -->
+        <main class="main">
+
+            <div class="container-fluid">
+
+                <div class="animated fadeIn">
+                    <h1>SETTINGS</h1>
+                    <hr>
+                    <div class="card">
+                        <div class="card-header">
+                            <b>Set Default Landing Page</b>
+                        </div>
+                        <div class="card-block">
+                            <div class="radio">
+                                <input id="landing-operations" type="radio" value="operations" name="landingPage">Operations
+                            </div>
+                            <div class="radio">
+                                <input id="landing-employees" type="radio" value="employees" name="landingPage">Employees
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button id="button-settings-landing-save" type="button" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.conainer-fluid -->
+        </main>
+
+    </div>
+    
+    <div id="footer"></div>
+
+    <!-- Load jquery for navs and footer -->
+    <script src="js/libs/jquery.min.js"></script>
+    <!-- Main scripts -->
+    <script src="js/app.js"></script>
+    
+    <!-- Bootstrap and necessary plugins -->
+    <script src="js/libs/tether.min.js"></script>
+    <script src="js/libs/bootstrap.min.js"></script>
+    <script src="js/libs/pace.min.js"></script>
+
+
+    <!-- Plugins and scripts required by all views -->
+    <script src="js/libs/Chart.min.js"></script>
+    <script src="js/libs/toastr.min.js"></script>
+    
+    <!-- Comment out unneeded navbars -->
+    <script>
+        $(document).ready(function () {
+            $("#footer").load("footer.html");
+            //$("#navbar").load("god-navbar.html");
+            
+            //document.getElementById("employees-sidebar").style.display = "none";
+            //document.getElementById("operations-sidebar").style.display = "none";
+            if(localStorage["WYDuserNameFull"]!=null){
+                document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
+                document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
+            }
+            firebase.database().ref('user/' + localStorage["WYDuserID"]).once('value').then(function(snapshot) {
+                if(snapshot.val().settings == null || snapshot.val().settings.landing == null || snapshot.val().settings.landing == 'employees') document.getElementById('landing-employees').setAttribute('checked', true);
+                else document.getElementById('landing-operations').setAttribute('checked', true);
+            });
+        });
+    </script>
+    
+    <!-- Make sure user is logged in, else send to login -->
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            // User is signed in.
+            //toastr["info"]("user logged in");
+            if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
+          } else {
+            // No user is signed in.
+            window.location="login.html";
+            //toastr["warning"]("User Not Logged In!");
+          }
+        });
+    </script>
+
+</body>
+
+</html>

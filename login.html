@@ -84,8 +84,7 @@
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             // User is signed in.
-            getUserData();
-            window.location="operations-dashboard.html";
+            getUserData(1);
           } else {
             getLocalStorage();
             // No user is signed in.

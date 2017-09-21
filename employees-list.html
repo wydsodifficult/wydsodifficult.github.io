@@ -252,6 +252,12 @@
                                 <span class="input-group-addon"><i class="icon-user"></i></span>
                                 <input id="initials-input" type="text" class="form-control" placeholder="Initials">
                             </div>
+                            
+                            <label>E-Mail</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input id="email-input" type="text" class="form-control" placeholder="E-Mail">
+                            </div>
 
                             <label>Cellular #</label>
                             <div class="input-group mb-1">
@@ -473,6 +479,7 @@
                     document.getElementById("last-input").value = snapshot.val().nameLast;
                     document.getElementById("full-input").value = snapshot.val().nameFull;
                     document.getElementById("initials-input").value = snapshot.val().nameInitials;
+                    document.getElementById("email-input").value = snapshot.val().email;
                     document.getElementById("cell-input").value = snapshot.val().numCell;
                     document.getElementById("contact-input").value = snapshot.val().numContact;
                     document.getElementById("class-input").value = snapshot.val().class;

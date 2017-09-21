@@ -2198,10 +2198,23 @@ function newDPRLine(section) {
     }
 }
 
+// Function run when the save button is clicked to save settings for the default landing page
+// settingsLanding()
+// Settings
+$('#button-settings-landing-save').on('click', function() {
+    var updateEverything = {};
+    var path = 'user/' + localStorage["WYDuserID"] + '/settings/landing';
+    if(document.getElementById('landing-employees').checked == true) updateEverything[path] = "employees";
+    if(document.getElementById('landing-operations').checked == true) updateEverything[path] = "operations";
+    firebase.database().ref().update(updateEverything).then(function() {
+        toastr["info"]("Updated your default landing page!");
+    });
+});
+
 /* ================================================== */
 /* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
-function getUserData() {
+function getUserData(input) {
     localStorage["WYDuserID"] = firebase.auth().currentUser.uid;
     toastr["info"]("Updating Local Storage for:" + localStorage["WYDuserID"]);
     firebase.database().ref('user/' + localStorage["WYDuserID"]).once('value').then(function(snapshot) {
@@ -2218,9 +2231,15 @@ function getUserData() {
         localStorage["WYDuserJobTitle"] = data.jobTitle;
         localStorage["WYDuserCompanyID"] = data.companyID;
         localStorage["WYDuserNumID"] = data.numID;
+        if(input == 1) {
+            if(data.settings == null || data.settings.landing == null || data.settings.landing == "employees") window.location = "employees-dashboard.html";
+            else window.location = "operations-dashboard.html";
+        }
         firebase.database().ref('company/' + data.companyID + "/info").once('value').then(function(snapshot) {
             localStorage["WYDuserCompanyName"] = snapshot.val().name;
-            location.reload();
+            if(input == null) {
+                location.reload();
+            }
         });
     });
 }
