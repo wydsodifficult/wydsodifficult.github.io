@@ -2218,6 +2218,47 @@ $('#button-settings-landing-save').on('click', function() {
     });
 });
 
+// Function run when employees-profile page is loaded
+// getEmployeeProfile()
+// Employees-prfile
+function getEmployeeProfile() {
+    firebase.database().ref('user/' + localStorage["WYDuserID"]).once('value').then(function(snapshot) {
+        document.getElementById("first-input").value = snapshot.val().nameFirst;
+        document.getElementById("last-input").value = snapshot.val().nameLast;
+        document.getElementById("full-input").value = snapshot.val().nameFull;
+        document.getElementById("initials-input").value = snapshot.val().nameInitials;
+        document.getElementById("cell-input").value = snapshot.val().numCell;
+        document.getElementById("contact-input").value = snapshot.val().numContact;
+        document.getElementById("class-input").value = snapshot.val().class;
+        document.getElementById("title-input").value = snapshot.val().jobTitle;
+        document.getElementById("employee-input").value = snapshot.val().numID;
+        document.getElementById("access-input").value = snapshot.val().access;
+        document.getElementById("additional-input").value = snapshot.val().additional;
+    });
+}
+
+// Function run to update employees profile
+// saveEmployeeProfile()
+// Employees-profile
+$('#button-profile-save').on('click', function() {
+    var updateEverything = {};
+    var path = 'user/' + localStorage["WYDuserID"];
+    updateEverything[path + '/nameFirst'] = document.getElementById("first-input").value;
+    updateEverything[path + '/nameLast'] = document.getElementById("last-input").value;
+    updateEverything[path + '/nameFull'] = document.getElementById("full-input").value;
+    updateEverything[path + '/nameInitials'] = document.getElementById("initials-input").value;
+    updateEverything[path + '/numCell'] = document.getElementById("cell-input").value;
+    updateEverything[path + '/numContact'] = document.getElementById("contact-input").value;
+    updateEverything[path + '/class'] = document.getElementById("class-input").value;
+    updateEverything[path + '/jobTitle'] = document.getElementById("title-input").value;
+    updateEverything[path + '/numID'] = document.getElementById("employee-input").value;
+    updateEverything[path + '/access'] = document.getElementById("access-input").value;
+    updateEverything[path + '/additional'] = document.getElementById("additional-input").value;
+    firebase.database().ref().update(updateEverything).then(function() {
+        toastr["info"]("Updated your profile!");
+    });
+});
+
 /* ================================================== */
 /* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
