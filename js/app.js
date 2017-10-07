@@ -2278,17 +2278,12 @@ function getUserData(input) {
         localStorage["WYDuserClass"] = data.class;
         localStorage["WYDuserJobTitle"] = data.jobTitle;
         localStorage["WYDuserCompanyID"] = data.companyID;
+        localStorage["WYDuserCompanyName"] = data.companyName;
         localStorage["WYDuserNumID"] = data.numID;
         if(input == 1) {
             if(data.settings == null || data.settings.landing == null || data.settings.landing == "employees") window.location = "employees-dashboard.html";
             else window.location = "operations-dashboard.html";
         }
-        firebase.database().ref('company/' + data.companyID + "/info").once('value').then(function(snapshot) {
-            localStorage["WYDuserCompanyName"] = snapshot.val().name;
-            if(input == null) {
-                location.reload();
-            }
-        });
     });
 }
 
