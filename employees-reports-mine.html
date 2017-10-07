@@ -331,9 +331,20 @@
                             </div>
                             <div class="card-footer">
                                 <input id="view-hidden-id" style="display:none"></input>
-                                <button id="button-view-close" class="btn btn-info float-left">Close View</button>
-                                <button id="button-view-edit" type="button" class="btn btn-warning float-right" style="display:none">Edit</button>
-                                <button id="button-view-delete" type="button" class="btn btn-danger float-right">Delete</button>
+                                <div class="row">
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-view-close" class="btn btn-info float-center">Close View</button>
+                                    </div>
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-view-download" type="button" class="btn btn-success">Download</button>
+                                    </div>
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-view-edit" type="button" class="btn btn-warning">Edit</button>
+                                    </div>
+                                    <div class="col" style="margin-bottom:4px">
+                                        <button id="button-view-delete" type="button" class="btn btn-danger">Delete</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -372,10 +383,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="col" style="margin-bottom:4px">
-                                        <button id="button-search-date-submitted" class="btn btn-block btn-info">Search By Submitted Date</button>
+                                        <button id="button-search-date-report" class="btn btn-block btn-info">Search By Report Date</button>
                                     </div>
                                     <div class="col" style="margin-bottom:4px">
-                                        <button id="button-search-date-report" class="btn btn-block btn-info">Search By Report Date</button>
+                                        <button id="button-search-date-submitted" class="btn btn-block btn-info">Search By Submitted Date</button>
                                     </div>
                                 </div>
                                 <hr>
@@ -396,14 +407,14 @@
                                 Viewing: <b id="view-viewing">25 Most Recent</b>
                             </div>
                             <div class="card-block">
-                                Show/Hide: <a href='#' class="toggle-vis" data-column="0">Type</a> - <a  href='#' class="toggle-vis" data-column="1">Job #</a> - <a href='#'  class="toggle-vis" data-column="2">Submitted Date</a> - <a  href='#' class="toggle-vis" data-column="3">Report Date/Time</a> - <a  href='#' class="toggle-vis" data-column="4">By</a>
+                                Show/Hide: <a href='#' class="toggle-vis" data-column="0">Report Date/Time</a> - <a  href='#' class="toggle-vis" data-column="1">Type</a> - <a href='#'  class="toggle-vis" data-column="2">Job #</a> - <a  href='#' class="toggle-vis" data-column="3">Submitted Date</a> - <a  href='#' class="toggle-vis" data-column="4">By</a>
                                 <table class="table table-striped datatable table-bordered table-hover display nowrap dt-responsive" id="view-table" cellspace="0" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>Report Date/Time</th>
                                             <th>Type</th>
                                             <th>Job Number</th>
                                             <th>Submitted Date</th>
-                                            <th>Report Date/Time</th>
                                             <th>By</th>
                                             <!-- Uncomment if button wanted
                                             <th data-priority="1">Actions</th-->
@@ -440,6 +451,8 @@
     <script src="js/libs/bootstrap.min.js"></script>
     <script src="js/libs/pace.min.js"></script>
     <script src="js/libs/moment.js"></script>
+    <script src="js/libs/jspdf.debug.js"></script>
+    <script src="js/libs/jspdf.plugin.autotable.js"></script>
 
 
     <!-- Plugins and scripts required by all views -->
@@ -451,6 +464,7 @@
     
     <!-- Main scripts -->
     <script src="js/app.js"></script>
+    <script src="js/jstopdf.js"></script>
     
     <!-- Custom scripts required by this view -->
     <script src="js/views/tables.js"></script>
@@ -491,7 +505,7 @@
                 ]
             });
             // Hide Submitted Date Column
-            dataTable.column(2).visible(false);
+            dataTable.column(3).visible(false);
             
             // Toggle Visibility of a Column
             $('a.toggle-vis').on( 'click', function (e) {
@@ -512,10 +526,11 @@
             else {
                 firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().limitToFirst(25).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                        dataTable.row.add([childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, childSnapshot.val().timeStart, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
+                        dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
+                    dataTable.order([0, 'des']).draw();
                 });
                 //dataTable.row.add(["DPR", "69-001", convertDate(Date()), "Shaniqua Jones"]).draw(false);
             }
@@ -526,11 +541,12 @@
                     var i = 0;
                     snapshot.forEach(function(childSnapshot){
                         if(i!=0){
-                            dataTable.row.add([childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, childSnapshot.val().timeStart, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
+                            dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                         }
                     });
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
+                    dataTable.order([0, 'des']).draw();
                 });
             });
             
@@ -608,6 +624,7 @@
                 console.log(data);
                 console.log("Getting data from: " + 'company/' + localStorage["WYDuserCompanyID"] + '/report/' + data[5]);
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + data[5]).once('value').then(function(snapshot) {
+                    document.getElementById("button-view-download").onclick = function(){reportDownload(snapshot)};
                     document.getElementById("view-hidden-id").value = snapshot.key;
                     document.getElementById("view-report").innerText = snapshot.val().short;
                     document.getElementById("view-report-job-name").value = snapshot.val().jobName;
@@ -799,10 +816,11 @@
                     .draw();
                 firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByChild("type").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                            dataTable.row.add([childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, childSnapshot.val().timeStart, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
+                            dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Reports Types Searched from: " + search.value;
+                    dataTable.order([0, 'des']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -820,10 +838,11 @@
                     .draw();
                 firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByChild("jobNum").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                            dataTable.row.add([childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, childSnapshot.val().timeStart, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
+                            dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Job Numbers Searched from: " + search.value;
+                    dataTable.order([0, 'des']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -841,10 +860,11 @@
                     .draw();
                 firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByChild("submittedBy").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                            dataTable.row.add([childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, childSnapshot.val().timeStart, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
+                            dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted By: " + search.value;
+                    dataTable.order([0, 'des']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -856,18 +876,23 @@
             // Submitted Date
             $('#button-search-date-submitted').on('click', function() {
                 var search = document.getElementById("input-search-date");
-                console.log(search.value);
-                console.log(Date(search.value));
+                var searchShort = search.value.split(" ");
+                var searchFinal;
+                if(searchShort[2] < 10) searchFinal = searchShort[0] + " " + searchShort[1] + " 0" + searchShort[2] + " " + searchShort[3];
+                else searchFinal = search.value;
+                console.log(searchFinal);
+                console.log(new Date(searchFinal));
                 document.getElementById("view-search-count").value = 100;
-                document.getElementById("view-search-last-input").value = search.value;
+                document.getElementById("view-search-last-input").value = searchFinal;
                 dataTable.clear()
                     .draw();
-                firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByChild("submittedDate").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
+                firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByChild("submittedDate").startAt(searchFinal).endAt(searchFinal + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                            dataTable.row.add([childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, childSnapshot.val().timeStart, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
+                            dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
-                    document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted On: " + search.value;
+                    document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted On: " + searchFinal;
+                    dataTable.order([0, 'des']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -887,10 +912,11 @@
                     .draw();
                 firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByChild("timeStart").startAt(search.value).endAt(search.value + "\uf8ff").limitToFirst(100).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                            dataTable.row.add([childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, childSnapshot.val().timeStart, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
+                            dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Reports For: " + search.value;
+                    dataTable.order([0, 'des']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -907,10 +933,11 @@
                     .draw();
                 firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().limitToFirst(25).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                            dataTable.row.add([childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, childSnapshot.val().timeStart, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
+                            dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Most Recent";
+                    dataTable.order([0, 'des']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:true");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");

@@ -17,7 +17,7 @@
     <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
     <link rel="shortcut icon" href="img/WYD_logo.png">
 
-    <title>WYD-Company Seats</title>
+    <title>WYD-Employees Proile</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -48,7 +48,7 @@
 
 <body class="app header-fixed sidebar-fixed">
     
-    <!-- Navigation -->     
+    <!-- Navigation Header for Operations>     
     <header class="app-header navbar">
         <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
         <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
@@ -63,6 +63,28 @@
         </ul>
         <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
             <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout-sidebar" class="py-1 px-2" href="#" ><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header-->
+    
+    <!-- Navigation Header for employees -->
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-paw"></i>EMPLOYEES
+        </span>
+        <a class="navbar-brand" href="employees-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cube"></i>EMPLOYEES
         </span>
         <span class="nav navbar-toggler-right float-right hidden-md-down">
             <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
@@ -129,7 +151,7 @@
                     </li>
                     <li class="divider"></li>
                     <li class="nav-item">
-                        <a id="logout-sidebar" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
                     </li>
                     <li class="divider"></li>
                 </ul>
@@ -193,203 +215,78 @@
 
         <!-- Main content -->
         <main class="main">
-            <!-- Modal Content -->
-            <div class="modal fade" id="add-user-modal" tabindex="-1" role="dialog" aria-labelledby="addUserModalTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addUserModalTitle">Add Seated User</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="input-group mb-1">
-                                <span class="input-group-addon"><i class="icon-user"></i></span>
-                                <input id="email-input" type="text" class="form-control" autofocus="autofocus" placeholder="Email">
-                            </div>
 
-                            <div id="password-hint"></div>
-                            <div class="input-group mb-1">
-                                <span class="input-group-addon"><i class="icon-lock"></i>
-                                </span>
-                                <input id="password-input" type="password" class="form-control" placeholder="Password" onkeyup="passMinCheck(); return false;">
-                            </div>
+            <div class="container-fluid">
 
-                            <div id="password-match"></div>
-                            <div class="input-group mb-2">
-                                <span class="input-group-addon"><i class="icon-lock"></i>
-                                </span>
-                                <input id="password-confirm" type="password" class="form-control" disabled placeholder="Repeat password" onkeyup="passCheck(1); return false;">
-                            </div>
-
-                            <div id="loading" class="sk-cube-grid" style="display:none">
-                                <div class="sk-cube sk-cube1"></div>
-                                <div class="sk-cube sk-cube2"></div>
-                                <div class="sk-cube sk-cube3"></div>
-                                <div class="sk-cube sk-cube4"></div>
-                                <div class="sk-cube sk-cube5"></div>
-                                <div class="sk-cube sk-cube6"></div>
-                                <div class="sk-cube sk-cube7"></div>
-                                <div class="sk-cube sk-cube8"></div>
-                                <div class="sk-cube sk-cube9"></div>
-                            </div>
+                <div class="animated fadeIn">
+                    <h1>Employees Profile</h1>
+                    <hr>
+                    <div class="card">
+                        <div class="card-header">
+                            Your Profile
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button id="button-add-user" type="button" class="btn btn-primary">Add User</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="add-user-info-modal" tabindex="-1" role="dialog" aria-labelledby="addUserInfoModalTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addUserInfoModalTitle">Seated User Info</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <!--button type="button" class="btn btn-danger" data-dismiss="modal">Close</button-->
-                            <br>
-                            <br>
+                        <div class="card-block">
+                            <label>First Name</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-user"></i></span>
                                 <input id="first-input" type="text" class="form-control" placeholder="First Name">
                             </div>
-
+                            <label>Last Name</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-user"></i></span>
                                 <input id="last-input" type="text" class="form-control" placeholder="Last Name">
                             </div>
-
+                            <label>Full Name</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-user"></i></span>
                                 <input id="full-input" type="text" class="form-control" placeholder="Full Name">
                             </div>
-
+                            <label>Initials</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-user"></i></span>
                                 <input id="initials-input" type="text" class="form-control" placeholder="Initials">
                             </div>
-
+                            <label>Cellular #</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-screen-smartphone"></i></span>
                                 <input id="cell-input" type="telephone" class="form-control" placeholder="Cellular #">
                             </div>
-
+                            <label>Contact #</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-phone"></i></span>
                                 <input id="contact-input" type="telephone" class="form-control" placeholder="Contact #">
                             </div>
-
+                            <label>Classification</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-graduation"></i></span>
                                 <input id="class-input" type="input" class="form-control" placeholder="Classification">
                             </div>
-
+                            <label>Job Title</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-badge"></i></span>
                                 <input id="title-input" type="text" class="form-control" placeholder="Job Title">
                             </div>
-
+                            <label>Employee ID #</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-briefcase"></i></span>
-                                <input id="employee-input" type="text" class="form-control" placeholder="Employee ID #">
+                                <input readonly id="employee-input" type="text" class="form-control" placeholder="Employee ID #">
                             </div>
-                            
+                            <label>Access Level</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-lock"></i></span>
-                                <input id="access-input" type="number" class="form-control" placeholder="Access Level: 2, 3, 4, or 5">
+                                <input readonly id="access-input" type="number" class="form-control" placeholder="Access Level: 2, 3, 4, or 5">
                             </div>
-
+                            <label>Additional Information</label>
                             <div class="input-group mb-1">
                                 <span class="input-group-addon"><i class="icon-layers"></i></span>
                                 <textarea id="additional-input" type="textarea" class="form-control" placeholder=" Additional Information"></textarea>
                             </div>
-
-                            <div id="loading" class="sk-cube-grid" style="display:none">
-                                <div class="sk-cube sk-cube1"></div>
-                                <div class="sk-cube sk-cube2"></div>
-                                <div class="sk-cube sk-cube3"></div>
-                                <div class="sk-cube sk-cube4"></div>
-                                <div class="sk-cube sk-cube5"></div>
-                                <div class="sk-cube sk-cube6"></div>
-                                <div class="sk-cube sk-cube7"></div>
-                                <div class="sk-cube sk-cube8"></div>
-                                <div class="sk-cube sk-cube9"></div>
-                            </div>
                         </div>
-                        
-                        <div class="modal-footer">
-                            Do Not Close Or Click Away From This Modal Or You Will Lose This Information!
+                        <div class="card-footer">
+                            <button id="button-profile-save" type="button" class="btn btn-success float-right">Update?</button>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Main Page Content -->
-            <div class="container-fluid">
-
-                <div class="animated fadeIn">
-                    
-                    <h1>Company Seats</h1>
-                    <hr>
-                    <label>Overall Seats</label>
-                    <div class="input-group mb-1">
-                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                        <input disabled id="overall-input" type="number" class="form-control" placeholder="Overall Seats">
-                    </div>
-
-                    <label>Seats Used (Does NOT Count Main User)</label>
-                    <div class="input-group mb-1">
-                        <span class="input-group-addon"><i class="icon-people"></i></span>
-                        <input disabled id="used-input" type="number" class="form-control" placeholder="Seats Used">
-                    </div>
-                    <div style="display:none" id="non-access">
-                        <label>Sign-Up Date</label>
-                        <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            <input disabled id="signup-input" type="text" class="form-control" placeholder="Sign Up Date">
-                        </div>
-
-                        <label>Payment Start Date</label>
-                        <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="icon-control-play"></i></span>
-                            <input disabled id="start-input" type="text" class="form-control" placeholder="Start Date">
-                        </div>
-
-                        <label>Payment End Date</label>
-                        <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="fa fa-square-o"></i></span>
-                            <input disabled id="end-input" type="text" class="form-control" placeholder="End Date">
-                        </div>
-                        
-                        <button type="button" class="btn  btn-primary" style="display:none" id="button-add-user-modal" data-toggle="modal" data-target="#add-user-modal">Add User</button>
-                        
-                        <button type="button" class="btn  btn-danger float-right" style="display:none" id="button-delete-user-modal">Delete Users</button>
-                        
-                        <button type="button" class="btn  btn-danger float-right" style="display:none" id="button-hide-delete-user-modal">Delete Users</button>
-                    </div>
-                    <br>
-                    <label>Seated Users</label>
-                    <div id="seated-users"></div>
-                    
-                    <div id="loading" class="sk-cube-grid" style="display:none">
-                        <div class="sk-cube sk-cube1"></div>
-                        <div class="sk-cube sk-cube2"></div>
-                        <div class="sk-cube sk-cube3"></div>
-                        <div class="sk-cube sk-cube4"></div>
-                        <div class="sk-cube sk-cube5"></div>
-                        <div class="sk-cube sk-cube6"></div>
-                        <div class="sk-cube sk-cube7"></div>
-                        <div class="sk-cube sk-cube8"></div>
-                        <div class="sk-cube sk-cube9"></div>
-                    </div>
-                </div>
-
             </div>
             <!-- /.conainer-fluid -->
         </main>
@@ -417,16 +314,14 @@
     <script>
         $(document).ready(function () {
             $("#footer").load("footer.html");
-            //$("#navbar").load("operations-navbar.html");
-            //$("#navbar").load("employees-navbar.html");
             //$("#navbar").load("god-navbar.html");
             
-            document.getElementById("employees-sidebar").style.display = "none";
+            //document.getElementById("employees-sidebar").style.display = "none";
+            document.getElementById("operations-sidebar").style.display = "none";
             if(localStorage["WYDuserNameFull"]!=null){
                 document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
             }
-            $('input').keyup(userProfileCheck);
         });
     </script>
     
@@ -437,7 +332,7 @@
             // User is signed in.
             //toastr["info"]("user logged in");
             if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
-            getSeatedUsers();
+            getEmployeeProfile();
           } else {
             // No user is signed in.
             window.location="login.html";
