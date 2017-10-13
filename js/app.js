@@ -1179,19 +1179,25 @@ $('#button-job-save').on('click',function() {
     document.getElementById('loading').setAttribute('style','display:true');
     var active;
     var companyKey = localStorage["WYDuserCompanyID"];
+    var jobKey = document.getElementById("jobID").value;
+    var count = document.getElementById("view-contact-count").value;
+    var updateEverything = {};
     if(document.getElementById("view-active-input").checked==true) {
         active = "active";
+        if(document.getElementById("button-switch-job").value=="active") {
+            console.log("Job was inactive");
+            updateEverything['company/' + companyKey + '/job/inactive/' + jobKey] = null;
+        }
     }
     else {
         active = "inactive";
+            console.log("Job was active");
+            updateEverything['company/' + companyKey + '/job/active/' + jobKey] = null;
     }
-    var jobKey = document.getElementById("jobID").value;
-    var count = document.getElementById("view-contact-count").value;
     var jobRef = 'company/' + companyKey + '/job/' + active + '/' + jobKey + '/';
     var newEditJob = firebase.database().ref('company/' + companyKey + '/job/' + active + '/' + jobKey + '/editedBy').push();
     var newEditJobKey = newEditJob.key;
     var jobName = document.getElementById("view-name-input").value;
-    var updateEverything = {};
     updateEverything[jobRef + "jobName"] = document.getElementById("view-name-input").value;
     updateEverything[jobRef + "jobNum"] = document.getElementById("view-number-input").value;
     updateEverything[jobRef + "jobLocation"] = document.getElementById("view-location-input").value;
@@ -1213,7 +1219,7 @@ $('#button-job-save').on('click',function() {
     firebase.database().ref().update(updateEverything)
     .then(function() {
         // Use Click of Cancel to clear everything
-        $('#button-add-job-cancel').trigger('click');
+        $('#view-modal-close').trigger('click');
         toastr["info"](jobName + " has successfully been updated!");
     });
 });
