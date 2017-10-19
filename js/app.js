@@ -508,9 +508,11 @@ function getSeatedUsers() {
         document.getElementById("non-access").setAttribute("style", "display:inline");
         if(localStorage["WYDuserAccess"] == 1) {
             if(document.getElementById("overall-input").value >= document.getElementById("used-input").value) document.getElementById("button-add-user-modal").setAttribute("style", "display:inline");
-            document.getElementById("button-delete-user-modal").setAttribute("style", "display:inline");
+            document.getElementById("button-info-edit").setAttribute("style", "display:inline");
+            document.getElementById("view-access-div").setAttribute("style", "display:true");
         }
     }
+    /*
     var seatedPeeps = document.getElementById("seated-users");
     var query = firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/users").orderByChild("nameFull");
     query.once('value').then(function(snapshot) {
@@ -601,7 +603,7 @@ function getSeatedUsers() {
             seatedPeeps.append(seatDiv);
         });
         $('[data-toggle="tooltip"]').tooltip();  
-    });
+    }); */
 }
 
 // Function run when creating a new seated user account
@@ -723,6 +725,80 @@ $('#button-add-user-info').on('click',function(){
         console.log(error);
     });
     toastr[document.getElementById("nameFull").value + " has been added as a user"];
+});
+
+// Function run when "Edit User" Button is clicked to enable all user info inputs
+// editSeatButton()
+// Operations-seats
+$('#button-info-edit').on('click',function() {
+    document.getElementById("button-info-save").style.display = "inline";
+    document.getElementById("button-info-delete").style.display = "inline";
+    document.getElementById("button-info-edit").style.display = "none";
+    document.getElementById("button-info-close").innerHTML = "Cancel";
+    var modal = document.getElementById("user-info-modal");
+    var inputs = modal.getElementsByTagName('input');
+    for(i = 0; i < inputs.length; i++) {
+        inputs[i].readOnly = false;
+    }
+    document.getElementById("view-additional-input").readOnly = false;
+});
+
+// Function run when "Save User" Button is clicked to save data to Firebase
+// editSeatIno()
+// Operations-seats
+$('#button-info-save').on('click', function() {
+    var companyId = localStorage["WYDuserCompanyID"];
+    var updateEverything = {};
+    var path = 'user/' + document.getElementById("view-uid-input").value + '/';
+    var companyPath = 'company/' + companyId + '/users/' + document.getElementById("view-uid-input").value + '/';
+    console.log("Update User Path: " + path);
+    console.log("Update Company Path: " + companyPath);
+    updateEverything[companyPath + 'class'] = document.getElementById("view-class-input").value;
+    updateEverything[companyPath + 'nameFirst'] = document.getElementById("view-first-input").value;
+    updateEverything[companyPath + 'nameLast'] = document.getElementById("view-last-input").value;
+    updateEverything[companyPath + 'nameFull'] = document.getElementById("view-full-input").value;
+    updateEverything[companyPath + 'nameInitials'] = document.getElementById("view-initials-input").value;
+    updateEverything[path + 'nameFirst'] = document.getElementById("view-first-input").value;
+    updateEverything[path + 'nameLast'] = document.getElementById("view-last-input").value;
+    updateEverything[path + 'nameFull'] = document.getElementById("view-full-input").value;
+    updateEverything[path + 'nameInitials'] = document.getElementById("view-initials-input").value;
+    updateEverything[path + 'email'] = document.getElementById("view-email-input").value;
+    updateEverything[path + 'numCell'] = document.getElementById("view-cell-input").value;
+    updateEverything[path + 'numContact'] = document.getElementById("view-contact-input").value;
+    updateEverything[path + 'class'] = document.getElementById("view-class-input").value;
+    updateEverything[path + 'jobTitle'] = document.getElementById("view-title-input").value;
+    updateEverything[path + 'numID'] = document.getElementById("view-employee-input").value;
+    updateEverything[path + 'additional'] = document.getElementById("view-additional-input").value;
+    updateEverything[path + 'access'] = document.getElementById("view-access-input").value;
+    // Send All Data to Firebase
+    firebase.database().ref().update(updateEverything)
+        .then(function() {
+            toastr["info"](document.getElementById("view-uid-input").value + " Information Successfully Updated!");
+            document.getElementById("button-info-close").click();
+        })
+        .catch(function(error) {
+            // If wrong
+            toastr["warning"]("Something happened when updating user details: " + error.message);
+            console.log(error);
+        });
+});
+
+// Function run when the View User Modal loses focus then disables all job info inputs
+// dismissViewSeatModal()
+// Operations-seats
+$("#user-info-modal").on("hide.bs.modal", function(){
+    if(localStorage["WYDuserAccess"] < 2) {
+        document.getElementById("button-info-save").style.display = "none";
+        document.getElementById("button-info-delete").style.display = "none";
+        document.getElementById("button-info-edit").style.display = "inline";
+        document.getElementById("button-info-close").innerHTML = "Close";
+    }
+    var modal = document.getElementById("user-info-modal");
+    var inputs = modal.getElementsByTagName('input');
+    for(i = 0; i < inputs.length; i++) {
+        inputs[i].readOnly = true;
+    }
+    document.getElementById("view-additional-input").readOnly = true;
 });
 
 // Function Run to show active jobs
@@ -2211,22 +2287,9 @@ function newDPRLine(section) {
     }
 }
 
-// Function run when the save button is clicked to save settings for the default landing page
-// settingsLanding()
-// Settings
-$('#button-settings-landing-save').on('click', function() {
-    var updateEverything = {};
-    var path = 'user/' + localStorage["WYDuserID"] + '/settings/landing';
-    if(document.getElementById('landing-employees').checked == true) updateEverything[path] = "employees";
-    if(document.getElementById('landing-operations').checked == true) updateEverything[path] = "operations";
-    firebase.database().ref().update(updateEverything).then(function() {
-        toastr["info"]("Updated your default landing page!");
-    });
-});
-
 // Function run when employees-profile page is loaded
 // getEmployeeProfile()
-// Employees-prfile
+// Employees-profile
 function getEmployeeProfile() {
     firebase.database().ref('user/' + localStorage["WYDuserID"]).once('value').then(function(snapshot) {
         document.getElementById("first-input").value = snapshot.val().nameFirst;
@@ -2262,6 +2325,19 @@ $('#button-profile-save').on('click', function() {
     updateEverything[path + '/additional'] = document.getElementById("additional-input").value;
     firebase.database().ref().update(updateEverything).then(function() {
         toastr["info"]("Updated your profile!");
+    });
+});
+
+// Function run when the save button is clicked to save settings for the default landing page
+// settingsLanding()
+// Settings
+$('#button-settings-landing-save').on('click', function() {
+    var updateEverything = {};
+    var path = 'user/' + localStorage["WYDuserID"] + '/settings/landing';
+    if(document.getElementById('landing-employees').checked == true) updateEverything[path] = "employees";
+    if(document.getElementById('landing-operations').checked == true) updateEverything[path] = "operations";
+    firebase.database().ref().update(updateEverything).then(function() {
+        toastr["info"]("Updated your default landing page!");
     });
 });
 
