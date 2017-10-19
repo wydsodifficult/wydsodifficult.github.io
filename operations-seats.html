@@ -30,6 +30,9 @@
     
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="css/responsive.bootstrap4.min.js" rel="stylesheet">
+    <link rel='stylesheet' type='text/css' href='http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'/>
     
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
     <script src="js/fbinit.js"></script>
@@ -329,6 +332,112 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="user-info-modal" tabindex="-1" role="dialog" aria-labelledby="userInfoModalTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="userInfoModalTitle">Employee Information</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="user-info-modal-body">
+                            <!--button type="button" class="btn btn-danger" data-dismiss="modal">Close</button-->
+                            <label>First Name</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input readonly id="view-first-input" type="text" class="form-control" placeholder="First Name">
+                            </div>
+
+                            <label>Last Name</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input readonly id="view-last-input" type="text" class="form-control" placeholder="Last Name">
+                            </div>
+
+                            <label>Full Name</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input readonly id="view-full-input" type="text" class="form-control" placeholder="Full Name">
+                            </div>
+
+                            <label>Initials</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input readonly id="view-initials-input" type="text" class="form-control" placeholder="Initials">
+                            </div>
+                            
+                            <label>E-Mail</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input readonly id="view-email-input" type="text" class="form-control" placeholder="E-Mail">
+                            </div>
+
+                            <label>Cellular #</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-screen-smartphone"></i></span>
+                                <input readonly id="view-cell-input" type="telephone" class="form-control" placeholder="Cellular #">
+                            </div>
+
+                            <label>Contact #</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-phone"></i></span>
+                                <input readonly id="view-contact-input" type="telephone" class="form-control" placeholder="Contact #">
+                            </div>
+
+                            <label>Classification</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-graduation"></i></span>
+                                <input readonly id="view-class-input" type="input" class="form-control" placeholder="Classification">
+                            </div>
+
+                            <label>Job Title</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-badge"></i></span>
+                                <input readonly id="view-title-input" type="text" class="form-control" placeholder="Job Title">
+                            </div>
+
+                            <label>Employee ID #</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-briefcase"></i></span>
+                                <input readonly id="view-employee-input" type="text" class="form-control" placeholder="Employee ID #">
+                            </div>
+
+                            <label>Additional Information</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-layers"></i></span>
+                                <textarea readonly id="view-additional-input" type="textarea" class="form-control" placeholder=" Additional Information"></textarea>
+                            </div>
+                            <div id="view-access-div" style="display:none">
+                                <label>Access Level</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-lock"></i></span>
+                                    <input readonly id="view-access-input" type="text" class="form-control" placeholder="Access Level">
+                                </div>
+                            </div>
+                            
+                            <div id="loading" class="sk-cube-grid" style="display:none">
+                                <div class="sk-cube sk-cube1"></div>
+                                <div class="sk-cube sk-cube2"></div>
+                                <div class="sk-cube sk-cube3"></div>
+                                <div class="sk-cube sk-cube4"></div>
+                                <div class="sk-cube sk-cube5"></div>
+                                <div class="sk-cube sk-cube6"></div>
+                                <div class="sk-cube sk-cube7"></div>
+                                <div class="sk-cube sk-cube8"></div>
+                                <div class="sk-cube sk-cube9"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input id="view-uid-input" style="display:none">
+                            <button id="button-info-save" type="button" class="btn btn-success float-left" style="display: none">Save</button>
+                            <button id="button-info-delete" type="button" class="btn btn-warning float-left" style="display: none">Remove User</button>
+                            <button id="button-info-edit" type="button" class="btn btn-warning float-left" style="display:none">Edit</button>
+                            <button id="button-info-close" type="button" class="btn btn-danger float-right" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <!-- Main Page Content -->
             <div class="container-fluid">
@@ -337,46 +446,46 @@
                     
                     <h1>Company Seats</h1>
                     <hr>
-                    <label>Overall Seats</label>
-                    <div class="input-group mb-1">
-                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                        <input disabled id="overall-input" type="number" class="form-control" placeholder="Overall Seats">
-                    </div>
-
-                    <label>Seats Used (Does NOT Count Main User)</label>
-                    <div class="input-group mb-1">
-                        <span class="input-group-addon"><i class="icon-people"></i></span>
-                        <input disabled id="used-input" type="number" class="form-control" placeholder="Seats Used">
-                    </div>
-                    <div style="display:none" id="non-access">
-                        <label>Sign-Up Date</label>
-                        <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            <input disabled id="signup-input" type="text" class="form-control" placeholder="Sign Up Date">
-                        </div>
-
-                        <label>Payment Start Date</label>
-                        <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="icon-control-play"></i></span>
-                            <input disabled id="start-input" type="text" class="form-control" placeholder="Start Date">
-                        </div>
-
-                        <label>Payment End Date</label>
-                        <div class="input-group mb-1">
-                            <span class="input-group-addon"><i class="fa fa-square-o"></i></span>
-                            <input disabled id="end-input" type="text" class="form-control" placeholder="End Date">
-                        </div>
-                        
-                        <button type="button" class="btn  btn-primary" style="display:none" id="button-add-user-modal" data-toggle="modal" data-target="#add-user-modal">Add User</button>
-                        
-                        <button type="button" class="btn  btn-danger float-right" style="display:none" id="button-delete-user-modal">Delete Users</button>
-                        
-                        <button type="button" class="btn  btn-danger float-right" style="display:none" id="button-hide-delete-user-modal">Delete Users</button>
-                    </div>
-                    <br>
-                    <label>Seated Users</label>
-                    <div id="seated-users"></div>
                     
+                    <div class="card card-accent-info">
+                        <div class="card-header">
+                            <b>Seats Information</b>
+                        </div>
+                        <div class="card-block">
+                            <label>Overall Seats</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                <input disabled id="overall-input" type="number" class="form-control" placeholder="Overall Seats">
+                            </div>
+
+                            <label>Seats Used (Does NOT Count Main User)</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-addon"><i class="icon-people"></i></span>
+                                <input disabled id="used-input" type="number" class="form-control" placeholder="Seats Used">
+                            </div>
+                            <div style="display:none" id="non-access">
+                                <label>Sign-Up Date</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input disabled id="signup-input" type="text" class="form-control" placeholder="Sign Up Date">
+                                </div>
+
+                                <label>Payment Start Date</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-control-play"></i></span>
+                                    <input disabled id="start-input" type="text" class="form-control" placeholder="Start Date">
+                                </div>
+
+                                <label>Payment End Date</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="fa fa-square-o"></i></span>
+                                    <input disabled id="end-input" type="text" class="form-control" placeholder="End Date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="seated-users"></div>
                     <div id="loading" class="sk-cube-grid" style="display:none">
                         <div class="sk-cube sk-cube1"></div>
                         <div class="sk-cube sk-cube2"></div>
@@ -388,8 +497,28 @@
                         <div class="sk-cube sk-cube8"></div>
                         <div class="sk-cube sk-cube9"></div>
                     </div>
-                </div>
+                    <div class="card card-accent-info">
+                        <div class="card-header">
+                            <b>Seated Users</b>
+                            <button type="button" class="btn btn-primary float-right" style="display:none" id="button-add-user-modal" data-toggle="modal" data-target="#add-user-modal">Add User</button>
+                        </div>
+                        <div class="card-block">
+                            <table class="table table-striped datatable table-bordered table-hover display nowrap dt-responsive" id="view-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Class</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="card-footer">
 
+                        </div>
+                    </div>
+                </div>
+                <!-- /.animated-fadein -->
             </div>
             <!-- /.conainer-fluid -->
         </main>
@@ -407,11 +536,15 @@
     <script src="js/libs/tether.min.js"></script>
     <script src="js/libs/bootstrap.min.js"></script>
     <script src="js/libs/pace.min.js"></script>
+    <script src="js/libs/moment.js"></script>
 
 
     <!-- Plugins and scripts required by all views -->
     <script src="js/libs/Chart.min.js"></script>
     <script src="js/libs/toastr.min.js"></script>
+    <script src="js/libs/jquery.dataTables.min.js"></script>
+    <script src="js/libs/dataTables.bootstrap4.min.js"></script>
+    <script src="js/libs/dataTables.responsive.min.js"></script>
     
     <!-- Comment out unneeded navbars -->
     <script>
@@ -427,6 +560,50 @@
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
             }
             $('input').keyup(userProfileCheck);
+             // Initialize data table
+            $('#view-table').DataTable().destroy();
+            var dataTable = $('#view-table').DataTable({
+                autoWidth: false,
+                columnDefs: [
+                    //{
+                        //"data":null
+                        // Uncomment if button wanted
+                        /*,
+                        "defaultContent": "<button class='btn btn-primary'>View</button>",
+                        "targets": -1
+                        */
+                    //},
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 0}, // First Name
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 1}, // Last Name
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 2}, // Classification
+                ]
+            });
+            // Fill in Data Table
+            firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/users').orderByKey().once('value').then(function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                    dataTable.row.add([childSnapshot.val().nameFirst, childSnapshot.val().nameLast, childSnapshot.val().class, childSnapshot.key]).draw();
+                });
+            });
+            
+            $('#view-table tbody').on('click', 'tr', function () {
+                var data = $('#view-table').DataTable().row($(this)).data();
+                firebase.database().ref('user/' + data[3]).once('value').then(function(snapshot) {
+                    document.getElementById("view-first-input").value = snapshot.val().nameFirst;
+                    document.getElementById("view-last-input").value = snapshot.val().nameLast;
+                    document.getElementById("view-full-input").value = snapshot.val().nameFull;
+                    document.getElementById("view-initials-input").value = snapshot.val().nameInitials;
+                    document.getElementById("view-email-input").value = snapshot.val().email;
+                    document.getElementById("view-cell-input").value = snapshot.val().numCell;
+                    document.getElementById("view-contact-input").value = snapshot.val().numContact;
+                    document.getElementById("view-class-input").value = snapshot.val().class;
+                    document.getElementById("view-title-input").value = snapshot.val().jobTitle;
+                    document.getElementById("view-employee-input").value = snapshot.val().numID;
+                    document.getElementById("view-additional-input").value = snapshot.val().additional;
+                    document.getElementById("view-access-input").value = snapshot.val().access;
+                    document.getElementById("view-uid-input").value = snapshot.key;
+                    $('#user-info-modal').modal();
+                });
+            });
         });
     </script>
     
