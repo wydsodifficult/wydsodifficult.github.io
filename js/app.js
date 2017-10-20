@@ -651,30 +651,6 @@ $('#button-add-user').on('click',function(){
     }
 });
 
-// Function run when "Delete Users" button is clicked
-// deleteUserButton()
-// Operations-seats
-$('#button-delete-user-modal').on('click',function(){
-    var seatLengths = document.getElementsByName('user-delete').length;
-    for(i=0; i<seatLengths; i++) {
-        document.getElementById('user-delete-'+i).setAttribute("style", "display:inline");
-    }
-    document.getElementById('button-delete-user-modal').setAttribute("style", "display:none");
-    document.getElementById('button-hide-delete-user-modal').setAttribute("style", "display:inline");
-});
-
-// Function run when "Delete Users" button is clicked again to hide delete prompts
-// hideDeleteUserButton()
-// Operations-seats
-$('#button-hide-delete-user-modal').on('click',function(){
-    var seatLengths = document.getElementsByName('user-delete').length;
-    for(i=0; i<seatLengths; i++) {
-        document.getElementById('user-delete-'+i).setAttribute("style", "display:none");
-    }
-    document.getElementById('button-delete-user-modal').setAttribute("style", "display:inline");
-    document.getElementById('button-hide-delete-user-modal').setAttribute("style", "display:none");
-});
-
 // Function run after creating a new seated user for their info
 // addUserInfo()
 // Operations-seats
@@ -741,6 +717,36 @@ $('#button-info-edit').on('click',function() {
         inputs[i].readOnly = false;
     }
     document.getElementById("view-additional-input").readOnly = false;
+});
+
+// Function run when "Remove User" Button is remove user
+// deleteUserButton()
+// Operations-seats
+$('#button-info-delete').on('click', function() {
+    if(confirm("Are You Sure You Want To Delete This User?")) {
+        var companyId = localStorage["WYDuserCompanyID"];
+        var updateEverything = {};
+        var path = 'user/' + document.getElementById("view-uid-input").value;
+        var companyPath = 'company/' + companyId + '/users/' + document.getElementById("view-uid-input").value;
+        var usedPath = 'company/' + companyId + '/payment/used';
+        var usedQuantity = document.getElementById("used-input").value;
+        usedQuantity--;
+        updateEverything[path] = null;
+        updateEverything[companyPath] = null;
+        updateEverything[usedPath] = usedQuantity;
+        // Send All Data to Firebase
+        firebase.database().ref().update(updateEverything)
+        .then(function() {
+            document.getElementById("used-input").value = usedQuantity;
+            toastr["info"](document.getElementById("view-uid-input").value + " Successfully Deleted! Refresh Page to see changes..");
+            document.getElementById("button-info-close").click();
+        })
+        .catch(function(error) {
+            // If wrong
+            toastr["warning"]("Something happened when deleting user: " + error.message);
+            console.log(error);
+        });
+    }
 });
 
 // Function run when "Save User" Button is clicked to save data to Firebase
@@ -2302,6 +2308,7 @@ function getEmployeeProfile() {
         document.getElementById("title-input").value = snapshot.val().jobTitle;
         document.getElementById("employee-input").value = snapshot.val().numID;
         document.getElementById("access-input").value = snapshot.val().access;
+        document.getElementById("uid-input").value = snapshot.key;
         document.getElementById("additional-input").value = snapshot.val().additional;
     });
 }
