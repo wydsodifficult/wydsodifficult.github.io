@@ -381,9 +381,9 @@ $('#button-create-company-profile').on('click', function(){
     // Change the below if seat numbers are changed when making payments
     updateEverything['company/' + newCompanyKey + '/payment/seats'] = 25;
     updateEverything['company/' + newCompanyKey + '/payment/used'] = 0;
-    updateEverything['company/' + newCompanyKey + '/payment/signup'] = getTodaysDate();
-    updateEverything['company/' + newCompanyKey + '/payment/payStart'] = getTodaysDate();
-    updateEverything['company/' + newCompanyKey + '/payment/payEnd'] = getTodaysDate();
+    updateEverything['company/' + newCompanyKey + '/payment/signup'] = getTodaysDate(0,0,0);
+    updateEverything['company/' + newCompanyKey + '/payment/payStart'] = getTodaysDate(0,0,0);
+    updateEverything['company/' + newCompanyKey + '/payment/payEnd'] = getTodaysDate(1,0,0);
     updateEverything['company/' + newCompanyKey + '/info/name'] = document.getElementById('name-input').value;
     updateEverything['company/' + newCompanyKey + '/info/numContact'] = document.getElementById('contact-input').value;
     updateEverything['company/' + newCompanyKey + '/info/address'] = document.getElementById('address-input').value;
@@ -805,6 +805,15 @@ $("#user-info-modal").on("hide.bs.modal", function(){
         inputs[i].readOnly = true;
     }
     document.getElementById("view-additional-input").readOnly = true;
+});
+
+// Function run when the View User Modal loses focus then disables all job info inputs
+// dismissViewSeatModal()
+// Operations-seats
+$("#employee-info-modal").on("hide.bs.modal", function(){
+    if(localStorage["WYDuserAccess"] < 2) {
+        document.getElementById("button-info-close").innerHTML = "Close";
+    }
 });
 
 // Function Run to show active jobs
@@ -1521,7 +1530,7 @@ $('#button-template-modal-save').on('click', function() {
     var title = document.getElementById("template-modal-title-input").value;
     if(title == "") {
         d = new Date();
-        title = "template_" + getTodaysDate() + "_" + d.getHours() + "-" + d.getMinutes();
+        title = "template_" + getTodaysDate(0,0,0) + "_" + d.getHours() + "-" + d.getMinutes();
     }
     var templatePath = 'company/' + companyKey + '/list/' + title + '/';
     updateEverything[templatePath + 'short'] = document.getElementById("template-modal-short-title").value;
@@ -1825,7 +1834,7 @@ $('#button-template-save').on('click',function() {
     var title = document.getElementById("template-title").value;
     if(title == "") {
         d = new Date();
-        title = "template_" + getTodaysDate() + "_" + d.getHours() + "-" + d.getMinutes();
+        title = "template_" + getTodaysDate(0,0,0) + "_" + d.getHours() + "-" + d.getMinutes();
     }
     console.log("Template Title: " + title);
     var templatePath = 'company/' + companyKey + '/list/' + title + '/';
@@ -2416,14 +2425,14 @@ $('#logout').add('#logout-sidebar').on('click', function() {
 });
 
 // Returns today's Date as year-month-day
-function getTodaysDate() {
+function getTodaysDate(addYear, addMonth, addDay) {
     var date =  new Date();
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
+    var year = date.getFullYear() + addYear;
+    var month = date.getMonth() + 1 + addMonth;
     if(month < 10) {
         month = "0" + month;   
     }
-    var day = date.getDate();
+    var day = date.getDate() + addDay;
     if(day < 10) {
         day = "0" + day;   
     }

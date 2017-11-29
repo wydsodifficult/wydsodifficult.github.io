@@ -218,7 +218,7 @@
 
         <!-- Main content -->
         <main class="main">
-            <div class="modal fade" id="user-info-modal" tabindex="-1" role="dialog" aria-labelledby="userInfoModalTitle" aria-hidden="true">
+            <div class="modal fade" id="employee-info-modal" tabindex="-1" role="dialog" aria-labelledby="userInfoModalTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -307,6 +307,9 @@
                                 <div class="sk-cube sk-cube9"></div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button id="button-info-close" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -379,7 +382,7 @@
             <div class="container-fluid">
 
                 <div class="animated fadeIn">
-                    <h1>Jobs</h1>
+                    <h1>Employee's List</h1>
                     <hr>
                     <div class="col-sm">
                         <div class="card card-accent-info">
@@ -487,7 +490,7 @@
                     document.getElementById("title-input").value = snapshot.val().jobTitle;
                     document.getElementById("employee-input").value = snapshot.val().numID;
                     document.getElementById("additional-input").value = snapshot.val().additional;
-                    $('#user-info-modal').modal();
+                    $('#employee-info-modal').modal();
                 });
             });
         });
