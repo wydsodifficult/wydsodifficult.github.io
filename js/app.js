@@ -2030,7 +2030,7 @@ $('#button-save-report').on('click', function() {
     updateEverything[path + 'timeEnd'] = document.getElementById('report-time-end-input').value;
     updateEverything[path + 'timeTotal'] = document.getElementById('report-time-total').value;
     updateEverything[path + 'contractor'] = document.getElementById('report-contractor').value;
-    updateEverything[path + 'foreman'] = document.getElementById('report-foreman').value;
+    updateEverything[path + 'foreman'] = document.getElementById('report-foreman').options[document.getElementById('report-foreman').selectedIndex].text;
     if(document.getElementById('report-iqr').value=="") {
         updateEverything[path + 'iqr'] = "Nothing to Report";
     }
@@ -2064,14 +2064,18 @@ $('#button-save-report').on('click', function() {
             tempCount++;
             tempDiv = document.getElementById("report-performed-" + tempCount);
         }
-        tempDiv = document.getElementById("report-progress-0");
+        tempDiv = document.getElementById("report-location-0");
         tempCount = 0;
+        updateEverything[path + 'tasks/lunch'] = document.getElementById('report-dpr-lunch').value;
         while (tempDiv != null) {
-            updateEverything[path + 'progress/' + tempCount + '/location'] = tempDiv.value;
-            updateEverything[path + 'progress/' + tempCount + '/description'] = document.getElementById('report-description-' + tempCount).value;
-            updateEverything[path + 'progress/' + tempCount + '/percent'] = document.getElementById('report-percent-' + tempCount).value;
+            updateEverything[path + 'tasks/' + tempCount + '/location'] = tempDiv.value;
+            updateEverything[path + 'tasks/' + tempCount + '/tr'] = document.getElementById('report-tr-' + tempCount).value;
+            updateEverything[path + 'tasks/' + tempCount + '/pathways'] = document.getElementById('report-pathways-' + tempCount).value;
+            updateEverything[path + 'tasks/' + tempCount + '/roughin'] = document.getElementById('report-roughin-' + tempCount).value;
+            updateEverything[path + 'tasks/' + tempCount + '/terminations'] = document.getElementById('report-terminations-' + tempCount).value;
+            updateEverything[path + 'tasks/' + tempCount + '/testing'] = document.getElementById('report-testing-' + tempCount).value;
             tempCount++;
-            tempDiv = document.getElementById("report-progress-" + tempCount);
+            tempDiv = document.getElementById("report-location-" + tempCount);
         }
     }
     else {
@@ -2124,18 +2128,35 @@ function newReportSelect(name) {
         console.log("lol dumpit");
         var templateFields = document.getElementById("template-fields");
         var reportTechs = document.getElementById("report-dpr-techs");
+        var reportForeman = document.getElementById("report-foreman");
+        removeOptions(reportTechs);
+        removeOptions(reportForeman);
         document.getElementById("div-report-dpr").setAttribute('style', 'display:true');
         templateFields.innerHTML = "";
+        firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/users').once('value').then(function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+                var optA = document.createElement("option");
+                var optB = document.createElement("option");
+                optA.innerText = childSnapshot.val().nameFull;
+                optB.innerText = childSnapshot.val().nameFull;
+                optA.value = childSnapshot.key;
+                optB.value = childSnapshot.key;
+                reportTechs.add(optA);
+                reportForeman.add(optB);
+            });
+        });
+    }
+    else {
+        var reportForeman = document.getElementById("report-foreman");
+        removeOptions(reportForeman);
         firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/users').once('value').then(function(snapshot) {
             snapshot.forEach(function(childSnapshot){
                 var opt = document.createElement("option");
                 opt.innerText = childSnapshot.val().nameFull;
                 opt.value = childSnapshot.key;
-                reportTechs.appendChild(opt);
+                reportForeman.appendChild(opt);
             });
         });
-    }
-    else {
         var templateFields = document.getElementById("template-fields");
         templateFields.innerHTML = "";
         document.getElementById("div-report-dpr").setAttribute('style', 'display:none');
@@ -2288,14 +2309,16 @@ function newDPRLine(section) {
             holdingDiv.innerHTML = '<div class="row"><div class="col-sm mb-1"><label for="report-performed-' + count + '">Work Performed</label><div class="input-group"><span class="input-group-addon"><i class="icon-like"></i></span><input id="report-performed-' + count + '" placeholder="Work Performed" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-location-' + count + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input id="report-location-' + count + '" placeholder="Location" class="form-control"></div></div></div>';
             performedLine.append(holdingDiv);
             break;
-        case 'progress':
-            var progressLine =  document.getElementById("report-dpr-progress");
-            var count = document.getElementById("report-dpr-progress-count").value;
+        case 'tasks':
+            var tasksLine =  document.getElementById("report-dpr-tasks");
+            var count = document.getElementById("report-dpr-tasks-count").value;
             count++;
-            document.getElementById("report-dpr-progress-count").value = count;
+            document.getElementById("report-dpr-tasks-count").value = count;
             var holdingDiv = document.createElement("div");
-            holdingDiv.innerHTML = '<div class="row"><div class="col-sm mb-1"><label for="report-progress-' + count + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input id="report-progress-' + count + '" placeholder="Progress Location" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-description--' + count + '">Description</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input id="report-description-' + count + '" placeholder="Progress Description" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-percent--' + count + '">Percentage</label><div class="input-group"><span class="input-group-addon"><i class="icon-equalizer"></i></span><input id="report-percent-' + count + '" placeholder="Progress Percentage" class="form-control"></div></div></div>';
-            progressLine.append(holdingDiv);
+            holdingDiv.innerHTML = '<div class="row"><div class="col-sm mb-1"><label for="report-location-' + count + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input id="report-location-' + count + '" placeholder="Task Location" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-description-' + count + '">TR Build Out</label><div class="input-group"><span class="input-group-addon"><i class="fa fa-building"></i></span><input id="report-tr-' + count + '" type="number" placeholder="TR % " class="form-control"></div></div><div class="col-sm mb-1"><label for="report-pathways-' + count + '">Pathways</label><div class="input-group"><span class="input-group-addon"><i class="fa fa-exchange"></i></span><input id="report-pathways-' + count + '" type="number" placeholder="Pathways %" class="form-control"></div></div></div><div class="row"><div class="col-sm mb-1"><label for="report-roughin-' + count + '">Rough In</label><div class="input-group"><span class="input-group-addon"><i class="fa fa-industry"></i></span><input id="report-roughin-' + count + '" type="number" placeholder="Rough In %" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-terminations-' + count + '">Terminations</label><div class="input-group"><span class="input-group-addon"><i class="fa fa-terminal"></i></span><input id="report-terminations-' + count + '" type="number" placeholder="Terminations %" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-testing-' + count + '">Testing</label><div class="input-group"><span class="input-group-addon"><i class="fa fa-calculator"></i></span><input id="report-testing-' + count + '" type="number" placeholder="Testing %" class="form-control"></div></div></div>';
+                /*holdingDiv.innerHTML = '<div class="row"><div class="col-sm mb-1"><label for="report-progress-' + count + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input id="report-progress-' + count + '" placeholder="Progress Location" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-description-' + count + '">Description</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input id="report-description-' + count + '" placeholder="Progress Description" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-percent-' + count + '">Percentage</label><div class="input-group"><span class="input-group-addon"><i class="icon-equalizer"></i></span><input id="report-percent-' + count + '" placeholder="Progress Percentage" class="form-control"></div></div></div>';
+            */
+            tasksLine.append(holdingDiv);
             break;
         default:
             alert("How did you even get this??");
@@ -2393,7 +2416,6 @@ function enableInputs(enable, divName) {
     for(var i=0; i<inputs.length; i++){
         inputs[i].disabled = !enable;
     }
-    
 }
 
 // When anything with the id "Logout" is clicked LOGOUT
@@ -2460,6 +2482,15 @@ function getLocalStorage() {
     var value = localStorage[key];
     console.log(key + " => " + value);
   }
+}
+
+// Remove options from select HTML
+function removeOptions(selectBox) {
+    var i = 0;
+    for(i = selectBox.options.length - 1 ; i >= 0 ; i--)
+    {
+        selectBox.remove(i);
+    }
 }
 
 // Returns FB connection

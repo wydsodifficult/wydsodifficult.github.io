@@ -290,17 +290,24 @@
                                     <span class="input-group-addon"><i class="icon-wrench"></i></span>
                                     <input readonly class="form-control"  id="report-contractor"></input>
                                 </div>
-                                <label for="report-foreman">Foreman</label>
+                                <label for="report-foreman">Select Foreman</label>
                                 <div class="input-group mb-1">
                                     <span class="input-group-addon"><i class="fa fa-fort-awesome"></i></span>
-                                    <input class="form-control"  id="report-foreman" placeholder="Foreman"></input>
+                                    <select id="report-foreman" class="form-control" placeholder="Foreman">
+                                    </select>
                                 </div>
                                 <!-- Input Fields for DPR -->
                                 <div id="div-report-dpr" style="display:none">
+                                    <label for="report-dpr-lunch">Lunch Length (Minutes)</label>
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                        <input type="number" id="report-dpr-lunch" value="30" class="form-control">
+                                        </input>
+                                    </div>
                                     <label for="report-dpr-techs">Select Employees</label>
                                     <div class="input-group mb-1">
                                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                        <select id="report-dpr-techs" placeholder="Select Your Employees" class="form-control select2-multiple" multiple="multiple">
+                                        <select id="report-dpr-techs" placeholder="Employees" class="form-control select2-multiple" multiple="multiple">
                                         </select>
                                     </div>
                                     <button id="report-tech-hours" type="button" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Employees</button>
@@ -340,35 +347,58 @@
                                     <div id = "report-dpr-performed">
                                         <input id="report-dpr-performed-count" style="display:none" value=0></input>
                                     </div>  
-                                    <button  type="button" class="btn btn-primary mb-1" onclick="newDPRLine('performed')">Add Another Work Performed Line</button>
-                                    <h5>Progress</h5>
+                                    <button  type="button" class="btn btn-primary mb-1" onclick="newDPRLine('performed')">Add Another Performed Line</button>
+                                    <h5>Tasks</h5>
                                     <div class="row">
                                         <div class="col-sm mb-1">
-                                            <label for="report-progress-0">Location</label>
+                                            <label for="report-location-0">Location</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="icon-globe-alt"></i></span>
-                                                <input id="report-progress-0" placeholder="Progress Location" class="form-control">
+                                                <input id="report-location-0" placeholder="Task Location" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm mb-1">
-                                            <label for="report-description--0">Description</label>
+                                            <label for="report-tr-0">TR Build Out</label>
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="icon-map"></i></span>
-                                                <input id="report-description-0" placeholder="Progress Description" class="form-control">
+                                                <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                                                <input id="report-tr-0" type="number" placeholder="TR % " class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm mb-1">
-                                            <label for="report-percent--0">Percentage</label>
+                                            <label for="report-pathways-0">Pathways</label>
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="icon-equalizer"></i></span>
-                                                <input id="report-percent-0" type="number" placeholder="Progress Percentage" class="form-control">
+                                                <span class="input-group-addon"><i class="fa fa-exchange"></i></span>
+                                                <input id="report-pathways-0" type="number" placeholder="Pathways %" class="form-control">
                                             </div>
                                         </div>
                                     </div>
-                                    <div id = "report-dpr-progress">
-                                        <input id="report-dpr-progress-count" style="display:none" value=0></input>
+                                    <div class="row">
+                                        <div class="col-sm mb-1">
+                                            <label for="report-roughin-0">Rough In</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-industry"></i></span>
+                                                <input id="report-roughin-0" type="number" placeholder="Rough In %" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-terminations-0">Terminations</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-terminal"></i></span>
+                                                <input id="report-terminations-0" type="number" placeholder="Terminations %" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-testing-0">Testing</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calculator"></i></span>
+                                                <input id="report-testing-0" type="number" placeholder="Testing %" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id = "report-dpr-tasks">
+                                        <input id="report-dpr-tasks-count" style="display:none" value=0></input>
                                     </div>  
-                                    <button  type="button" class="btn btn-primary mb-1" onclick="newDPRLine('progress')">Add Another Progress Line</button>
+                                    <button  type="button" class="btn btn-primary mb-1" onclick="newDPRLine('tasks')">Add Another Tasks Line</button>
                                 </div>
                                 <label for="report-iqr">Issues / Questions / Remarks</label>
                                 <div class="input-group mb-1">
@@ -463,7 +493,6 @@
     <script>
        $(function () {
             $('#report-dpr-techs').select2({
-                placeholder: "Select Your Techs"
             });
             $('#report-time-start').datetimepicker({
                 //inline: true,
