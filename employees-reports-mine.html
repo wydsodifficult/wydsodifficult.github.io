@@ -280,6 +280,12 @@
                                 </div>
                                 <!-- Input Fields for DPR -->
                                 <div id="div-view-report-dpr" style="display:none">
+                                    <label for="view-report-dpr-lunch">Lunch Length (Minutes)</label>
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                        <input readonly type="number" id="view-report-dpr-lunch" placeholder="Minutes" class="form-control">
+                                        </input>
+                                    </div>
                                     <label for="view-report-dpr-techs" id="view-report-dpr-techs-label" style="display:none">Select Employees</label>
                                     <div class="input-group mb-1" id=view-report-dpr-techs-div style="display:none">
                                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
@@ -287,6 +293,7 @@
                                         </select>
                                     </div>
                                     <button id="view-report-tech-hours" type="button" style="display:none" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Employees</button>
+                                    <div id = "view-report-dpr-lunch">
                                     <div id = "view-report-dpr-techs-hours">
                                     </div>
                                     <div id="view-report-dpr-materials">
@@ -301,12 +308,12 @@
                                         <input id="view-report-dpr-performed-count" style="display:none" value=0></input>
                                     </div>
                                     <button  style="display:none" type="button" class="btn btn-primary mb-1" onclick="newDPRLine('performed')">Add Another Work Performed Line</button>
-                                    <div id = "view-report-dpr-progress">
+                                    <div id = "view-report-dpr-tasks">
                                     </div>
-                                    <div id = "view-report-dpr-hidden-progress">
-                                        <input id="view-report-dpr-progress-count" style="display:none" value=0></input>
+                                    <div id = "view-report-dpr-hidden-tasks">
+                                        <input id="view-report-dpr-tasks-count" style="display:none" value=0></input>
                                     </div>  
-                                    <button  style="display:none" type="button" class="btn btn-primary mb-1" onclick="newDPRLine('progress')">Add Another Progress Line</button>
+                                    <button  style="display:none" type="button" class="btn btn-primary mb-1" onclick="newDPRLine('tasks')">Add Another Tasks Line</button>
                                 </div>
                                 <label for="view-report-iqr">Issues / Questions / Remarks</label>
                                 <div class="input-group mb-1">
@@ -347,6 +354,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                     <div class="col-sm">
                         <div class="card card-accecnt-info">
@@ -519,7 +527,7 @@
             } );
             
             // Functions for loading reports
-            if(localStorage["WYDuserAccess"] == 6) {
+            if(localStorage["WYDuserAccess"] /*==*/ > 6) {
                 document.getElementById("view-table").setAttribute('style', 'display:none');
                 document.getElementById("button-view-increase").setAttribute('style', 'display:none');
             }
@@ -641,10 +649,14 @@
                     // Load Data if Report is a DPR
                     if(snapshot.val().short=="DPR") {
                         document.getElementById("view-report-dpr-performed").innerHTML = "";
-                        document.getElementById("view-report-dpr-progress").innerHTML = "";
+                        document.getElementById("view-report-dpr-tasks").innerHTML = "";
+                        document.getElementById("view-report-dpr-lunch").innerHTML = "";
                         document.getElementById("view-report-dpr-materials").innerHTML = "";
                         document.getElementById("view-report-dpr-techs-hours").innerHTML = "";
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:true');
+                        var lunch = document.getElementById("view-report-dpr-techs-hours");
+                        var sectionLunch = document.createElement("H6");
+                        var sectionLunchText = document.createTextNode("Employee Hours");
                         // Data for DPR employees and their hours
                         var hours = document.getElementById("view-report-dpr-techs-hours");
                         var sectionTitle = document.createElement("H6");
@@ -664,6 +676,8 @@
                                 hours.append(div);
                             }
                         }
+                        // Data for DPR Lunch Length
+                        document.getElementById("view-report-dpr-lunch").value = snapshot.val().tasks.lunch;
                         // Data for DPR Materials
                         var materials = document.getElementById("view-report-dpr-materials");
                         sectionTitle = document.createElement("H6");
@@ -693,18 +707,27 @@
                                 performed.append(div);
                             }
                         }
-                        // Data for DPR Work Performed
-                        var progress = document.getElementById("view-report-dpr-progress");
+                        // Data for DPR Tasks
+                        var tasks = document.getElementById("view-report-dpr-tasks");
                         sectionTitle = document.createElement("H6");
-                        sectionTitleText = document.createTextNode("Progress"); sectionTitle.append(sectionTitleText);
+                        sectionTitleText = document.createTextNode("Tasks"); sectionTitle.append(sectionTitleText);
                         performed.append(sectionTitle);
-                        if(snapshot.val().progress != null) {
-                            for(var i=0; i < snapshot.val().progress.length; i++) {
-                                var div = document.createElement("div");
-                                div.id = "view-report-dpr-materials-row-" + i;
-                                div.className = "row";
-                                div.innerHTML = '<div class="col-sm mb-1"><label for="report-progress-' + i + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input readonly id="report-progress-' + i + '" placeholder="Progress Location" class="form-control" value="' + snapshot.val().progress[i].location + '"></div></div><div class="col-sm mb-1"><label for="report-description--' + i + '">Description</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="report-description-' + i + '" placeholder="Progress Description" class="form-control" value="' + snapshot.val().progress[i].description + '"></div></div><div class="col-sm mb-1"><label for="report-percent-' + i + '">Percentage</label><div class="input-group"><span class="input-group-addon"><i class="icon-equalizer"></i></span><input readonly id="report-percent-' + i + '" type="number" placeholder="Progress Percentage" class="form-control" value="' + snapshot.val().progress[i].percent + '"></div></div>';
-                                progress.append(div);
+                        if(snapshot.val().tasks != null) {
+                            console.log(snapshot.val().tasks.length);
+                            var i = 0;
+                            while(snapshot.val().tasks[i] != null) {
+                                var divA = document.createElement("div");
+                                console.log("Making Tasks: " + i);
+                                divA.id = "view-report-dpr-tasks-row-a-" + i;
+                                divA.className = "row";
+                                divA.innerHTML = '<div class="col-sm mb-1"><label for="report-tasks-' + i + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input readonly id="report-tasks-' + i + '" placeholder="Tasks Location" class="form-control" value="' + snapshot.val().tasks[i].location + '"></div></div><div class="col-sm mb-1"><label for="report-tr-' + i + '">TR Build Out</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="report-tr-' + i + '" placeholder="TR %" class="form-control" value="' + snapshot.val().tasks[i].tr + '"></div></div><div class="col-sm mb-1"><label for="report-pathways-' + i + '">Pathways</label><div class="input-group"><span class="input-group-addon"><i class="icon-equalizer"></i></span><input readonly id="report-pathways-' + i + '" type="number" placeholder="Pathways %" class="form-control" value="' + snapshot.val().tasks[i].pathways + '"></div></div>';
+                                performed.append(divA);
+                                var divB = document.createElement("div");
+                                divB.id = "view-report-dpr-tasks-row-b-" + i;
+                                divB.className = "row";
+                                divB.innerHTML = '<div class="col-sm mb-1"><label for="report-roughin-' + i + '">Rough In</label><div class="input-group"><span class="input-group-addon"><i class="icon-globe-alt"></i></span><input readonly id="report-roughin-' + i + '" placeholder="Rough In %" class="form-control" value="' + snapshot.val().tasks[i].roughin + '"></div></div><div class="col-sm mb-1"><label for="report-terminations-' + i + '">Terminations</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="report-terminations-' + i + '" placeholder="Terminations %" class="form-control" value="' + snapshot.val().tasks[i].terminations + '"></div></div><div class="col-sm mb-1"><label for="report-testing-' + i + '">Testing</label><div class="input-group"><span class="input-group-addon"><i class="icon-equalizer"></i></span><input readonly id="report-testing-' + i + '" type="number" placeholder="Testing %" class="form-control" value="' + snapshot.val().tasks[i].testing + '"></div></div>';
+                                performed.append(divB);
+                                i++;
                             }
                         }
                     }

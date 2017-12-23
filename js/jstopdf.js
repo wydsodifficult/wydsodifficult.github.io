@@ -32,7 +32,7 @@ function reportDownload (snapshot) {
     var mainRows = [
         {"0": "PROJECT NAME: ", "1": values.jobName, "2": "JOB NUMBER:", "3": values.jobNum},
         {"0": "SUBMITTED BY: ", "1": values.submittedBy, "2": "CONTRACTOR: ", "3": values.contractor},
-        {"0": "START TIME: ", "1": values.timeStart, "2": "START TIME: ", "3": values.timeEnd},
+        {"0": "START TIME: ", "1": values.timeStart, "2": "END TIME: ", "3": values.timeEnd},
         {"0": "TIME TOTAL: ", "1": values.timeTotal, "2": "FOREMAN: ", "3": values.foreman}
     ];
     
@@ -53,8 +53,27 @@ function reportDownload (snapshot) {
         }
     });
     
+    // Table for DPR Lunch
+    if(values.type == "DPR") {
+        var lunchRows = [
+            {"0": values.tasks.lunch}
+        ]
+        var lunchCols= [
+            {title: "LUNCH LENGTH (Minutes)", datakey: "lunch"}
+        ];
+
+        doc.autoTable(lunchCols, lunchRows, {
+            theme: "grid",
+            startY: doc.autoTable.previous.finalY+5,
+            styles: {overflow: 'linebreak', fontSize: 8},
+            fontSize: 8,
+            margin: {horizontal: 20},
+            columnStyles: {text: {columnWidth: 'auto'}}
+        });
+    }
+    
     // Table for DPR Employee's Hours
-    if(values.type = "DPR" && values.employees != null) {
+    if(values.type == "DPR" && values.employees != null) {
         var employeeRows = [];
         for(var i = 0; i < values.employees.length; i++) {
             employeeRows.push({"0": values.employees[i].name, "1": values.employees[i].hours});
@@ -82,7 +101,7 @@ function reportDownload (snapshot) {
         
         doc.autoTable(materialCols, materialRows, {
             theme: "grid",
-            startY: doc.autoTable.previous.finalY,
+            startY: doc.autoTable.previous.finalY+5,
             styles: {overflow: 'linebreak', fontSize: 8},
             fontSize: 8,
             margin: {horizontal: 20},
@@ -99,13 +118,15 @@ function reportDownload (snapshot) {
         
         doc.autoTable(workCols, workRows, {
             theme: "grid",
-            startY: doc.autoTable.previous.finalY,
+            startY: doc.autoTable.previous.finalY+5,
             styles: {overflow: 'linebreak', fontSize: 8},
             fontSize: 8,
             margin: {horizontal: 20},
             columnStyles: {text: {columnWidth: 'auto'}}
         });
+    }
         
+        /*
         var progressRows = [];
             for(var i = 0; i < values.progress.length; i++) {
                 progressRows.push({"0": values.progress[i].location, "1": values.progress[i].description, "2": values.progress[i].percent});
@@ -122,6 +143,53 @@ function reportDownload (snapshot) {
                 margin: {horizontal: 20},
                 columnStyles: {text: {columnWidth: 'auto'}}
             });
+        */
+        
+    
+    // Table for DPR Tasks
+    if(values.type == "DPR" && values.tasks != null) {
+        var i = 0;
+        while(values.tasks[i] != null) {
+            var tasksARows = [
+                {"0": values.tasks[i].location}
+            ]
+            var tasksACols = [
+                {title: "TASK LOCATION", datakey: "location"}
+            ];
+
+            doc.autoTable(tasksACols, tasksARows, {
+                theme: "grid",
+                startY: doc.autoTable.previous.finalY+5,
+                styles: {overflow: 'linebreak', fontSize: 8},
+                fontSize: 8,
+                margin: {horizontal: 20},
+                columnStyles: {text: {columnWidth: 'auto'}}
+            });
+            var tasksBRows = [
+                {"0": values.tasks[i].tr,
+                "1": values.tasks[i].pathways,
+                "2": values.tasks[i].roughin,
+                "3": values.tasks[i].terminations,
+                "4": values.tasks[i].testing}
+            ]
+            var tasksBCols= [
+                {title: "Tr %", datakey: "tr"},
+                {title: "Pathways %", datakey: "pathways"},
+                {title: "Roughin %", datakey: "roughin"},
+                {title: "Terminations %", datakey: "terminations"},
+                {title: "Testing %", datakey: "testing"}
+            ];
+
+            doc.autoTable(tasksBCols, tasksBRows, {
+                theme: "grid",
+                startY: doc.autoTable.previous.finalY,
+                styles: {overflow: 'linebreak', fontSize: 8},
+                fontSize: 8,
+                margin: {horizontal: 20},
+                columnStyles: {text: {columnWidth: 'auto'}}
+            });
+            i++;
+        }
     }
     
     
