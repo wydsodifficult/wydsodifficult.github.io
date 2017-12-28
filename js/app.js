@@ -1237,7 +1237,9 @@ $("#view-job-modal").on("hide.bs.modal", function(){
 // Operations-jobs
 $('#button-job-edit').on('click',function() {
     document.getElementById("button-job-save").style.display = "inline";
-    document.getElementById("button-job-delete").style.display = "inline";
+    if(localStorage["WYDuserAccess"] > 3) {
+        document.getElementById("button-job-delete").style.display = "inline";
+    }
     document.getElementById("button-job-cancel").innerHTML = "Cancel";
     document.getElementById("button-job-edit").style.display = "none";
     var modal = document.getElementById("view-job-modal");
