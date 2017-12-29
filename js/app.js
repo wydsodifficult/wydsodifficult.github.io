@@ -2495,6 +2495,7 @@ function removeOptions(selectBox) {
     }
 }
 
+
 // Returns FB connection
 function createSecondFB() {
     // Initialize secondary Firebase App
