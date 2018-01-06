@@ -294,6 +294,7 @@
                                     </div>
                                     <button id="view-report-tech-hours" type="button" style="display:none" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Employees</button>
                                     <div id = "view-report-dpr-lunch">
+                                    </div>
                                     <div id = "view-report-dpr-techs-hours">
                                     </div>
                                     <div id="view-report-dpr-materials">
@@ -538,7 +539,7 @@
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 //dataTable.row.add(["DPR", "69-001", convertDate(Date()), "Shaniqua Jones"]).draw(false);
             }
@@ -554,7 +555,7 @@
                         }
                     });
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
             });
             
@@ -843,7 +844,7 @@
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Reports Types Searched from: " + search.value;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -865,7 +866,7 @@
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Job Numbers Searched from: " + search.value;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -887,7 +888,7 @@
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted By: " + search.value;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -915,7 +916,7 @@
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted On: " + searchFinal;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -939,7 +940,7 @@
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Reports For: " + search.value;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -960,7 +961,7 @@
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Most Recent";
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:true");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");

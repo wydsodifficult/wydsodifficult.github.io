@@ -158,7 +158,8 @@ function progressBar(progressDiv, incrementVal) {
 // userLogin
 $('#button-login').on('click', function(){
     firebase.auth().signInWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).catch(function(error) {
-        toastr["warning", "Error:" + error.message];
+        console.log("Something wrong: " + error.message);
+        toastr["warning"]("Error:" + error.message);
     });
 });
 
