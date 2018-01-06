@@ -294,6 +294,7 @@
                                     </div>
                                     <button id="view-report-tech-hours" type="button" style="display:none" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Employees</button>
                                     <div id = "view-report-dpr-lunch">
+                                    </div>
                                     <div id = "view-report-dpr-techs-hours">
                                     </div>
                                     <div id="view-report-dpr-materials">
@@ -322,7 +323,7 @@
                                 </div>
                                 <hr>
                                 <div id="view-report-fields">
-
+Hello
                                 </div>
                                <div id="loading" class="sk-cube-grid" style="display:none">
                                     <div class="sk-cube sk-cube1"></div>
@@ -522,11 +523,12 @@
             else {
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByKey().limitToFirst(25).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
-                        dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate),childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        dataTable.row.add([ 
+                            childSnapshot.val().timeStart, childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate),childSnapshot.val().submittedBy, childSnapshot.key]).draw();
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 //dataTable.row.add(["DPR", "69-001", convertDate(Date()), "Shaniqua Jones"]).draw(false);
             }
@@ -717,9 +719,11 @@
                         }
                     }
                     else {
+                        console.log("Non-DPR");
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:none');
                         for(var i=0; i<snapshot.val().list.length; i++) {
                             if(snapshot.val().list[i].title == true) {
+                                console.log("Title: " + snapshot.val().list[i].title);
                                 var h5 = document.createElement("H5");
                                 var h5Text = document.createTextNode(snapshot.val().list[i].work);
                                 h5.append(h5Text);
@@ -828,7 +832,7 @@
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Reports Types Searched from: " + search.value;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -850,7 +854,7 @@
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Job Numbers Searched from: " + search.value;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -872,7 +876,7 @@
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted By: " + search.value;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -900,7 +904,7 @@
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Submitted On: " + searchFinal;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -924,7 +928,7 @@
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Reports For: " + search.value;
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
@@ -945,7 +949,7 @@
                         document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Most Recent";
-                    dataTable.order([0, 'des']).draw();
+                    dataTable.order([0, 'asc']).draw();
                 });
                 document.getElementById("button-view-increase").setAttribute("style", "display:true");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
