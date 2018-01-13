@@ -32,6 +32,7 @@
     <link href="css/style.css" rel="stylesheet">
     <link href="css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="css/responsive.bootstrap4.min.js" rel="stylesheet">
+    <link href="css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link rel='stylesheet' type='text/css' href='http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'/>
     
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
@@ -411,14 +412,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm">
+                    <div>
                         <div class="card card-accent-primary">
                             <div class="card-header">
                                 Viewing: <b id="view-viewing">25 Most Recent</b>
                             </div>
                             <div class="card-block">
-                                Show/Hide: <a href='#' class="toggle-vis" data-column="0">Report Date/Time</a> - <a  href='#' class="toggle-vis" data-column="1">Type</a> - <a href='#'  class="toggle-vis" data-column="2">Job #</a> - <a  href='#' class="toggle-vis" data-column="3">Submitted Date</a> - <a  href='#' class="toggle-vis" data-column="4">By</a>
-                                <table class="table table-striped datatable table-bordered table-hover display nowrap dt-responsive" id="view-table" cellspace="0" width="100%">
+                                <div>
+                                    Show/Hide: <a href='#' class="toggle-vis" data-column="0">Report Date/Time</a> - <a  href='#' class="toggle-vis" data-column="1">Type</a> - <a href='#'  class="toggle-vis" data-column="2">Job #</a> - <a  href='#' class="toggle-vis" data-column="3">Submitted Date</a> - <a  href='#' class="toggle-vis" data-column="4">By</a>
+                                </div>
+                                <div>
+                                    <table style="display: inline-block" class="table table-striped datatable table-bordered table-hover display nowrap dt-responsive collapsed" id="view-table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Report Date/Time</th>
@@ -431,6 +435,7 @@
                                         </tr>
                                     </thead> 
                                 </table>
+                                </div>
                             </div>
                             <div class="card-footer">
                                 <button id="button-view-increase" class="btn btn-primary float-right">Increase by 25</button>
@@ -495,7 +500,7 @@
             // Initialize data table
             $('#view-table').DataTable().destroy();
             var dataTable = $('#view-table').DataTable({
-                autoWidth: false,
+                responsive: true,
                 columnDefs: [
                     //{
                         //"data":null
@@ -509,9 +514,9 @@
                     {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 1}, // Job
                     {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 2}, // Submitted Date
                     {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 3}, // Report Date
-                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 4}, // Submitted By
-                    
-                ]
+                    {className: "desktop tablet-l tablet-p mobile-l mobile-p", targets: 4} // Submitted By
+                ],
+                autoWidth: false
             });
             // Hide Submitted Date Column
             dataTable.column(3).visible(false);
