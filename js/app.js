@@ -170,6 +170,36 @@ $('#button-register').on('click', function() {
     window.location="register.html";
 });
 
+// Send to Forgot Password
+// Login
+// forgotPassword
+$('#button-forgot').on('click', function() {
+    window.location="forgot.html";
+});
+
+// Return to Login Page
+// Forgot
+// returnLogin
+$('#button-return').on('click', function() {
+    window.location="login.html";
+});
+
+// Reset Password
+// Forgot
+// resetPassword
+$('#button-reset').on('click', function() {
+    var auth = firebase.auth();
+    var emailAddress = document.getElementById("forgot-email").value;
+
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+      // Email sent.
+        window.location="login.html";
+    }).catch(function(error) {
+        toastr["warning"]("Something happened: " + error);
+      // An error happened.
+    });
+});
+
 
 // Check to make sure that passwords match
 // Register
