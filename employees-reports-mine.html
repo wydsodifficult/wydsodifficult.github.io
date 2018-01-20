@@ -32,7 +32,7 @@
     <link href="css/style.css" rel="stylesheet">
     <link href="css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="css/responsive.bootstrap4.min.js" rel="stylesheet">
-    <link rel='stylesheet' type='text/css' href='css/jquery-ui.css'/>
+    <link rel='stylesheet' type='text/css' href='http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'/>
     
     <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
     <script src="js/fbinit.js"></script>
@@ -537,7 +537,7 @@
                 document.getElementById("button-view-increase").setAttribute('style', 'display:none');
             }
             else {
-                firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().limitToFirst(25).once('value').then(function(snapshot) {
+                firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().limitToLast(25).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
                         dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                         document.getElementById("view-search-last").value = childSnapshot.key;
