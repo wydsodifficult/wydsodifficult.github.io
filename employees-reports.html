@@ -526,10 +526,15 @@ Hello
             }
             else {
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByKey().limitToLast(25).once('value').then(function(snapshot) {
+                    // localStorage["WYDviewClicked"] saves how many times a load more button is clicked
+                    localStorage["WYDviewClicked"] = 1;
                     snapshot.forEach(function(childSnapshot){
-                        dataTable.row.add([ 
-                            childSnapshot.val().timeStart, childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate),childSnapshot.val().submittedBy, childSnapshot.key]).draw();
-                        document.getElementById("view-search-last").value = childSnapshot.key;
+                        dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate),childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        //console.log(document.getElementById("view-search-last").value);
+                        if(document.getElementById("view-search-last").value == "") document.getElementById("view-search-last").value = childSnapshot.key;
+                        if(childSnapshot.key < document.getElementById("view-search-last").value) {
+                            document.getElementById("view-search-last").value = childSnapshot.key;
+                        }
                     });
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
                     dataTable.order([0, 'dec']).draw();
@@ -539,14 +544,21 @@ Hello
             
             // Increase view by 25
             $('#button-view-increase').on('click', function() {
-                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByKey().startAt(document.getElementById("view-search-last").value).limitToFirst(25).once('value').then(function(snapshot) {
+                //console.log(document.getElementById("view-search-last").value);
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByKey().endAt(document.getElementById("view-search-last").value).limitToLast(localStorage["WYDviewClicked"]*25+25).once('value').then(function(snapshot) {
                     var i = 0;
+                    var last = document.getElementById("view-search-last").value;
+                    i = snapshot.numChildren();
                     snapshot.forEach(function(childSnapshot){
-                        if(i!=0){
-                           dataTable.row.add([childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate), childSnapshot.val().timeStart, childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                        //console.log(childSnapshot.key);
+                        if(i!=0 && childSnapshot.key != last){
+                           dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate),childSnapshot.val().submittedBy, childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                         }
                     });
+                    //console.log(localStorage["WYDviewClicked"]*25+25);
+                    localStorage["WYDviewClicked"]++;
+                    //console.log("View Clicked" + localStorage["WYDviewClicked"]);
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
                 });
             });
