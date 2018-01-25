@@ -2075,6 +2075,7 @@ $('#button-save-report').on('click', function() {
         var tempDiv = document.getElementById("report-tech-0");
         var tempCount = 0;
         while (tempDiv != null) {
+            console.log("Looking for " + tempCount);
             updateEverything[path + 'employees/' + tempCount + '/name'] = tempDiv.innerText;
             updateEverything[path + 'employees/' + tempCount + '/id'] = tempDiv.value;
             updateEverything[path + 'employees/' + tempCount + '/hours'] = document.getElementById('report-tech-hours-' + tempCount).value;
@@ -2290,12 +2291,13 @@ function reportSetTechHours() {
     //var selectedArray = selectedTechs.val();
     var techsHoursDiv = document.getElementById('report-dpr-techs-hours');
     techsHoursDiv.innerHTML = "";
+    var num = 0;
     for(var i = 0; i < selectedTechs.length; i++) {
         if(selectedTechs.options[i].selected) {
             var hoursDiv = document.createElement('div');
             hoursDiv.className = "input-group mb-1";
             var hoursLabel = document.createElement('label');
-            hoursLabel.id = 'report-tech-' + i;
+            hoursLabel.id = 'report-tech-' + num;
             hoursLabel.value = 
             selectedTechs.options[i].value;
             hoursLabel.innerText = 
@@ -2306,7 +2308,7 @@ function reportSetTechHours() {
             hoursI.className = "fa fa-user";
             var hoursInput = document.createElement('input');
             hoursInput.className = "form-control";
-            hoursInput.id = 'report-tech-hours-' + i;
+            hoursInput.id = 'report-tech-hours-' + num;
             hoursInput.type = 'number';
             hoursInput.placeHolder = "Hours Worked";
             hoursSpan.appendChild(hoursI);
@@ -2315,6 +2317,7 @@ function reportSetTechHours() {
             techsHoursDiv.append(hoursLabel);
             techsHoursDiv.append(hoursDiv);
             console.log(hoursLabel.value + ": " + hoursLabel.innerText);
+            num++;
         }
     }
 }
