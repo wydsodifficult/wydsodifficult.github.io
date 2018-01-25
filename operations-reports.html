@@ -656,6 +656,7 @@
                 currentDataRow = $('#view-table').DataTable().row($(this));
                 console.log(data);
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + data[5]).once('value').then(function(snapshot) {
+                    console.log(snapshot.val());
                     document.getElementById("button-view-download").onclick = function(){reportDownload(snapshot)};
                     document.getElementById("view-hidden-id").value = snapshot.key;
                     document.getElementById("view-report").innerText = snapshot.val().short;
