@@ -228,6 +228,8 @@
                         <div class="card card-accent-primary">
                             <div class="card-header">
                                 Report Type: <b id="view-report"></b>
+                                <br>
+                                Submitted By: <b id="view-submitted"></b>
                             </div>
                             <div class="card-block">
                                 <h5>Job Info</h5>
@@ -639,6 +641,7 @@ Hello
                     document.getElementById("button-view-download").onclick = function(){reportDownload(snapshot)};
                     document.getElementById("view-hidden-id").value = snapshot.key;
                     document.getElementById("view-report").innerText = snapshot.val().short;
+                    document.getElementById("view-submitted").innerText = snapshot.val().submittedBy;
                     document.getElementById("view-report-job-name").value = snapshot.val().jobName;
                     document.getElementById("view-report-job-num").value = snapshot.val().jobNum;
                     document.getElementById("view-report-date").value = snapshot.val().submittedDate;
@@ -734,6 +737,7 @@ Hello
                             }
                         }
                     }
+                    // Non-DPR Reports
                     else {
                         console.log("Non-DPR");
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:none');
@@ -823,6 +827,14 @@ Hello
                                 reportRowC.append(reportColH);
                                 reportRowC.append(reportColI);
                                 reportRowC.append(reportColJ);
+                                 if(localStorage["WYDuserUnused"] == "false") {
+                                    if(reportInputA.value == "" && reportInputB.value == "" && reportInputC.value == "" && reportInputD.value == "") {
+                                        console.log("Trying to hide");
+                                        reportRowA.style.display = "none";
+                                        reportRowB.style.display = "none";
+                                        reportRowC.style.display = "none";
+                                    }
+                                }
                                 viewList.append(reportRowA);
                                 viewList.append(reportRowB);
                                 viewList.append(reportRowC);
