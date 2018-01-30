@@ -736,6 +736,7 @@
                             }
                         }
                     }
+                    // Non-DPR Reports
                     else {
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:none');
                         for(var i=0; i<snapshot.val().list.length; i++) {
@@ -823,6 +824,14 @@
                                 reportRowC.append(reportColH);
                                 reportRowC.append(reportColI);
                                 reportRowC.append(reportColJ);
+                                 if(localStorage["WYDuserUnused"] == "false") {
+                                    if(reportInputA.value == "" && reportInputB.value == "" && reportInputC.value == "" && reportInputD.value == "") {
+                                        console.log("Trying to hide");
+                                        reportRowA.style.display = "none";
+                                        reportRowB.style.display = "none";
+                                        reportRowC.style.display = "none";
+                                    }
+                                }
                                 viewList.append(reportRowA);
                                 viewList.append(reportRowB);
                                 viewList.append(reportRowC);

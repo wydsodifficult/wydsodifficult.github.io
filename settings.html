@@ -116,18 +116,34 @@
                     <hr>
                     <div class="card">
                         <div class="card-header">
-                            <b>Set Default Landing Page</b>
+                            <b>Default Landing Page</b>
                         </div>
                         <div class="card-block">
                             <div class="radio">
-                                <input id="landing-operations" type="radio" value="operations" name="landingPage">Operations
+                                <input id="landing-operations" type="radio" value="operations" name="landingPage"> Operations
                             </div>
                             <div class="radio">
-                                <input id="landing-employees" type="radio" value="employees" name="landingPage">Employees
+                                <input id="landing-employees" type="radio" value="employees" name="landingPage"> Employees
                             </div>
                         </div>
                         <div class="card-footer">
                             <button id="button-settings-landing-save" type="button" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <b>View Unused Report Fields</b>
+                        </div>
+                        <div class="card-block">
+                            <div class="radio">
+                                <input id="unused-true" type="radio" value="true" name="viewUnused"> True
+                            </div>
+                            <div class="radio">
+                                <input id="unused-false" type="radio" value="false" name="viewUnused"> False
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button id="button-settings-unused-save" type="button" class="btn btn-success">Save Changes</button>
                         </div>
                     </div>
                 </div>
@@ -168,8 +184,28 @@
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
             }
             firebase.database().ref('user/' + localStorage["WYDuserID"]).once('value').then(function(snapshot) {
-                if(snapshot.val().settings == null || snapshot.val().settings.landing == null || snapshot.val().settings.landing == 'employees') document.getElementById('landing-employees').setAttribute('checked', true);
-                else document.getElementById('landing-operations').setAttribute('checked', true);
+                // Default Settings for Everythig
+                if(snapshot.val().settings == null) {
+                    document.getElementById('landing-employees').setAttribute('checked', true);
+                    document.getElementById('unused-true').setAttribute('checked', true);
+                }
+                else {
+                    // Landing Page
+                    if(snapshot.val().settings.landing == null || snapshot.val().settings.landing == 'employees') {
+                        document.getElementById('landing-employees').setAttribute('checked', true);
+                    }
+                    else {
+                        document.getElementById('landing-operations').setAttribute('checked', true);
+                    }
+                    
+                    // View Unused Report Fields
+                    if(snapshot.val().settings.unused == null || snapshot.val().settings.unused == 'true') {
+                        document.getElementById('unused-true').setAttribute('checked', true);
+                    }
+                    else {
+                        document.getElementById('unused-false').setAttribute('checked', true);
+                    }
+                }
             });
         });
     </script>

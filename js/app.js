@@ -2416,6 +2416,25 @@ $('#button-settings-landing-save').on('click', function() {
     });
 });
 
+// Function run when the save button is clicked to save settings for showing unused fields in reports
+// settingsLanding()
+// Settings
+$('#button-settings-unused-save').on('click', function() {
+    var updateEverything = {};
+    var path = 'user/' + localStorage["WYDuserID"] + '/settings/unused';
+    if(document.getElementById('unused-true').checked == true) {
+        updateEverything[path] = "true";
+        localStorage["WYDuserUnused"] = "true";
+    }
+    if(document.getElementById('unused-false').checked == true) {
+        updateEverything[path] = "false";
+        localStorage["WYDuserUnused"] = "false";
+    }
+    firebase.database().ref().update(updateEverything).then(function() {
+        toastr["info"]("Updated your Viewing of Unused Fields!");
+    });
+});
+
 /* ================================================== */
 /* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
@@ -2437,6 +2456,10 @@ function getUserData(input) {
         localStorage["WYDuserCompanyID"] = data.companyID;
         localStorage["WYDuserCompanyName"] = data.companyName;
         localStorage["WYDuserNumID"] = data.numID;
+        localStorage["WYDuserUnused"] = data.settings.unused;
+        if(data.settings.unused == null) {
+            localStorage["WYDuserUnused"] = 'true';
+        }
         if(input == 1) {
             if(data.settings == null || data.settings.landing == null || data.settings.landing == "employees") window.location = "employees-dashboard.html";
             else window.location = "operations-dashboard.html";
