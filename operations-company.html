@@ -235,6 +235,10 @@
                         <input disabled id="lunch-input" type="number" class="form-control" placeholder="Standard Lunch Length (minutes)">
                     </div>
                     
+                    <label>Additional Info</label>
+                    <div id="additional">
+                    </div>
+                    
                     <div id="loading" class="sk-cube-grid" style="display:none">
                         <div class="sk-cube sk-cube1"></div>
                         <div class="sk-cube sk-cube2"></div>
@@ -246,6 +250,9 @@
                         <div class="sk-cube sk-cube8"></div>
                         <div class="sk-cube sk-cube9"></div>
                     </div>
+                    <button type="button" class="btn  btn-info" style="display:none" id="button-edit-company-add-additional">Add Additional Information</button>
+                    <br>
+                    <br>
                     <button type="button" class="btn  btn-primary" style="display:none" id="button-edit-company-profile">Edit Company Profile</button>
                     <button type="button" class="btn  btn-success" style="display:none" id="button-save-company-profile">Save Company Profile</button>
                     <button type="button" class="btn  btn-danger" style="display:none" id="button-cancel-company-profile">Cancel</button>
@@ -304,6 +311,34 @@
                 document.getElementById("fax-input").value = snapshot.val().numFax;
                 document.getElementById("website-input").value = snapshot.val().website;
                 document.getElementById("lunch-input").value = snapshot.val().lunch;
+                if(snapshot.val().additional == null || snapshot.val().additional.length == 0 || snapshot.val().additional.length == null) {
+                    localStorage["WYDviewClicked"] = 0;
+                }
+                else {
+                    var i = 0;
+                    var addDiv = document.getElementById("additional");
+                    while(snapshot.val().additional[i] != null) {
+                        var newDiv = document.createElement("div");
+                        var newInput = document.createElement("textarea");
+                        var newSpan = document.createElement("span");
+                        var newIcon = document.createElement("i");
+                        newDiv.className = "input-group mb-1";
+                        newInput.value = snapshot.val().additional[i];
+                        newInput.type = "textarea";
+                        newInput.className = "form-control";
+                        newInput.placeholder = "Additional Information";
+                        newInput.id = "additional-" + i;
+                        newInput.readOnly = true;
+                        newSpan.className = "input-group-addon";
+                        newIcon.className = "icon-layers";
+                        newSpan.append(newIcon);
+                        newDiv.append(newSpan);
+                        newDiv.append(newInput);
+                        addDiv.append(newDiv);
+                        i++;
+                    }
+                    localStorage["WYDviewClicked"] = i;
+                }
             });
             if(localStorage["WYDuserAccess"] == 1) document.getElementById("button-edit-company-profile").style.display="inline";
           } else {
