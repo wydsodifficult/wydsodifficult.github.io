@@ -234,6 +234,10 @@
                         <span class="input-group-addon"><i class="icon-cup"></i></span>
                         <input readonly id="lunch-input" type="number" class="form-control" placeholder="Standard Lunch Length (minutes)">
                     </div>
+                    
+                    <label>Additional Info</label>
+                    <div id="additional">
+                    </div>
                 </div>
                 <br>
 
@@ -289,6 +293,33 @@
                 document.getElementById("fax-input").value = snapshot.val().numFax;
                 document.getElementById("website-input").value = snapshot.val().website;
                 document.getElementById("lunch-input").value = snapshot.val().lunch;
+                if(snapshot.val().additional == null || snapshot.val().additional.length == 0 || snapshot.val().additional.length == null) {
+                    localStorage["WYDviewClicked"] = 0;
+                }
+                else {
+                    var i = 0;
+                    var addDiv = document.getElementById("additional");
+                    while(snapshot.val().additional[i] != null) {
+                        var newDiv = document.createElement("div");
+                        var newInput = document.createElement("textarea");
+                        var newSpan = document.createElement("span");
+                        var newIcon = document.createElement("i");
+                        newDiv.className = "input-group mb-1";
+                        newInput.value = snapshot.val().additional[i];
+                        newInput.type = "textarea";
+                        newInput.className = "form-control";
+                        newInput.placeholder = "Additional Information";
+                        newInput.id = "additional-" + i;
+                        newInput.readOnly = true;
+                        newSpan.className = "input-group-addon";
+                        newIcon.className = "icon-layers";
+                        newSpan.append(newIcon);
+                        newDiv.append(newSpan);
+                        newDiv.append(newInput);
+                        addDiv.append(newDiv);
+                        i++;
+                    }
+                }
             });
           } else {
             // No user is signed in.

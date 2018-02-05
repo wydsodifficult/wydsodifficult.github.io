@@ -473,9 +473,16 @@ $('#button-edit-company-profile').on('click', function(){
     document.getElementById("fax-input").removeAttribute("disabled");
     document.getElementById("website-input").removeAttribute("disabled");
     document.getElementById("lunch-input").removeAttribute("disabled");
+    var i = 0;
+    while(document.getElementById("additional-" + i) != null) {
+        document.getElementById("additional-" + i).readOnly = false;
+        i++;
+    }
+    localStorage["WYDadditionalEdit"] = i-1;
     document.getElementById("button-edit-company-profile").setAttribute("style", "display:none");
     document.getElementById("button-save-company-profile").setAttribute("style", "display:inline");
     document.getElementById("button-cancel-company-profile").setAttribute("style", "display:inline");
+    document.getElementById("button-edit-company-add-additional").setAttribute("style", "display:inline");
 });
 
 // Function run to cancel the editing of the company profile
@@ -491,6 +498,16 @@ $('#button-cancel-company-profile').on('click', function(){
     document.getElementById("button-edit-company-profile").setAttribute("style", "display:inline");
     document.getElementById("button-save-company-profile").setAttribute("style", "display:none");
     document.getElementById("button-cancel-company-profile").setAttribute("style", "display:none");
+    document.getElementById("button-edit-company-add-additional").setAttribute("style", "display:none");
+    for(var i = 0; i < localStorage["WYDviewClicked"]; i++) {
+        document.getElementById("additional-" + i).setAttribute("readOnly", "true");
+    }
+    var j = localStorage["WYDviewClicked"] - 1;
+    var parent = document.getElementById("additional");
+    while(document.getElementById("additional-div-" + j) != null) {
+        parent.removeChild(document.getElementById("additional-div-" + j));
+        j++;
+    }
 });
 
 // Function run when editing the company profile
@@ -500,6 +517,8 @@ $('#button-save-company-profile').on('click', function(){
     var uID = localStorage["WYDuserID"];
     var companyKey = localStorage["WYDuserCompanyID"];
     var updateEverything = {};
+    var i = 0;
+    var current = 0;
     var loading = document.getElementById('loading').setAttribute('style','display:true');
     // Add Company Information
     updateEverything['company/' + companyKey + '/info/name'] = document.getElementById('name-input').value;
@@ -508,6 +527,17 @@ $('#button-save-company-profile').on('click', function(){
     updateEverything['company/' + companyKey + '/info/numFax'] = document.getElementById('fax-input').value;
     updateEverything['company/' + companyKey + '/info/website'] = document.getElementById('website-input').value;
     updateEverything['company/' + companyKey + '/info/lunch'] = document.getElementById('lunch-input').value;
+    while(document.getElementById('additional-' + i) != null && document.getElementById('additional-' + i).value != null) {
+        if(document.getElementById('additional-' + i).value == '' || document.getElementById('additional-' + i).value == null) {
+            i ++;
+        }
+        else {
+            updateEverything['company/' + companyKey + '/info/additional/' + current] = document.getElementById('additional-' + i).value;
+            current++;
+            i++;
+        }
+    }
+    
     // Send All Data to Firebase
     firebase.database().ref().update(updateEverything)
     .then(function() {
@@ -521,6 +551,30 @@ $('#button-save-company-profile').on('click', function(){
         toastr["warning"]("Something happened when saving company details: " + error.message);
         console.log(error);
     });
+});
+
+// Function run when adding additional info to Company Profile
+// editAddAdditionalCompanyProfile()
+// Add Additional Company Info
+$("#button-edit-company-add-additional").on('click', function() {
+    var addDiv = document.getElementById("additional");
+    var newDiv = document.createElement("div");
+    var newInput = document.createElement("textArea");
+    var newSpan = document.createElement("span");
+    var newIcon = document.createElement("i");
+    newDiv.className = "input-group mb-1";
+    newDiv.id = "additional-div-" +  localStorage["WYDadditionalEdit"];
+    newInput.type = "textarea";
+    newInput.className = "form-control";
+    newInput.placeholder = "Additional Information";
+    localStorage["WYDadditionalEdit"]++;
+    newInput.id = "additional-" + localStorage["WYDadditionalEdit"];
+    newSpan.className = "input-group-addon";
+    newIcon.className = "icon-layers";
+    newSpan.append(newIcon);
+    newDiv.append(newSpan);
+    newDiv.append(newInput);
+    addDiv.append(newDiv);
 });
 
 // Function Run to show seated users (variation will be used in employees section)
