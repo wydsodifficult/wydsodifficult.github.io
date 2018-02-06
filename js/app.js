@@ -2510,10 +2510,12 @@ function getUserData(input) {
         localStorage["WYDuserCompanyID"] = data.companyID;
         localStorage["WYDuserCompanyName"] = data.companyName;
         localStorage["WYDuserNumID"] = data.numID;
-        if(data.settings.unused == null) {
+        if(data.settings == null || data.settings.unused == null) {
             localStorage["WYDuserUnused"] = 'true';
         }
-        localStorage["WYDuserUnused"] = data.settings.unused;
+        else {
+            localStorage["WYDuserUnused"] = data.settings.unused;
+        }
         if(input == 1) {
             if(data.settings == null || data.settings.landing == null || data.settings.landing == "employees") window.location = "employees-dashboard.html";
             else window.location = "operations-dashboard.html";
