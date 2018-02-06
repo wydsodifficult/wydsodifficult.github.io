@@ -2510,10 +2510,10 @@ function getUserData(input) {
         localStorage["WYDuserCompanyID"] = data.companyID;
         localStorage["WYDuserCompanyName"] = data.companyName;
         localStorage["WYDuserNumID"] = data.numID;
-        localStorage["WYDuserUnused"] = data.settings.unused;
         if(data.settings.unused == null) {
             localStorage["WYDuserUnused"] = 'true';
         }
+        localStorage["WYDuserUnused"] = data.settings.unused;
         if(input == 1) {
             if(data.settings == null || data.settings.landing == null || data.settings.landing == "employees") window.location = "employees-dashboard.html";
             else window.location = "operations-dashboard.html";
@@ -2550,6 +2550,9 @@ $('#logout').add('#logout-sidebar').on('click', function() {
         localStorage.removeItem('WYDuserCompanyID');
         localStorage.removeItem('WYDuserNumID');
         localStorage.removeItem('WYDuserID');
+        localStorage.removeItem('WYDviewClicked');
+        localStorage.removeItem('WYDuserUnused');
+        localStorage.removeItem('WYDadditionalEdit');
         console.log("Logging Out");
         //alert("You Have Successfully Signed Out!");
         window.location="index.html";
