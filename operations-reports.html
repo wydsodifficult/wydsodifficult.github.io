@@ -763,102 +763,205 @@
                     else {
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:none');
                         for(var i=0; i<snapshot.val().list.length; i++) {
-                            if(snapshot.val().list[i].title == true) {
-                                var h5 = document.createElement("H5");
-                                var h5Text = document.createTextNode(snapshot.val().list[i].work);
-                                h5.append(h5Text);
-                                viewList.append(h5);
+                            if(snapshot.val().list[i].type != null) {
+                                switch(snapshot.val().list[i].type) {
+                                    case "title":
+                                        var h5 = document.createElement("H5");
+                                        var h5Text = document.createTextNode(snapshot.val().list[i].work);
+                                        h5.append(h5Text);
+                                        viewList.append(h5);
+                                        break;
+                                    case "costCode":
+                                    case "costCodeFillable":
+                                        var reportRowA = document.createElement("div");
+                                        reportRowA.className = "row";
+                                        var reportRowB = document.createElement("div");
+                                        reportRowB.className = "row";
+                                        var reportRowC = document.createElement("div");
+                                        reportRowC.className = "row";
+                                        var reportColA = document.createElement("div");
+                                        reportColA.className = "col";
+                                        reportColA.innerText = snapshot.val().list[i].work;
+                                        reportColA.id = "report-" + i;
+                                        var reportColB = document.createElement("div");
+                                        reportColB.className = "col";
+                                        reportColB.innerText = "Cost Code: " + snapshot.val().list[i].code;
+                                        reportColB.value = snapshot.val().list[i].code;
+                                        reportColB.id = "report-code-" + i;
+                                        var reportColC = document.createElement("div");
+                                        reportColC.className = "col";
+                                        reportColC.innerText = "Hours";
+                                        var reportColD = document.createElement("div");
+                                        reportColD.className = "col";
+                                        reportColD.innerText = "Overtime Hours";
+                                        var reportColE = document.createElement("div");
+                                        reportColE.className = "col";
+                                        reportColE.innerText = "Issued Materials";
+                                        var reportColF = document.createElement("div");
+                                        reportColF.className = "col";
+                                        reportColF.innerText = "Installed Materials";
+                                        reportRowA.append(reportColA);
+                                        reportRowA.append(reportColB);
+                                        reportRowB.append(reportColC);
+                                        reportRowB.append(reportColD);
+                                        reportRowB.append(reportColE);
+                                        reportRowB.append(reportColF);
+                                        var reportColG = document.createElement("div");
+                                        reportColG.className = "col-6 col-md-3 mb-1";
+                                        var reportColH = document.createElement("div");
+                                        reportColH.className = "col-6 col-md-3 mb-1";
+                                        var reportColI = document.createElement("div");
+                                        reportColI.className = "col-6 col-md-3 mb-1";
+                                        var reportColJ = document.createElement("div");
+                                        reportColJ.className = "col-6 col-md-3 mb-1";
+                                        var reportInputA = document.createElement("input");
+                                        reportInputA.className = "form-control";
+                                        reportInputA.id = "report-hours-" + i;
+                                        reportInputA.type = "number";
+                                        reportInputA.placeholder = "Hours";
+                                        reportInputA.readOnly = true;
+                                        reportInputA.value = snapshot.val().list[i].hours;
+                                        reportColG.append(reportInputA);
+                                        var reportInputB = document.createElement("input");
+                                        reportInputB.className = "form-control";
+                                        reportInputB.id = "report-ot-" + i;
+                                        reportInputB.type = "number";
+                                        reportInputB.placeholder = "Overtime Hours";
+                                        reportInputB.readOnly = true;
+                                        reportInputB.value = snapshot.val().list[i].ot;
+                                        reportColH.append(reportInputB);
+                                        var reportInputC = document.createElement("input");
+                                        reportInputC.className = "form-control";
+                                        reportInputC.id = "report-issued-" + i;
+                                        reportInputC.type = "text";
+                                        reportInputC.placeholder = "Issued Materials";
+                                        reportInputC.readOnly = true;
+                                        reportInputC.value = snapshot.val().list[i].issued;
+                                        reportColI.append(reportInputC);
+                                        var reportInputD = document.createElement("input");
+                                        reportInputD.className = "form-control";
+                                        reportInputD.id = "report-installed-" + i;
+                                        reportInputD.type = "text";
+                                        reportInputD.placeholder = "Installed Materials";
+                                        reportInputD.readOnly = true;
+                                        reportInputD.value = snapshot.val().list[i].installed;
+                                        reportColJ.append(reportInputD);
+                                        reportRowC.append(reportColG);
+                                        reportRowC.append(reportColH);
+                                        reportRowC.append(reportColI);
+                                        reportRowC.append(reportColJ);
+                                         if(localStorage["WYDuserUnused"] == "false") {
+                                            if(reportInputA.value == "" && reportInputB.value == "" && reportInputC.value == "" && reportInputD.value == "") {
+                                                console.log("Trying to hide");
+                                                reportRowA.style.display = "none";
+                                                reportRowB.style.display = "none";
+                                                reportRowC.style.display = "none";
+                                            }
+                                        }
+                                        viewList.append(reportRowA);
+                                        viewList.append(reportRowB);
+                                        viewList.append(reportRowC);
+                                        break;
+                                }
                             }
                             else {
-                                var reportRowA = document.createElement("div");
-                                reportRowA.className = "row";
-                                var reportRowB = document.createElement("div");
-                                reportRowB.className = "row";
-                                var reportRowC = document.createElement("div");
-                                reportRowC.className = "row";
-                                var reportColA = document.createElement("div");
-                                reportColA.className = "col";
-                                reportColA.innerText = snapshot.val().list[i].work;
-                                reportColA.id = "report-" + i;
-                                var reportColB = document.createElement("div");
-                                reportColB.className = "col";
-                                reportColB.innerText = "Cost Code: " + snapshot.val().list[i].code;
-                                reportColB.value = snapshot.val().list[i].code;
-                                reportColB.id = "report-code-" + i;
-                                var reportColC = document.createElement("div");
-                                reportColC.className = "col";
-                                reportColC.innerText = "Hours";
-                                var reportColD = document.createElement("div");
-                                reportColD.className = "col";
-                                reportColD.innerText = "Overtime Hours";
-                                var reportColE = document.createElement("div");
-                                reportColE.className = "col";
-                                reportColE.innerText = "Issued Materials";
-                                var reportColF = document.createElement("div");
-                                reportColF.className = "col";
-                                reportColF.innerText = "Installed Materials";
-                                reportRowA.append(reportColA);
-                                reportRowA.append(reportColB);
-                                reportRowB.append(reportColC);
-                                reportRowB.append(reportColD);
-                                reportRowB.append(reportColE);
-                                reportRowB.append(reportColF);
-                                var reportColG = document.createElement("div");
-                                reportColG.className = "col-6 col-md-3 mb-1";
-                                var reportColH = document.createElement("div");
-                                reportColH.className = "col-6 col-md-3 mb-1";
-                                var reportColI = document.createElement("div");
-                                reportColI.className = "col-6 col-md-3 mb-1";
-                                var reportColJ = document.createElement("div");
-                                reportColJ.className = "col-6 col-md-3 mb-1";
-                                var reportInputA = document.createElement("input");
-                                reportInputA.className = "form-control";
-                                reportInputA.id = "report-hours-" + i;
-                                reportInputA.type = "number";
-                                reportInputA.placeholder = "Hours";
-                                reportInputA.readOnly = true;
-                                reportInputA.value = snapshot.val().list[i].hours;
-                                reportColG.append(reportInputA);
-                                var reportInputB = document.createElement("input");
-                                reportInputB.className = "form-control";
-                                reportInputB.id = "report-ot-" + i;
-                                reportInputB.type = "number";
-                                reportInputB.placeholder = "Overtime Hours";
-                                reportInputB.readOnly = true;
-                                reportInputB.value = snapshot.val().list[i].ot;
-                                reportColH.append(reportInputB);
-                                var reportInputC = document.createElement("input");
-                                reportInputC.className = "form-control";
-                                reportInputC.id = "report-issued-" + i;
-                                reportInputC.type = "text";
-                                reportInputC.placeholder = "Issued Materials";
-                                reportInputC.readOnly = true;
-                                reportInputC.value = snapshot.val().list[i].issued;
-                                reportColI.append(reportInputC);
-                                var reportInputD = document.createElement("input");
-                                reportInputD.className = "form-control";
-                                reportInputD.id = "report-installed-" + i;
-                                reportInputD.type = "text";
-                                reportInputD.placeholder = "Installed Materials";
-                                reportInputD.readOnly = true;
-                                reportInputD.value = snapshot.val().list[i].installed;
-                                reportColJ.append(reportInputD);
-                                reportRowC.append(reportColG);
-                                reportRowC.append(reportColH);
-                                reportRowC.append(reportColI);
-                                reportRowC.append(reportColJ);
-                                 if(localStorage["WYDuserUnused"] == "false") {
-                                    if(reportInputA.value == "" && reportInputB.value == "" && reportInputC.value == "" && reportInputD.value == "") {
-                                        console.log("Trying to hide");
-                                        reportRowA.style.display = "none";
-                                        reportRowB.style.display = "none";
-                                        reportRowC.style.display = "none";
-                                    }
+                                if(snapshot.val().list[i].title == true) {
+                                    var h5 = document.createElement("H5");
+                                    var h5Text = document.createTextNode(snapshot.val().list[i].work);
+                                    h5.append(h5Text);
+                                    viewList.append(h5);
                                 }
-                                viewList.append(reportRowA);
-                                viewList.append(reportRowB);
-                                viewList.append(reportRowC);
-                                
+                                else {
+                                    var reportRowA = document.createElement("div");
+                                    reportRowA.className = "row";
+                                    var reportRowB = document.createElement("div");
+                                    reportRowB.className = "row";
+                                    var reportRowC = document.createElement("div");
+                                    reportRowC.className = "row";
+                                    var reportColA = document.createElement("div");
+                                    reportColA.className = "col";
+                                    reportColA.innerText = snapshot.val().list[i].work;
+                                    reportColA.id = "report-" + i;
+                                    var reportColB = document.createElement("div");
+                                    reportColB.className = "col";
+                                    reportColB.innerText = "Cost Code: " + snapshot.val().list[i].code;
+                                    reportColB.value = snapshot.val().list[i].code;
+                                    reportColB.id = "report-code-" + i;
+                                    var reportColC = document.createElement("div");
+                                    reportColC.className = "col";
+                                    reportColC.innerText = "Hours";
+                                    var reportColD = document.createElement("div");
+                                    reportColD.className = "col";
+                                    reportColD.innerText = "Overtime Hours";
+                                    var reportColE = document.createElement("div");
+                                    reportColE.className = "col";
+                                    reportColE.innerText = "Issued Materials";
+                                    var reportColF = document.createElement("div");
+                                    reportColF.className = "col";
+                                    reportColF.innerText = "Installed Materials";
+                                    reportRowA.append(reportColA);
+                                    reportRowA.append(reportColB);
+                                    reportRowB.append(reportColC);
+                                    reportRowB.append(reportColD);
+                                    reportRowB.append(reportColE);
+                                    reportRowB.append(reportColF);
+                                    var reportColG = document.createElement("div");
+                                    reportColG.className = "col-6 col-md-3 mb-1";
+                                    var reportColH = document.createElement("div");
+                                    reportColH.className = "col-6 col-md-3 mb-1";
+                                    var reportColI = document.createElement("div");
+                                    reportColI.className = "col-6 col-md-3 mb-1";
+                                    var reportColJ = document.createElement("div");
+                                    reportColJ.className = "col-6 col-md-3 mb-1";
+                                    var reportInputA = document.createElement("input");
+                                    reportInputA.className = "form-control";
+                                    reportInputA.id = "report-hours-" + i;
+                                    reportInputA.type = "number";
+                                    reportInputA.placeholder = "Hours";
+                                    reportInputA.readOnly = true;
+                                    reportInputA.value = snapshot.val().list[i].hours;
+                                    reportColG.append(reportInputA);
+                                    var reportInputB = document.createElement("input");
+                                    reportInputB.className = "form-control";
+                                    reportInputB.id = "report-ot-" + i;
+                                    reportInputB.type = "number";
+                                    reportInputB.placeholder = "Overtime Hours";
+                                    reportInputB.readOnly = true;
+                                    reportInputB.value = snapshot.val().list[i].ot;
+                                    reportColH.append(reportInputB);
+                                    var reportInputC = document.createElement("input");
+                                    reportInputC.className = "form-control";
+                                    reportInputC.id = "report-issued-" + i;
+                                    reportInputC.type = "text";
+                                    reportInputC.placeholder = "Issued Materials";
+                                    reportInputC.readOnly = true;
+                                    reportInputC.value = snapshot.val().list[i].issued;
+                                    reportColI.append(reportInputC);
+                                    var reportInputD = document.createElement("input");
+                                    reportInputD.className = "form-control";
+                                    reportInputD.id = "report-installed-" + i;
+                                    reportInputD.type = "text";
+                                    reportInputD.placeholder = "Installed Materials";
+                                    reportInputD.readOnly = true;
+                                    reportInputD.value = snapshot.val().list[i].installed;
+                                    reportColJ.append(reportInputD);
+                                    reportRowC.append(reportColG);
+                                    reportRowC.append(reportColH);
+                                    reportRowC.append(reportColI);
+                                    reportRowC.append(reportColJ);
+                                     if(localStorage["WYDuserUnused"] == "false") {
+                                        if(reportInputA.value == "" && reportInputB.value == "" && reportInputC.value == "" && reportInputD.value == "") {
+                                            console.log("Trying to hide");
+                                            reportRowA.style.display = "none";
+                                            reportRowB.style.display = "none";
+                                            reportRowC.style.display = "none";
+                                        }
+                                    }
+                                    viewList.append(reportRowA);
+                                    viewList.append(reportRowB);
+                                    viewList.append(reportRowC);
+
+                                }
                             }
                         }
                     }
