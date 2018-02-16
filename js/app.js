@@ -2417,6 +2417,7 @@ $('#button-save-report').on('click', function() {
                 //updateEverything[path + 'list/' + i + '/title'] = false;
                 if(document.getElementById("report-code-fillable-" + i) != null) {
                     updateEverything[path + 'list/' + i + '/type'] = "costCodeFillable";
+                    updateEverything[path + 'list/' + i + '/work'] = document.getElementById("report-" + i).innerHTML;
                     var temp = document.getElementById("report-code-fillable-" + i);
                     if(temp.value == null || temp.value == "") {
                         updateEverything[path + 'list/' + i + '/code'] = temp.placeholder;
@@ -2428,6 +2429,7 @@ $('#button-save-report').on('click', function() {
                 else {
                     updateEverything[path + 'list/' + i + '/type'] = "costCode";
                     updateEverything[path + 'list/' + i + '/code'] = document.getElementById("report-code-" + i).value;
+                    updateEverything[path + 'list/' + i + '/work'] = document.getElementById("report-" + i).innerHTML;
                 }
                 updateEverything[path + 'list/' + i + '/hours'] = document.getElementById("report-hours-" + i).value;
                 updateEverything[path + 'list/' + i + '/ot'] = document.getElementById("report-ot-" + i).value;
