@@ -210,42 +210,87 @@ function reportDownload (snapshot) {
         columnStyles: {text: {columnWidth: 'auto'}}
     });
     
+    
+    // Non-DPR List
     for(var i = 0; values.list != null && i < values.list.length; i++) {
-        if(values.list[i].title == true) {
-            var listCols = [
-                {title: values.list[i].work, datakey: ("title_" + i)}
-            ];
-            var listRows = [
-            ];
-            doc.autoTable(listCols, listRows, {
-                theme: "grid",
-                startY: doc.autoTable.previous.finalY+5,
-                styles: {overflow: 'linebreak', fontSize: 8},
-                fontSize: 8,
-                margin: {horizontal: 20},
-                columnStyles: {text: {columnWidth: 'auto'}}
-            });
+        if(values.list[i].type != null) {
+           switch(values.list[i].type) {
+                case "title":
+                    var listCols = [
+                        {title: values.list[i].work, datakey: ("title_" + i)}
+                    ];
+                    var listRows = [
+                    ];
+                    doc.autoTable(listCols, listRows, {
+                        theme: "grid",
+                        startY: doc.autoTable.previous.finalY+5,
+                        styles: {overflow: 'linebreak', fontSize: 8},
+                        fontSize: 8,
+                        margin: {horizontal: 20},
+                        columnStyles: {text: {columnWidth: 'auto'}}
+                    });
+                    break;
+                case "costCode":
+                case "costCodeFillable":
+                    var listCols = [
+                        {datakey: "5"},
+                        {datakey: "6"},
+                        {datakey: "7"},
+                        {datakey: "8"}
+                    ];
+                    var listRows = [
+                        {"0": values.list[i].work, "1": "Cost Code: " + values.list[i].code, "2": "Hours: " + values.list[i].hours, "3": "Overtime Hours: " + values.list[i].ot},
+                        {"0": "ISSUED MATERIALS: ", "1": values.list[i].issued, "2": "INSTALLED MATERIALS: ", "3": values.list[i].installed}
+                    ];
+                    doc.autoTable(listCols, listRows, {
+                        theme: "grid",
+                        startY: doc.autoTable.previous.finalY,
+                        styles: {overflow: 'linebreak', fontSize: 8},
+                        fontSize: 8,
+                        margin: {horizontal: 20},
+                        showHeader: "never",
+                        columnStyles: {text: {columnWidth: 'auto'}}
+                    });
+                    break;
+           }
         }
-        else{
-            var listCols = [
-                {datakey: "5"},
-                {datakey: "6"},
-                {datakey: "7"},
-                {datakey: "8"}
-            ];
-            var listRows = [
-                {"0": values.list[i].work, "1": "Cost Code: " + values.list[i].code, "2": "Hours: " + values.list[i].hours, "3": "Overtime Hours: " + values.list[i].ot},
-                {"0": "ISSUED MATERIALS: ", "1": values.list[i].issued, "2": "INSTALLED MATERIALS: ", "3": values.list[i].installed}
-            ];
-            doc.autoTable(listCols, listRows, {
-                theme: "grid",
-                startY: doc.autoTable.previous.finalY,
-                styles: {overflow: 'linebreak', fontSize: 8},
-                fontSize: 8,
-                margin: {horizontal: 20},
-                showHeader: "never",
-                columnStyles: {text: {columnWidth: 'auto'}}
-            });
+        else {
+            if(values.list[i].title == true) {
+                var listCols = [
+                    {title: values.list[i].work, datakey: ("title_" + i)}
+                ];
+                var listRows = [
+                ];
+                doc.autoTable(listCols, listRows, {
+                    theme: "grid",
+                    startY: doc.autoTable.previous.finalY+5,
+                    styles: {overflow: 'linebreak', fontSize: 8},
+                    fontSize: 8,
+                    margin: {horizontal: 20},
+                    columnStyles: {text: {columnWidth: 'auto'}}
+                });
+            }
+            else{
+                var listCols = [
+                    {datakey: "5"},
+                    {datakey: "6"},
+                    {datakey: "7"},
+                    {datakey: "8"}
+                ];
+                var listRows = [
+                    {"0": values.list[i].work, "1": "Cost Code: " + values.list[i].code, "2": "Hours: " + values.list[i].hours, "3": "Overtime Hours: " + values.list[i].ot},
+                    {"0": "ISSUED MATERIALS: ", "1": values.list[i].issued, "2": "INSTALLED MATERIALS: ", "3": values.list[i].installed}
+                ];
+                doc.autoTable(listCols, listRows, {
+                    theme: "grid",
+                    startY: doc.autoTable.previous.finalY,
+                    styles: {overflow: 'linebreak', fontSize: 8},
+                    fontSize: 8,
+                    margin: {horizontal: 20},
+                    showHeader: "never",
+                    columnStyles: {text: {columnWidth: 'auto'}}
+                });
+            }
         }
     }
 
