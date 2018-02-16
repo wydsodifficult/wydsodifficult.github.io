@@ -1426,139 +1426,258 @@ function viewTemplates() {
                 templateFields.innerHTML = "<h5 id='template-modal-title'>" + childSnapshot.key + "</h5><input id='template-modal-title-value' value='" + childSnapshot.key + "' style='display:none'><input id='template-modal-count' value='" + (childSnapshot.numChildren()-1) + "' style='display:none'><div class='input-group mb-1'><span class='input-group-addon'><i class='fa fa-star'></i></span><input disabled id='template-modal-short-title' class='form-control' value='" + childSnapshot.val().short + "'></div><hr>";
                 for(var i = 0; i < childSnapshot.numChildren()-1; i++) {
                     (function(i){
-                        console.log("i: " + i + " is " + childSnapshot.val()[i].work);
-                        if(childSnapshot.val()[i].title==true) {
+                        if(childSnapshot.val()[i].type != null) {
                             var tempDiv = document.createElement("div");
                             tempDiv.id = "line-modal-div-" + i;
-                            var switchDiv = document.createElement("label");
+                            var choiceDiv = document.createElement("div");
+                            var switchDiv = document.createElement("div");
+                            switchDiv.id = "select-modal-div-" + i;
                             var titleDiv = document.createElement("div");
+                            titleDiv.id = "title-modal-div-" + i;
                             var workDiv = document.createElement("div");
+                            workDiv.id = "work-modal-div-" + i;
                             var codeDiv = document.createElement("div");
-                            titleDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-book-open'></i></span> <input disabled type='text' class='form-control' placeholder='Template Title' value='" + childSnapshot.val()[i].work + "' id='title-modal-input-" + i + "'> </div><hr>";
-                            workDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-calculator'></i></span> <input disabled type='text' class='form-control' id='work-modal-input-" + i + "' placeholder='Work Performed'> </div>";
-                            codeDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-wrench'></i></span> <input disabled type='text' class='form-control' placeholder='Cost Code' id='code-modal-input-" + i + "'> </div><hr>";
-                            switchDiv.className = "switch switch-text switch-pill switch-primary";
-                            var switchSpanA = document.createElement("span");
-                            var switchSpanB = document.createElement("span");
-                            switchSpanA.className = "switch-label";
-                            switchSpanA.setAttribute("data-on", "Yes");
-                            switchSpanA.setAttribute("data-off", "No");
-                            switchSpanB.className = "switch-handle";
-                            var switchInput = document.createElement("input");
-                            switchInput.className = "switch-input";
-                            switchInput.id = "view-template-checked-" + i;
-                            switchInput.type = "checkbox";
-                            switchInput.checked = true;
-                            switchInput.disabled = true;
-                            switchInput.onchange=function() {
-                                if(this.checked==false) {
-                                    titleDiv.setAttribute("style", "display:none");
-                                    workDiv.setAttribute("style", "display:inline");
-                                    codeDiv.setAttribute("style", "display:inline");
+                            codeDiv.id = "code-modal-div-" + i;
+                            // Choice Line
+                            var choiceLabel = document.createElement("label");
+                            var choiceSpan = document.createElement("span");
+                            var choiceI = document.createElement("i");
+                            var choiceSelect = document.createElement("select");
+                            var option = document.createElement("option");
+                            choiceLabel.innerHTML = "Choose Type of Field";
+                            choiceDiv.setAttribute("class", "input-group mb-1");
+                            choiceSpan.setAttribute("class", "input-group-addon");
+                            choiceI.setAttribute("class", "fa fa-tasks");
+                            choiceSelect.setAttribute("class", "form-control");
+                            choiceSelect.disabled = true;
+                            choiceSelect.id = ("choice-modal-input-" + i);
+                            for(var j = 0; j < 3; j++) {
+                                switch(j) {
+                                    case 0:
+                                        choiceSelect.options[j] = new Option('Cost Code Fixed', 'costCode');
+                                        break;
+                                    case 1:
+                                        choiceSelect.options[j] = new Option('Cost Code Fillable', 'costCodeFillable');
+                                        break;
+                                    case 2:
+                                        choiceSelect.options[j] = new Option('Title', 'title');
+                                        break;
                                 }
-                                else {
+
+                            }
+                            choiceSelect.value = childSnapshot.val()[i].type;
+                            choiceSelect.onchange = function () {
+                                console.log("changing to: " + this.value);
+                                switch(this.value) {
+                                    case 'title':
+                                        document.getElementById("title-modal-div-" + i).setAttribute("style", "display:inline");
+                                        document.getElementById("work-modal-div-" + i).setAttribute("style", "display:none");
+                                        document.getElementById("code-modal-div-" + i).setAttribute("style", "display:none");
+                                        break;
+                                    case 'costCode':
+                                        document.getElementById("title-modal-div-" + i).setAttribute("style", "display:none");
+                                        document.getElementById("work-modal-div-" + i).setAttribute("style", "display:inline");
+                                        document.getElementById("code-modal-div-" + i).setAttribute("style", "display:inline");
+                                        document.getElementById("code-modal-input-" + i).placeholder = "Cost Code";
+                                        break;
+                                    case 'costCodeFillable':
+                                        document.getElementById("title-modal-div-" + i).setAttribute("style", "display:none");
+                                        document.getElementById("work-modal-div-" + i).setAttribute("style", "display:inline");
+                                        document.getElementById("code-modal-div-" + i).setAttribute("style", "display:inline");
+                                        document.getElementById("code-modal-input-" + i).placeholder = "Cost Code Place Holder";
+                                        break;
+                                }
+                            }
+                            var deleteLine = document.createElement("div");
+                            var deleteButton = document.createElement("button");
+                            deleteButton.setAttribute("class", "btn btn-danger float-right");
+                            deleteButton.setAttribute("type", "button");
+                            deleteButton.setAttribute("title", "DELETE LINE");
+                            deleteButton.innerHTML = "DELETE LINE";
+                            deleteButton.onclick = function() {
+                                var thisContainer = this.parentElement.parentElement.parentElement;
+                                var divAbove = this.parentElement.parentElement.parentElement.parentElement;
+                                divAbove.removeChild(thisContainer);
+                            };
+                            
+                            deleteLine.setAttribute("name", "delete-modal-line");
+                            deleteLine.setAttribute("style", "display:none");
+                            deleteLine.appendChild(deleteButton);
+                            //choiceDiv.appendChild(choiceLabel);
+                            choiceSpan.appendChild(choiceI);
+                            choiceDiv.appendChild(choiceSpan);
+                            choiceDiv.appendChild(choiceSelect);
+                            tempDiv.appendChild(choiceDiv);
+                            switch(childSnapshot.val()[i].type) {
+                                case 'title':
+                                    titleDiv.innerHTML = "<div class = 'input-group mb-1' disabled><span class = 'input-group-addon'><i class = 'icon-book-open'></i></span><input disabled type = 'text' class = 'form-control' placeholder = 'Title Name' id = 'title-modal-input-" + i + "' value = '" + childSnapshot.val()[i].work + "'> </div>";
+                                    workDiv.innerHTML = "<div class = 'input-group mb-1' disabled><span class = 'input-group-addon'><i class = 'icon-wrench'></i></span><input disabled type = 'text' class = 'form-control' placeholder = 'Work Performed' id = 'work-modal-input-" + i + "'> </div>";
+                                    codeDiv.innerHTML = "<div class = 'input-group mb-1' disabled><span class = 'input-group-addon'><i class = 'icon-calculator'></i></span><input disabled type = 'text' class = 'form-control' placeholder = 'Cost Code' id = 'code-modal-input-" + i + "'> </div>";
                                     titleDiv.setAttribute("style", "display:inline");
                                     workDiv.setAttribute("style", "display:none");
                                     codeDiv.setAttribute("style", "display:none");
-                                }
+                                    break;
+                                case 'costCode':
+                                    titleDiv.innerHTML = "<div class = 'input-group mb-1' disabled><span class = 'input-group-addon'><i class = 'icon-book-open'></i></span><input disabled type = 'text' class = 'form-control' placeholder = 'Title Name' id = 'title-modal-input-" + i + "'> </div>";
+                                    workDiv.innerHTML = "<div class = 'input-group mb-1' disabled><span class = 'input-group-addon'><i class = 'icon-wrench'></i></span><input disabled type = 'text' class = 'form-control' placeholder = 'Work Performed' id = 'work-modal-input-" + i + "' value = '" + childSnapshot.val()[i].work + "'> </div>";
+                                    codeDiv.innerHTML = "<div class = 'input-group mb-1' disabled><span class = 'input-group-addon'><i class = 'icon-calculator'></i></span><input disabled type = 'text' class = 'form-control' placeholder = 'Cost Code' id = 'code-modal-input-" + i + "' value = '" + childSnapshot.val()[i].code + "'> </div>";
+                                    titleDiv.setAttribute("style", "display:none");
+                                    workDiv.setAttribute("style", "display:inline");
+                                    codeDiv.setAttribute("style", "display:inline");
+                                    break;
+                                case 'costCodeFillable':
+                                    titleDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'><i class='icon-book-open'></i></span><input disabled type='text' class='form-control' placeholder='Title Name' id='title-modal-input-" + i + "'> </div>";
+                                    workDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'><i class='icon-wrench'></i></span><input disabled type='text' class='form-control' placeholder='Work Performed' id='work-modal-input-" + i + "' value='" + childSnapshot.val()[i].work + "'> </div>";
+                                    codeDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'><i class='icon-calculator'></i></span><input disabled type='text' class='form-control' placeholder='Cost Code Fillable' id='code-modal-input-" + i + "' value='" + childSnapshot.val()[i].code + "'> </div>";
+                                    titleDiv.setAttribute("style", "display:none");
+                                    workDiv.setAttribute("style", "display:inline");
+                                    codeDiv.setAttribute("style", "display:inline");
+                                    break;
                             }
-                            workDiv.setAttribute("style", "display:none");
-                            codeDiv.setAttribute("style", "display:none");
-                            var switchLabel = document.createElement("label");
-                            switchLabel.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
-                            var deleteLine = document.createElement("button");
-                            deleteLine.setAttribute("class", "btn btn-danger float-right");
-                            deleteLine.setAttribute("type", "button");
-                            deleteLine.setAttribute("title", "DELETE LINE");
-                            deleteLine.setAttribute("style", "display:none");
-                            deleteLine.setAttribute("name", "delete-modal-line");
-                            deleteLine.innerHTML = "DELETE LINE";
-                            deleteLine.onclick = function() {
-                                var thisContainer = this.parentElement.parentElement;
-                                var divAbove = this.parentElement.parentElement.parentElement;
-                                divAbove.removeChild(thisContainer);
-                                count.value--;
-            console.log("Count: " + document.getElementById("view-contact-count").value);
-                            };
-                            var lineDiv = document.createElement("div");
-                            switchDiv.appendChild(switchInput);
-                            switchDiv.appendChild(switchSpanA);
-                            switchDiv.appendChild(switchSpanB);
-                            lineDiv.appendChild(switchDiv);
-                            lineDiv.appendChild(switchLabel);
-                            lineDiv.appendChild(deleteLine);
-                            tempDiv.appendChild(lineDiv);
-                            tempDiv.appendChild(document.createElement("br"));
+                            switchDiv.appendChild(deleteLine);
+                            switchDiv.appendChild(choiceDiv);
+                            tempDiv.appendChild(switchDiv); 
                             tempDiv.appendChild(titleDiv);
                             tempDiv.appendChild(workDiv);
                             tempDiv.appendChild(codeDiv);
+                            tempDiv.appendChild(document.createElement("hr"));
                             templateFields.appendChild(tempDiv);
                         }
+                        // Pre-Title Change
                         else {
-                            var tempDiv = document.createElement("div");
-                            tempDiv.id = "line-modal-div-" + i;
-                            var switchDiv = document.createElement("label");
-                            var titleDiv = document.createElement("div");
-                            var workDiv = document.createElement("div");
-                            var codeDiv = document.createElement("div");
-                            titleDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-book-open'></i></span> <input disabled type='text' class='form-control' placeholder='Template Title' id='title-modal-input-" + i + "'> </div><hr>";
-                            workDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-calculator'></i></span> <input disabled type='text' class='form-control' placeholder='Work Performed' value='" + childSnapshot.val()[i].work + "' id='work-modal-input-" + i + "'> </div>";
-                            codeDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-wrench'></i></span> <input disabled type='text' class='form-control' placeholder='Cost Code' id='code-modal-input-" + i + "' value='" + childSnapshot.val()[i].code + "'> </div><hr>";
-                            switchDiv.className = "switch switch-text switch-pill switch-primary";
-                            var switchSpanA = document.createElement("span");
-                            var switchSpanB = document.createElement("span");
-                            switchSpanA.className = "switch-label";
-                            switchSpanA.setAttribute("data-on", "Yes");
-                            switchSpanA.setAttribute("data-off", "No");
-                            switchSpanB.className = "switch-handle";
-                            var switchInput = document.createElement("input");
-                            switchInput.className = "switch-input";
-                            switchInput.id = "view-template-checked-" + i;
-                            switchInput.type = "checkbox";
-                            switchInput.checked = false;
-                            switchInput.disabled = true;
-                            switchInput.onchange=function() {
-                                if(this.checked==false) {
-                                    titleDiv.setAttribute("style", "display:none");
-                                    workDiv.setAttribute("style", "display:inline");
-                                    codeDiv.setAttribute("style", "display:inline");
+                            if(childSnapshot.val()[i].title==true) {
+                                var tempDiv = document.createElement("div");
+                                tempDiv.id = "line-modal-div-" + i;
+                                var switchDiv = document.createElement("label");
+                                var titleDiv = document.createElement("div");
+                                var workDiv = document.createElement("div");
+                                var codeDiv = document.createElement("div");
+                                titleDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-book-open'></i></span> <input disabled type='text' class='form-control' placeholder='Template Title' value='" + childSnapshot.val()[i].work + "' id='title-modal-input-" + i + "'> </div><hr>";
+                                workDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-calculator'></i></span> <input disabled type='text' class='form-control' id='work-modal-input-" + i + "' placeholder='Work Performed'> </div>";
+                                codeDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-wrench'></i></span> <input disabled type='text' class='form-control' placeholder='Cost Code' id='code-modal-input-" + i + "'> </div><hr>";
+                                switchDiv.className = "switch switch-text switch-pill switch-primary";
+                                var switchSpanA = document.createElement("span");
+                                var switchSpanB = document.createElement("span");
+                                switchSpanA.className = "switch-label";
+                                switchSpanA.setAttribute("data-on", "Yes");
+                                switchSpanA.setAttribute("data-off", "No");
+                                switchSpanB.className = "switch-handle";
+                                var switchInput = document.createElement("input");
+                                switchInput.className = "switch-input";
+                                switchInput.id = "view-template-checked-" + i;
+                                switchInput.type = "checkbox";
+                                switchInput.checked = true;
+                                switchInput.disabled = true;
+                                switchInput.onchange=function() {
+                                    if(this.checked==false) {
+                                        titleDiv.setAttribute("style", "display:none");
+                                        workDiv.setAttribute("style", "display:inline");
+                                        codeDiv.setAttribute("style", "display:inline");
+                                    }
+                                    else {
+                                        titleDiv.setAttribute("style", "display:inline");
+                                        workDiv.setAttribute("style", "display:none");
+                                        codeDiv.setAttribute("style", "display:none");
+                                    }
                                 }
-                                else {
-                                    titleDiv.setAttribute("style", "display:inline");
-                                    workDiv.setAttribute("style", "display:none");
-                                    codeDiv.setAttribute("style", "display:none");
-                                }
+                                workDiv.setAttribute("style", "display:none");
+                                codeDiv.setAttribute("style", "display:none");
+                                var switchLabel = document.createElement("label");
+                                switchLabel.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
+                                var deleteLine = document.createElement("button");
+                                deleteLine.setAttribute("class", "btn btn-danger float-right");
+                                deleteLine.setAttribute("type", "button");
+                                deleteLine.setAttribute("title", "DELETE LINE");
+                                deleteLine.setAttribute("style", "display:none");
+                                deleteLine.setAttribute("name", "delete-modal-line");
+                                deleteLine.innerHTML = "DELETE LINE";
+                                deleteLine.onclick = function() {
+                                    var thisContainer = this.parentElement.parentElement;
+                                    var divAbove = this.parentElement.parentElement.parentElement;
+                                    divAbove.removeChild(thisContainer);
+                                    count.value--;
+                console.log("Count: " + document.getElementById("view-contact-count").value);
+                                };
+                                var lineDiv = document.createElement("div");
+                                switchDiv.appendChild(switchInput);
+                                switchDiv.appendChild(switchSpanA);
+                                switchDiv.appendChild(switchSpanB);
+                                lineDiv.appendChild(switchDiv);
+                                lineDiv.appendChild(switchLabel);
+                                lineDiv.appendChild(deleteLine);
+                                tempDiv.appendChild(lineDiv);
+                                tempDiv.appendChild(document.createElement("br"));
+                                tempDiv.appendChild(titleDiv);
+                                tempDiv.appendChild(workDiv);
+                                tempDiv.appendChild(codeDiv);
+                                templateFields.appendChild(tempDiv);
                             }
-                            titleDiv.setAttribute("style", "display:none");
-                            var switchLabel = document.createElement("label");
-                            switchLabel.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
-                            var deleteLine = document.createElement("button");
-                            deleteLine.setAttribute("class", "btn btn-danger float-right");
-                            deleteLine.setAttribute("type", "button");
-                            deleteLine.setAttribute("title", "DELETE LINE");
-                            deleteLine.setAttribute("style", "display:none");
-                            deleteLine.setAttribute("name", "delete-modal-line");
-                            deleteLine.innerHTML = "DELETE LINE";
-                            deleteLine.onclick = function() {
-                                var thisContainer = this.parentElement.parentElement;
-                                var divAbove = this.parentElement.parentElement.parentElement;
-                                divAbove.removeChild(thisContainer);
-                                count.value--;
-            console.log("Count: " + document.getElementById("view-contact-count").value);
-                            };
-                            var lineDiv = document.createElement("div");
-                            switchDiv.appendChild(switchInput);
-                            switchDiv.appendChild(switchSpanA);
-                            switchDiv.appendChild(switchSpanB);
-                            lineDiv.appendChild(switchDiv);
-                            lineDiv.appendChild(switchLabel);
-                            lineDiv.appendChild(deleteLine);
-                            tempDiv.appendChild(lineDiv);
-                            tempDiv.appendChild(document.createElement("br"));
-                            tempDiv.appendChild(titleDiv);
-                            tempDiv.appendChild(workDiv);
-                            tempDiv.appendChild(codeDiv);
-                            templateFields.append(tempDiv);
+                            else {
+                                var tempDiv = document.createElement("div");
+                                tempDiv.id = "line-modal-div-" + i;
+                                var switchDiv = document.createElement("label");
+                                var titleDiv = document.createElement("div");
+                                var workDiv = document.createElement("div");
+                                var codeDiv = document.createElement("div");
+                                titleDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-book-open'></i></span> <input disabled type='text' class='form-control' placeholder='Template Title' id='title-modal-input-" + i + "'> </div><hr>";
+                                workDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-calculator'></i></span> <input disabled type='text' class='form-control' placeholder='Work Performed' value='" + childSnapshot.val()[i].work + "' id='work-modal-input-" + i + "'> </div>";
+                                codeDiv.innerHTML = "<div class='input-group mb-1' disabled><span class='input-group-addon'> <i class='icon-wrench'></i></span> <input disabled type='text' class='form-control' placeholder='Cost Code' id='code-modal-input-" + i + "' value='" + childSnapshot.val()[i].code + "'> </div><hr>";
+                                switchDiv.className = "switch switch-text switch-pill switch-primary";
+                                var switchSpanA = document.createElement("span");
+                                var switchSpanB = document.createElement("span");
+                                switchSpanA.className = "switch-label";
+                                switchSpanA.setAttribute("data-on", "Yes");
+                                switchSpanA.setAttribute("data-off", "No");
+                                switchSpanB.className = "switch-handle";
+                                var switchInput = document.createElement("input");
+                                switchInput.className = "switch-input";
+                                switchInput.id = "view-template-checked-" + i;
+                                switchInput.type = "checkbox";
+                                switchInput.checked = false;
+                                switchInput.disabled = true;
+                                switchInput.onchange=function() {
+                                    if(this.checked==false) {
+                                        titleDiv.setAttribute("style", "display:none");
+                                        workDiv.setAttribute("style", "display:inline");
+                                        codeDiv.setAttribute("style", "display:inline");
+                                    }
+                                    else {
+                                        titleDiv.setAttribute("style", "display:inline");
+                                        workDiv.setAttribute("style", "display:none");
+                                        codeDiv.setAttribute("style", "display:none");
+                                    }
+                                }
+                                titleDiv.setAttribute("style", "display:none");
+                                var switchLabel = document.createElement("label");
+                                switchLabel.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
+                                var deleteLine = document.createElement("button");
+                                deleteLine.setAttribute("class", "btn btn-danger float-right");
+                                deleteLine.setAttribute("type", "button");
+                                deleteLine.setAttribute("title", "DELETE LINE");
+                                deleteLine.setAttribute("style", "display:none");
+                                deleteLine.setAttribute("name", "delete-modal-line");
+                                deleteLine.innerHTML = "DELETE LINE";
+                                deleteLine.onclick = function() {
+                                    var thisContainer = this.parentElement.parentElement;
+                                    var divAbove = this.parentElement.parentElement.parentElement;
+                                    divAbove.removeChild(thisContainer);
+                                    count.value--;
+                console.log("Count: " + document.getElementById("view-contact-count").value);
+                                };
+                                var lineDiv = document.createElement("div");
+                                switchDiv.appendChild(switchInput);
+                                switchDiv.appendChild(switchSpanA);
+                                switchDiv.appendChild(switchSpanB);
+                                lineDiv.appendChild(switchDiv);
+                                lineDiv.appendChild(switchLabel);
+                                lineDiv.appendChild(deleteLine);
+                                tempDiv.appendChild(lineDiv);
+                                tempDiv.appendChild(document.createElement("br"));
+                                tempDiv.appendChild(titleDiv);
+                                tempDiv.appendChild(workDiv);
+                                tempDiv.appendChild(codeDiv);
+                                templateFields.append(tempDiv);
+                            }
                         }
                     }).call(this,i);
                 }
@@ -1621,16 +1740,37 @@ $('#button-template-modal-save').on('click', function() {
     }
     var templatePath = 'company/' + companyKey + '/list/' + title + '/';
     updateEverything[templatePath + 'short'] = document.getElementById("template-modal-short-title").value;
-    for(var i = 0; i < count; i++){
+    for(var i = 0; actualCount < count; i++){
         if(document.getElementById("line-modal-div-" + i) != null) {
-            if(document.getElementById("view-template-checked-" + i).checked==false) {
-                updateEverything[templatePath + actualCount + "/title"] = false;
-                updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-modal-input-" + i).value;
-                updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-modal-input-" + i).value;
+            console.log("Checking: " + i + " count: " + count);
+            if(document.getElementById("view-template-checked-" + i) == null){
+                console.log("Choice: " + document.getElementById("choice-modal-input-" + i));
+                var thisType = document.getElementById("choice-modal-input-" + i).value;
+                updateEverything[templatePath + actualCount + "/type"] = thisType;
+                switch(thisType) {
+                    case 'title':
+                        updateEverything[templatePath + actualCount + "/work"] = document.getElementById("title-modal-input-" + i).value;
+                        break;
+                    case 'costCode':
+                        updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-modal-input-" + i).value;
+                        updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-modal-input-" + i).value;
+                        break;
+                    case 'costCodeFillable':
+                        updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-modal-input-" + i).value;
+                        updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-fillable-modal-input-" + i).value;
+                        break;
+                }
             }
             else {
-                updateEverything[templatePath + actualCount + "/title"] = true;
-                updateEverything[templatePath + actualCount + "/work"] = document.getElementById("title-modal-input-" + i).value;
+                if(document.getElementById("view-template-checked-" + i).checked==false) {
+                    updateEverything[templatePath + actualCount + "/type"] = "costCode";
+                    updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-modal-input-" + i).value;
+                    updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-modal-input-" + i).value;
+                }
+                else {
+                    updateEverything[templatePath + actualCount + "/type"] = "title";
+                    updateEverything[templatePath + actualCount + "/work"] = document.getElementById("title-modal-input-" + i).value;
+                }
             }
             actualCount++;
         }
@@ -1687,11 +1827,14 @@ $('#button-template-line').on('click', function() {
     var showDiv = document.getElementById("template-inputs");
     var container = document.createElement("div");
     container.id = ("line-div-" + count.value);
+    var choiceLine = document.createElement("div");
     var firstLine = document.createElement("div");
     var secondLine = document.createElement("div");
     var thirdLine = document.createElement("div");
     var fourthLine = document.createElement("div");
-    // Fourth Line
+    var fifthLine = document.createElement("div");
+    var sixthLine = document.createElement("div");
+    // Fourth Line - Title Field
     var titleDiv = document.createElement("div");
     var titleSpan = document.createElement("span");
     var titleI = document.createElement("i");
@@ -1708,7 +1851,24 @@ $('#button-template-line').on('click', function() {
     titleDiv.appendChild(titleInput);
     fourthLine.style=("display:none");
     fourthLine.appendChild(titleDiv);
-    // Third Line
+    // Third Line - Fillable Cost Code Placeholder
+    var codeFillableDiv = document.createElement("div");
+    var codeFillableSpan = document.createElement("span");
+    var codeFillableI = document.createElement("i");
+    var codeFillableInput = document.createElement("input");
+    codeFillableDiv.setAttribute("class", "input-group mb-1");
+    codeFillableSpan.setAttribute("class", "input-group-addon");
+    codeFillableI.setAttribute("class", "icon-calculator");
+    codeFillableInput.id = ("code-fillable-input-" + count.value);
+    codeFillableInput.setAttribute("type", "text");
+    codeFillableInput.setAttribute("class", "form-control");
+    codeFillableInput.setAttribute("placeholder", "Cost Code Placeholder");
+    codeFillableSpan.appendChild(codeFillableI);
+    codeFillableDiv.appendChild(codeFillableSpan);
+    codeFillableDiv.appendChild(codeFillableInput);
+    thirdLine.setAttribute("style", "display:none");
+    thirdLine.appendChild(codeFillableDiv);
+    // Second Line - Cost Code Fixed Field
     var codeDiv = document.createElement("div");
     var codeSpan = document.createElement("span");
     var codeI = document.createElement("i");
@@ -1723,8 +1883,8 @@ $('#button-template-line').on('click', function() {
     codeSpan.appendChild(codeI);
     codeDiv.appendChild(codeSpan);
     codeDiv.appendChild(codeInput);
-    thirdLine.appendChild(codeDiv);
-    // Second Line
+    secondLine.appendChild(codeDiv);
+    // First Line - Work Performed Field
     var performedDiv = document.createElement("div");
     var performedSpan = document.createElement("span");
     var performedI = document.createElement("i");
@@ -1732,60 +1892,86 @@ $('#button-template-line').on('click', function() {
     performedDiv.setAttribute("class", "input-group mb-1");
     performedSpan.setAttribute("class", "input-group-addon");
     performedI.setAttribute("class", "icon-wrench");
-    performedInput.id = ("performed-input-" + count.value);
+    performedInput.id = ("work-input-" + count.value);
     performedInput.setAttribute("type", "text");
     performedInput.setAttribute("class", "form-control");
     performedInput.setAttribute("placeholder", "Work Performed");
     performedSpan.appendChild(performedI);
     performedDiv.appendChild(performedSpan);
     performedDiv.appendChild(performedInput);
-    secondLine.appendChild(performedDiv);
-    // First Line
-    var toggleContainer = document.createElement("label");
-    toggleContainer.setAttribute("class", "switch switch-text switch-pill switch-primary");
-    var toggle = document.createElement("input");
-    toggle.setAttribute("class", "switch-input");
-    toggle.setAttribute("type", "checkbox");
-    toggle.id = ("toggle-input-" + count.value);
-    toggle.onchange = function(){
-        if(this.checked==false) {
-            secondLine.setAttribute("style", "display:inline");
-            thirdLine.setAttribute("style", "display:inline");
-            fourthLine.setAttribute("style", "display:none");
+    firstLine.appendChild(performedDiv);
+    // Choice Line
+    var choiceLabel = document.createElement("label");
+    var choiceDiv = document.createElement("div");
+    var choiceSpan = document.createElement("span");
+    var choiceI = document.createElement("i");
+    var choiceSelect = document.createElement("select");
+    var option = document.createElement("option");
+    choiceLabel.innerHTML = "Choose Type of Field";
+    choiceDiv.setAttribute("class", "input-group mb-1");
+    choiceSpan.setAttribute("class", "input-group-addon");
+    choiceI.setAttribute("class", "fa fa-tasks");
+    choiceSelect.setAttribute("class", "form-control");
+    choiceSelect.id = ("choice-input-" + count.value);
+    for(var i = 0; i < 3; i++) {
+        switch(i) {
+            case 0:
+                choiceSelect.options[i] = new Option('Cost Code Fixed', 'costCode');
+                break;
+            case 1:
+                choiceSelect.options[i] = new Option('Cost Code Fillable', 'costCodeFillable');
+                break;
+            case 2:
+                choiceSelect.options[i] = new Option('Title', 'title');
+                break;
         }
-        else {
-            secondLine.setAttribute("style", "display:none");
-            thirdLine.setAttribute("style", "display:none");
-            fourthLine.setAttribute("style", "display:inline");
+            
+    }
+    choiceSelect.onchange = function () {
+        switch(this.value) {
+            case 'title':
+                firstLine.setAttribute("style", "display:none");
+                secondLine.setAttribute("style", "display:none");
+                thirdLine.setAttribute("style", "display:none");
+                fourthLine.setAttribute("style", "display:inline");
+                break;
+            case 'costCode':
+                firstLine.setAttribute("style", "display:inline");
+                secondLine.setAttribute("style", "display:inline");
+                thirdLine.setAttribute("style", "display:none");
+                fourthLine.setAttribute("style", "display:none");
+                break;
+            case 'costCodeFillable':
+                firstLine.setAttribute("style", "display:inline");
+                secondLine.setAttribute("style", "display:none");
+                thirdLine.setAttribute("style", "display:inline");
+                fourthLine.setAttribute("style", "display:none");
+                break;
         }
-    };
-    var toggleLabels = document.createElement("span");
-    toggleLabels.setAttribute("class", "switch-label");
-    toggleLabels.setAttribute("data-on", "Yes");
-    toggleLabels.setAttribute("data-off", "No");
-    var toggleHandle = document.createElement("span");
-    toggleHandle.setAttribute("class","switch-handle");
-    toggleContainer.appendChild(toggle);
-    toggleContainer.appendChild(toggleLabels);
-    toggleContainer.appendChild(toggleHandle);
-    firstLine.appendChild(toggleContainer);
-    var titleQuestion = document.createElement("label");
-    titleQuestion.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
-    firstLine.appendChild(titleQuestion);
-    var deleteLine = document.createElement("button");
-    deleteLine.setAttribute("class", "btn btn-danger float-right");
-    deleteLine.setAttribute("type", "button");
-    deleteLine.setAttribute("title", "DELETE LINE");
-    deleteLine.innerHTML = "DELETE LINE";
-    deleteLine.onclick = function() {
+    }
+    var deleteLine = document.createElement("div");
+    var deleteButton = document.createElement("button");
+    deleteButton.setAttribute("class", "btn btn-danger float-right");
+    deleteButton.setAttribute("type", "button");
+    deleteButton.setAttribute("title", "DELETE LINE");
+    deleteButton.innerHTML = "DELETE LINE";
+    deleteButton.onclick = function() {
         var thisContainer = this.parentElement.parentElement;
         var divAbove = this.parentElement.parentElement.parentElement;
         divAbove.removeChild(thisContainer);
+        count.value--;
     };
-    firstLine.appendChild(deleteLine);
+    deleteLine.appendChild(deleteButton);
+    choiceSpan.appendChild(choiceI);
+    choiceDiv.appendChild(choiceSpan);
+    choiceDiv.appendChild(choiceSelect);
+    choiceLine.appendChild(choiceLabel);
+    choiceLine.appendChild(choiceDiv);
     // Add everything to the container  
-    container.appendChild(firstLine);
+    container.appendChild(deleteLine);
     container.appendChild(document.createElement("br"));
+    container.appendChild(choiceLine);
+    container.appendChild(firstLine);
     container.appendChild(secondLine);
     container.appendChild(thirdLine);
     container.appendChild(fourthLine);
@@ -1802,11 +1988,14 @@ $('#button-template-modal-line').on('click', function() {
     var showDiv = document.getElementById("template-modal-inputs");
     var container = document.createElement("div");
     container.id = ("line-modal-div-" + count.value);
+    var choiceLine = document.createElement("div");
     var firstLine = document.createElement("div");
     var secondLine = document.createElement("div");
     var thirdLine = document.createElement("div");
     var fourthLine = document.createElement("div");
-    // Fourth Line
+    var fifthLine = document.createElement("div");
+    var sixthLine = document.createElement("div");
+    // Fourth Line - Title Field
     var titleDiv = document.createElement("div");
     var titleSpan = document.createElement("span");
     var titleI = document.createElement("i");
@@ -1823,7 +2012,24 @@ $('#button-template-modal-line').on('click', function() {
     titleDiv.appendChild(titleInput);
     fourthLine.style=("display:none");
     fourthLine.appendChild(titleDiv);
-    // Third Line
+    // Third Line - Fillable Cost Code Placeholder
+    var codeFillableDiv = document.createElement("div");
+    var codeFillableSpan = document.createElement("span");
+    var codeFillableI = document.createElement("i");
+    var codeFillableInput = document.createElement("input");
+    codeFillableDiv.setAttribute("class", "input-group mb-1");
+    codeFillableSpan.setAttribute("class", "input-group-addon");
+    codeFillableI.setAttribute("class", "icon-calculator");
+    codeFillableInput.id = ("code-fillable-modal-input-" + count.value);
+    codeFillableInput.setAttribute("type", "text");
+    codeFillableInput.setAttribute("class", "form-control");
+    codeFillableInput.setAttribute("placeholder", "Cost Code Placeholder");
+    codeFillableSpan.appendChild(codeFillableI);
+    codeFillableDiv.appendChild(codeFillableSpan);
+    codeFillableDiv.appendChild(codeFillableInput);
+    thirdLine.setAttribute("style", "display:none");
+    thirdLine.appendChild(codeFillableDiv);
+    // Second Line - Cost Code Fixed Field
     var codeDiv = document.createElement("div");
     var codeSpan = document.createElement("span");
     var codeI = document.createElement("i");
@@ -1838,8 +2044,8 @@ $('#button-template-modal-line').on('click', function() {
     codeSpan.appendChild(codeI);
     codeDiv.appendChild(codeSpan);
     codeDiv.appendChild(codeInput);
-    thirdLine.appendChild(codeDiv);
-    // Second Line
+    secondLine.appendChild(codeDiv);
+    // First Line - Work Performed Field
     var performedDiv = document.createElement("div");
     var performedSpan = document.createElement("span");
     var performedI = document.createElement("i");
@@ -1854,54 +2060,79 @@ $('#button-template-modal-line').on('click', function() {
     performedSpan.appendChild(performedI);
     performedDiv.appendChild(performedSpan);
     performedDiv.appendChild(performedInput);
-    secondLine.appendChild(performedDiv);
-    // First Line
-    var toggleContainer = document.createElement("label");
-    toggleContainer.setAttribute("class", "switch switch-text switch-pill switch-primary");
-    var toggle = document.createElement("input");
-    toggle.setAttribute("class", "switch-input");
-    toggle.setAttribute("type", "checkbox");
-    toggle.id = ("view-template-checked-" + count.value);
-    toggle.onchange = function(){
-        if(this.checked==false) {
-            secondLine.setAttribute("style", "display:inline");
-            thirdLine.setAttribute("style", "display:inline");
-            fourthLine.setAttribute("style", "display:none");
+    firstLine.appendChild(performedDiv);
+    // Choice Line
+    var choiceLabel = document.createElement("label");
+    var choiceDiv = document.createElement("div");
+    var choiceSpan = document.createElement("span");
+    var choiceI = document.createElement("i");
+    var choiceSelect = document.createElement("select");
+    var option = document.createElement("option");
+    choiceLabel.innerHTML = "Choose Type of Field";
+    choiceDiv.setAttribute("class", "input-group mb-1");
+    choiceSpan.setAttribute("class", "input-group-addon");
+    choiceI.setAttribute("class", "fa fa-tasks");
+    choiceSelect.setAttribute("class", "form-control");
+    choiceSelect.id = ("choice-modal-input-" + count.value);
+    for(var i = 0; i < 3; i++) {
+        switch(i) {
+            case 0:
+                choiceSelect.options[i] = new Option('Cost Code Fixed', 'costCode');
+                break;
+            case 1:
+                choiceSelect.options[i] = new Option('Cost Code Fillable', 'costCodeFillable');
+                break;
+            case 2:
+                choiceSelect.options[i] = new Option('Title', 'title');
+                break;
         }
-        else {
-            secondLine.setAttribute("style", "display:none");
-            thirdLine.setAttribute("style", "display:none");
-            fourthLine.setAttribute("style", "display:inline");
+            
+    }
+    choiceSelect.onchange = function () {
+        switch(this.value) {
+            case 'title':
+                firstLine.setAttribute("style", "display:none");
+                secondLine.setAttribute("style", "display:none");
+                thirdLine.setAttribute("style", "display:none");
+                fourthLine.setAttribute("style", "display:inline");
+                break;
+            case 'costCode':
+                firstLine.setAttribute("style", "display:inline");
+                secondLine.setAttribute("style", "display:inline");
+                thirdLine.setAttribute("style", "display:none");
+                fourthLine.setAttribute("style", "display:none");
+                break;
+            case 'costCodeFillable':
+                firstLine.setAttribute("style", "display:inline");
+                secondLine.setAttribute("style", "display:none");
+                thirdLine.setAttribute("style", "display:inline");
+                fourthLine.setAttribute("style", "display:none");
+                break;
         }
-    };
-    var toggleLabels = document.createElement("span");
-    toggleLabels.setAttribute("class", "switch-label");
-    toggleLabels.setAttribute("data-on", "Yes");
-    toggleLabels.setAttribute("data-off", "No");
-    var toggleHandle = document.createElement("span");
-    toggleHandle.setAttribute("class","switch-handle");
-    toggleContainer.appendChild(toggle);
-    toggleContainer.appendChild(toggleLabels);
-    toggleContainer.appendChild(toggleHandle);
-    firstLine.appendChild(toggleContainer);
-    var titleQuestion = document.createElement("label");
-    titleQuestion.innerHTML = "&nbsp;&nbsp;&nbsp;Section Title?";
-    firstLine.appendChild(titleQuestion);
-    var deleteLine = document.createElement("button");
-    deleteLine.setAttribute("class", "btn btn-danger float-right");
-    deleteLine.setAttribute("type", "button");
-    deleteLine.setAttribute("title", "DELETE LINE");
-    deleteLine.innerHTML = "DELETE LINE";
-    deleteLine.onclick = function() {
+    }
+    var deleteLine = document.createElement("div");
+    var deleteButton = document.createElement("button");
+    deleteButton.setAttribute("class", "btn btn-danger float-right");
+    deleteButton.setAttribute("type", "button");
+    deleteButton.setAttribute("title", "DELETE LINE");
+    deleteButton.innerHTML = "DELETE LINE";
+    deleteButton.onclick = function() {
         var thisContainer = this.parentElement.parentElement;
         var divAbove = this.parentElement.parentElement.parentElement;
         divAbove.removeChild(thisContainer);
         count.value--;
     };
-    firstLine.appendChild(deleteLine);
-    // Add everything to the container  
-    container.appendChild(firstLine);
+    deleteLine.appendChild(deleteButton);
+    choiceSpan.appendChild(choiceI);
+    choiceDiv.appendChild(choiceSpan);
+    choiceDiv.appendChild(choiceSelect);
+    choiceLine.appendChild(choiceLabel);
+    choiceLine.appendChild(choiceDiv);
+    // Add everything to the container
+    container.appendChild(deleteLine);
     container.appendChild(document.createElement("br"));
+    container.appendChild(choiceLine);
+    container.appendChild(firstLine);
     container.appendChild(secondLine);
     container.appendChild(thirdLine);
     container.appendChild(fourthLine);
@@ -1913,11 +2144,12 @@ $('#button-template-modal-line').on('click', function() {
 // Function run when the New Template Save Button is clicked
 // saveNewReportTemplate()
 // Operations-report-templates
-$('#button-template-save').on('click',function() {    
+$('#button-template-save').on('click',function() {
     document.getElementById('loading').setAttribute('style','display:true');
     var actualCount = 0;
     var companyKey = localStorage["WYDuserCompanyID"];
     var count = document.getElementById("field-count").value;
+    console.log("count: " + count);
     var title = document.getElementById("template-title").value;
     if(title == "") {
         d = new Date();
@@ -1927,16 +2159,22 @@ $('#button-template-save').on('click',function() {
     var templatePath = 'company/' + companyKey + '/list/' + title + '/';
     var updateEverything = {};
     updateEverything[templatePath + 'short'] = document.getElementById("template-short-title").value;
-    for(var i = 0; i < count; i++){
+    for(var i = 0; actualCount < count; i++){
         if(document.getElementById("line-div-" + i) != null) {
-            if(document.getElementById("toggle-input-" + i).checked==false) {
-                updateEverything[templatePath + actualCount + "/title"] = false;
-                updateEverything[templatePath + actualCount + "/work"] = document.getElementById("performed-input-" + i).value;
-                updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-input-" + i).value;
-            }
-            else {
-                updateEverything[templatePath + actualCount + "/title"] = true;
-                updateEverything[templatePath + actualCount + "/work"] = document.getElementById("title-input-" + i).value;
+            var thisType = document.getElementById("choice-input-" + i).value;
+            updateEverything[templatePath + actualCount + "/type"] = thisType;
+            switch(thisType) {
+                case 'title':
+                    updateEverything[templatePath + actualCount + "/work"] = document.getElementById("title-input-" + i).value;
+                    break;
+                case 'costCode':
+                    updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-input-" + i).value;
+                    updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-input-" + i).value;
+                    break;
+                case 'costCodeFillable':
+                    updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-input-" + i).value;
+                    updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-fillable-input-" + i).value;                          
+                    break;
             }
             actualCount++;
         }
@@ -2171,13 +2409,26 @@ $('#button-save-report').on('click', function() {
         var templateLines = document.getElementById('report-' + i);
         while(templateLines != null) {
             if(templateLines.tagName == 'H5') {
-                updateEverything[path + 'list/' + i + '/title'] = true;
+                //updateEverything[path + 'list/' + i + '/title'] = true;
+                updateEverything[path + 'list/' + i + '/type'] = "title";
                 updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
             }
             else {
-                updateEverything[path + 'list/' + i + '/title'] = false;
-                updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
-                updateEverything[path + 'list/' + i + '/code'] = document.getElementById("report-code-" + i).value;
+                //updateEverything[path + 'list/' + i + '/title'] = false;
+                if(document.getElementById("report-code-fillable-" + i) != null) {
+                    updateEverything[path + 'list/' + i + '/type'] = "costCodeFillable";
+                    var temp = document.getElementById("report-code-fillable-" + i);
+                    if(temp.value == null || temp.value == "") {
+                        updateEverything[path + 'list/' + i + '/code'] = temp.placeholder;
+                    }
+                    else {
+                        updateEverything[path + 'list/' + i + '/code'] = temp.value;
+                    }
+                }
+                else {
+                    updateEverything[path + 'list/' + i + '/type'] = "costCode";
+                    updateEverything[path + 'list/' + i + '/code'] = document.getElementById("report-code-" + i).value;
+                }
                 updateEverything[path + 'list/' + i + '/hours'] = document.getElementById("report-hours-" + i).value;
                 updateEverything[path + 'list/' + i + '/ot'] = document.getElementById("report-ot-" + i).value;
                 updateEverything[path + 'list/' + i + '/issued'] = document.getElementById("report-issued-" + i).value;
@@ -2251,68 +2502,205 @@ function newReportSelect(name) {
         firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/list/' + name).once('value').then(function(snapshot) {
             var fields = snapshot.val();
             document.getElementById("template-short").value = fields.short;
-            for(i=0; i < snapshot.numChildren()-1; i++) {
-                if(fields[i].title) {
-                    var titleDiv = document.createElement("h5");
-                    titleDiv.id = "report-" + i;
-                    titleDiv.innerText = fields[i].work;
-                    templateFields.append(titleDiv);
-                    templateFields.append(document.createElement("hr"));
+            for(var i=0; i < snapshot.numChildren()-1; i++) {
+                if(fields[i].title == null) {
+                    console.log("i: " + i);
+                    console.log(fields[i]);
+                    switch(fields[i].type) {
+                        case "title":
+                            var titleDiv = document.createElement("h5");
+                            titleDiv.id = "report-" + i;
+                            titleDiv.innerText = fields[i].work;
+                            templateFields.append(titleDiv);
+                            templateFields.append(document.createElement("hr"));
+                            break;
+                        case "costCode":
+                            var reportRowA = document.createElement("div");
+                            reportRowA.className = "row";
+                            var reportRowB = document.createElement("div");
+                            reportRowB.className = "row";
+                            var reportColA = document.createElement("div");
+                            reportColA.className = "col";
+                            reportColA.innerText = fields[i].work;
+                            reportColA.id = "report-" + i;
+                            var reportColB = document.createElement("div");
+                            reportColB.className = "col";
+                            reportColB.innerText = "Cost Code: " + fields[i].code;
+                            reportColB.value = fields[i].code;
+                            reportColB.id = "report-code-" + i;
+                            reportRowA.append(reportColA);
+                            reportRowA.append(reportColB);
+                            var reportColC = document.createElement("div");
+                            reportColC.className = "col-6 col-md-3 mb-1";
+                            var reportColD = document.createElement("div");
+                            reportColD.className = "col-6 col-md-3 mb-1";
+                            var reportColE = document.createElement("div");
+                            reportColE.className = "col-6 col-md-3 mb-1";
+                            var reportColF = document.createElement("div");
+                            reportColF.className = "col-6 col-md-3 mb-1";
+                            var reportInputA = document.createElement("input");
+                            reportInputA.className = "input-group";
+                            reportInputA.id = "report-hours-" + i;
+                            reportInputA.type = "number";
+                            reportInputA.placeholder = "Hours";
+                            reportColC.append(reportInputA);
+                            var reportInputB = document.createElement("input");
+                            reportInputB.className = "input-group";
+                            reportInputB.id = "report-ot-" + i;
+                            reportInputB.type = "number";
+                            reportInputB.placeholder = "Overtime Hours";
+                            reportColD.append(reportInputB);
+                            var reportInputC = document.createElement("input");
+                            reportInputC.className = "input-group";
+                            reportInputC.id = "report-issued-" + i;
+                            reportInputC.type = "text";
+                            reportInputC.placeholder = "Issued Materials";
+                            reportColE.append(reportInputC);
+                            var reportInputD = document.createElement("input");
+                            reportInputD.className = "input-group";
+                            reportInputD.id = "report-installed-" + i;
+                            reportInputD.type = "text";
+                            reportInputD.placeholder = "Installed Materials";
+                            reportColF.append(reportInputD);
+                            reportRowB.append(reportColC);
+                            reportRowB.append(reportColD);
+                            reportRowB.append(reportColE);
+                            reportRowB.append(reportColF);
+                            templateFields.append(reportRowA);
+                            templateFields.append(reportRowB);
+                            break;
+                        case "costCodeFillable":
+                            var reportRowA = document.createElement("div");
+                            reportRowA.className = "row";
+                            var reportRowB = document.createElement("div");
+                            reportRowB.className = "row";
+                            var reportColA = document.createElement("div");
+                            reportColA.className = "col-6 col-md-3 mb-1";
+                            reportColA.innerText = fields[i].work;
+                            reportColA.id = "report-" + i;
+                            var reportColA2 = document.createElement("div");
+                            reportColA2.className = "col";
+                            reportColA2.className = "col-6 col-md-3 mb-1";
+                            var reportColB = document.createElement("div");
+                            reportColB.className = "col-6 col-md-3 mb-1";
+                            reportColB.innerText = "Cost Code: " + fields[i].code;
+                            var reportColB2 = document.createElement("div");
+                            reportColB2.className = "col";
+                            reportColB2.id = "report-fillable" + i;
+                            var reportInputFillable = document.createElement("input");
+                            reportInputFillable.className = "input-group";
+                            reportInputFillable.id = "report-code-fillable-" + i;
+                            reportInputFillable.type = "text";
+                            reportInputFillable.placeholder = fields[i].code; 
+                            reportRowA.append(reportColA);
+                            reportRowA.append(reportColA2);
+                            reportColB2.append(reportInputFillable);
+                            reportRowA.append(reportColB);
+                            reportRowA.append(reportColB2);
+                            var reportColC = document.createElement("div");
+                            reportColC.className = "col-6 col-md-3 mb-1";
+                            var reportColD = document.createElement("div");
+                            reportColD.className = "col-6 col-md-3 mb-1";
+                            var reportColE = document.createElement("div");
+                            reportColE.className = "col-6 col-md-3 mb-1";
+                            var reportColF = document.createElement("div");
+                            reportColF.className = "col-6 col-md-3 mb-1";
+                            var reportInputA = document.createElement("input");
+                            reportInputA.className = "input-group";
+                            reportInputA.id = "report-hours-" + i;
+                            reportInputA.type = "number";
+                            reportInputA.placeholder = "Hours";
+                            reportColC.append(reportInputA);
+                            var reportInputB = document.createElement("input");
+                            reportInputB.className = "input-group";
+                            reportInputB.id = "report-ot-" + i;
+                            reportInputB.type = "number";
+                            reportInputB.placeholder = "Overtime Hours";
+                            reportColD.append(reportInputB);
+                            var reportInputC = document.createElement("input");
+                            reportInputC.className = "input-group";
+                            reportInputC.id = "report-issued-" + i;
+                            reportInputC.type = "text";
+                            reportInputC.placeholder = "Issued Materials";
+                            reportColE.append(reportInputC);
+                            var reportInputD = document.createElement("input");
+                            reportInputD.className = "input-group";
+                            reportInputD.id = "report-installed-" + i;
+                            reportInputD.type = "text";
+                            reportInputD.placeholder = "Installed Materials";
+                            reportColF.append(reportInputD);
+                            reportRowB.append(reportColC);
+                            reportRowB.append(reportColD);
+                            reportRowB.append(reportColE);
+                            reportRowB.append(reportColF);
+                            templateFields.append(reportRowA);
+                            templateFields.append(reportRowB);
+                            break;
+                    }
                 }
                 else {
-                    var reportRowA = document.createElement("div");
-                    reportRowA.className = "row";
-                    var reportRowB = document.createElement("div");
-                    reportRowB.className = "row";
-                    var reportColA = document.createElement("div");
-                    reportColA.className = "col";
-                    reportColA.innerText = fields[i].work;
-                    reportColA.id = "report-" + i;
-                    var reportColB = document.createElement("div");
-                    reportColB.className = "col";
-                    reportColB.innerText = "Cost Code: " + fields[i].code;
-                    reportColB.value = fields[i].code;
-                    reportColB.id = "report-code-" + i;
-                    reportRowA.append(reportColA);
-                    reportRowA.append(reportColB);
-                    var reportColC = document.createElement("div");
-                    reportColC.className = "col-6 col-md-3 mb-1";
-                    var reportColD = document.createElement("div");
-                    reportColD.className = "col-6 col-md-3 mb-1";
-                    var reportColE = document.createElement("div");
-                    reportColE.className = "col-6 col-md-3 mb-1";
-                    var reportColF = document.createElement("div");
-                    reportColF.className = "col-6 col-md-3 mb-1";
-                    var reportInputA = document.createElement("input");
-                    reportInputA.className = "input-group";
-                    reportInputA.id = "report-hours-" + i;
-                    reportInputA.type = "number";
-                    reportInputA.placeholder = "Hours";
-                    reportColC.append(reportInputA);
-                    var reportInputB = document.createElement("input");
-                    reportInputB.className = "input-group";
-                    reportInputB.id = "report-ot-" + i;
-                    reportInputB.type = "number";
-                    reportInputB.placeholder = "Overtime Hours";
-                    reportColD.append(reportInputB);
-                    var reportInputC = document.createElement("input");
-                    reportInputC.className = "input-group";
-                    reportInputC.id = "report-issued-" + i;
-                    reportInputC.type = "text";
-                    reportInputC.placeholder = "Issued Materials";
-                    reportColE.append(reportInputC);
-                    var reportInputD = document.createElement("input");
-                    reportInputD.className = "input-group";
-                    reportInputD.id = "report-installed-" + i;
-                    reportInputD.type = "text";
-                    reportInputD.placeholder = "Installed Materials";
-                    reportColF.append(reportInputD);
-                    reportRowB.append(reportColC);
-                    reportRowB.append(reportColD);
-                    reportRowB.append(reportColE);
-                    reportRowB.append(reportColF);
-                    templateFields.append(reportRowA);
-                    templateFields.append(reportRowB);
+                    if(fields[i].title) {
+                        var titleDiv = document.createElement("h5");
+                        titleDiv.id = "report-" + i;
+                        titleDiv.innerText = fields[i].work;
+                        templateFields.append(titleDiv);
+                        templateFields.append(document.createElement("hr"));
+                    }
+                    else {
+                        var reportRowA = document.createElement("div");
+                        reportRowA.className = "row";
+                        var reportRowB = document.createElement("div");
+                        reportRowB.className = "row";
+                        var reportColA = document.createElement("div");
+                        reportColA.className = "col";
+                        reportColA.innerText = fields[i].work;
+                        reportColA.id = "report-" + i;
+                        var reportColB = document.createElement("div");
+                        reportColB.className = "col";
+                        reportColB.innerText = "Cost Code: " + fields[i].code;
+                        reportColB.value = fields[i].code;
+                        reportColB.id = "report-code-" + i;
+                        reportRowA.append(reportColA);
+                        reportRowA.append(reportColB);
+                        var reportColC = document.createElement("div");
+                        reportColC.className = "col-6 col-md-3 mb-1";
+                        var reportColD = document.createElement("div");
+                        reportColD.className = "col-6 col-md-3 mb-1";
+                        var reportColE = document.createElement("div");
+                        reportColE.className = "col-6 col-md-3 mb-1";
+                        var reportColF = document.createElement("div");
+                        reportColF.className = "col-6 col-md-3 mb-1";
+                        var reportInputA = document.createElement("input");
+                        reportInputA.className = "input-group";
+                        reportInputA.id = "report-hours-" + i;
+                        reportInputA.type = "number";
+                        reportInputA.placeholder = "Hours";
+                        reportColC.append(reportInputA);
+                        var reportInputB = document.createElement("input");
+                        reportInputB.className = "input-group";
+                        reportInputB.id = "report-ot-" + i;
+                        reportInputB.type = "number";
+                        reportInputB.placeholder = "Overtime Hours";
+                        reportColD.append(reportInputB);
+                        var reportInputC = document.createElement("input");
+                        reportInputC.className = "input-group";
+                        reportInputC.id = "report-issued-" + i;
+                        reportInputC.type = "text";
+                        reportInputC.placeholder = "Issued Materials";
+                        reportColE.append(reportInputC);
+                        var reportInputD = document.createElement("input");
+                        reportInputD.className = "input-group";
+                        reportInputD.id = "report-installed-" + i;
+                        reportInputD.type = "text";
+                        reportInputD.placeholder = "Installed Materials";
+                        reportColF.append(reportInputD);
+                        reportRowB.append(reportColC);
+                        reportRowB.append(reportColD);
+                        reportRowB.append(reportColE);
+                        reportRowB.append(reportColF);
+                        templateFields.append(reportRowA);
+                        templateFields.append(reportRowB);
+                    }
                 }
             }
         });
@@ -2530,6 +2918,10 @@ function enableInputs(enable, divName) {
     var inputs = div.getElementsByTagName('input');
     for(var i=0; i<inputs.length; i++){
         inputs[i].disabled = !enable;
+    }
+    var selects = div.getElementsByTagName('select');
+    for(var i=0; i<selects.length; i++){
+        selects[i].disabled = !enable;
     }
 }
 
