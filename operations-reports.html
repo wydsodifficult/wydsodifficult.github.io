@@ -691,6 +691,7 @@
                         document.getElementById("view-report-dpr-techs-hours").innerHTML = "";
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:true');
                         document.getElementById("view-report-lunch").setAttribute('style', 'display:inline');
+                        document.getElementById("div-view-report-lunch").setAttribute('style', 'display:none');
                         var lunch = document.getElementById("view-report-dpr-techs-hours");
                         var sectionLunch = document.createElement("H6");
                         var sectionLunchText = document.createTextNode("Employee Hours");
@@ -772,7 +773,6 @@
                     else {
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:none');
                         if(snapshot.val().lunch != null) {
-                            
                             document.getElementById("div-view-report-lunch").setAttribute('style', 'display:inline');
                             document.getElementById("view-report-lunch").value = snapshot.val().lunch;
                         }
