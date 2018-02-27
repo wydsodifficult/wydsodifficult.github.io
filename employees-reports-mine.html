@@ -322,6 +322,15 @@
                                     <textarea class="form-control" readonly id="view-report-iqr" placeholder="Any Issues Should Be Reported IMMEDIATELY"></textarea>
                                 </div>
                                 <hr>
+                                <hr>
+                                <div id="div-view-report-lunch" style="display:none">
+                                    <label for="view-report-lunch">Lunch Length (Minutes)</label>
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                        <input readonly type="number" id="view-report-lunch" placeholder="Minutes" class="form-control">
+                                        </input>
+                                    </div>
+                                </div>
                                 <div id="view-report-fields">
 
                                 </div>
@@ -739,6 +748,12 @@
                     // Non-DPR Reports
                     else {
                         document.getElementById("div-view-report-dpr").setAttribute('style', 'display:none');
+                        if(snapshot.val().lunch != null) {
+                            
+                            document.getElementById("div-view-report-lunch").setAttribute('style', 'display:inline');
+                            document.getElementById("view-report-lunch").value = snapshot.val().lunch;
+                        }
+                        else document.getElementById("div-view-report-lunch").setAttribute('style', 'display:none');
                         for(var i=0; i<snapshot.val().list.length; i++) {
                             if(snapshot.val().list[i].type != null) {
                                 switch(snapshot.val().list[i].type) {

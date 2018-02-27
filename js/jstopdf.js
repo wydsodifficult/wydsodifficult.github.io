@@ -212,6 +212,34 @@ function reportDownload (snapshot) {
     
     
     // Non-DPR List
+    if(values.type != "DPR" && values.lunch != null) {
+        var lunchRows = [
+            //{"0": values.lunch}
+            {"0": "LUNCH LENGTH (Minutes): ", "1": values.lunch}
+        ]
+        var lunchCols= [
+            //{title: "LUNCH LENGTH (Minutes)", datakey: "lunch"},
+            {datakey: "0"},
+            {datakey: "1"}
+        ];
+
+        doc.autoTable(lunchCols, lunchRows, {
+            theme: "grid",
+            startY: doc.autoTable.previous.finalY+5,
+            styles: {overflow: 'linebreak', fontSize: 8},
+            fontSize: 8,
+            showHeader: "never",
+            margin: {horizontal: 20},
+            columnStyles: {text: {columnWidth: 'auto'}},
+            createdCell: function(cell, dataRows) {
+                if(dataRows.column.index === 0) { 
+                    cell.styles.fontStyle = 'bold'; 
+                    cell.styles.fillColor = [178, 8, 175]; // 26, 188, 156
+                    cell.styles.textColor = [255, 255, 255];
+                }
+            }
+        });
+    }
     for(var i = 0; values.list != null && i < values.list.length; i++) {
         if(values.list[i].type != null) {
            switch(values.list[i].type) {
