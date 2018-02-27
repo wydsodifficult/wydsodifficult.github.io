@@ -20,7 +20,8 @@ $.grayLight =     '#818a91';
 $.grayLighter =   '#d1d4d7';
 $.grayLightest =  '#f8f9fa';
 
-'use strict';``
+'use strict';
+``
 
 /****
 * MAIN NAVIGATION
@@ -1422,9 +1423,19 @@ function viewTemplates() {
             templateButton.onclick = function() {
                 toastr["info"]("Viewing: " + childSnapshot.key);
                 if(access < 3) document.getElementById("button-template-modal-edit").setAttribute("style", "display:inline");
+                var childFields;
+                var lunchy = childSnapshot.val().lunch;
                 var templateFields = document.getElementById("view-modal-template-fields");
-                templateFields.innerHTML = "<h5 id='template-modal-title'>" + childSnapshot.key + "</h5><input id='template-modal-title-value' value='" + childSnapshot.key + "' style='display:none'><input id='template-modal-count' value='" + (childSnapshot.numChildren()-1) + "' style='display:none'><div class='input-group mb-1'><span class='input-group-addon'><i class='fa fa-star'></i></span><input disabled id='template-modal-short-title' class='form-control' value='" + childSnapshot.val().short + "'></div><hr>";
-                for(var i = 0; i < childSnapshot.numChildren()-1; i++) {
+                if(lunchy == null || lunchy == false) {
+                    if(lunchy == null) childFields = childSnapshot.numChildren()-1;
+                    else childFields = childSnapshot.numChildren()-2;
+                    templateFields.innerHTML = "<h5 id='template-modal-title'>" + childSnapshot.key + "</h5><input id='template-modal-title-value' value='" + childSnapshot.key + "' style='display:none'><input id='template-modal-count' value='" + (childFields) + "' style='display:none'><div class='input-group mb-1'><span class='input-group-addon'><i class='fa fa-star'></i></span><input disabled id='template-modal-short-title' class='form-control' value='" + childSnapshot.val().short + "'></div><div>Include Lunch?<label class='switch switch-text switch-pill switch-primary'><input id='template-modal-toggle-lunch' type='checkbox' class='switch-input'><span class='switch-label'data-on='YES' data-off='NO'></span><span class='switch-handle'></span></label></div><hr>";
+                }
+                else {
+                    childFields = childSnapshot.numChildren()-2;
+                    templateFields.innerHTML = "<h5 id='template-modal-title'>" + childSnapshot.key + "</h5><input id='template-modal-title-value' value='" + childSnapshot.key + "' style='display:none'><input id='template-modal-count' value='" + (childFields) + "' style='display:none'><div class='input-group mb-1'><span class='input-group-addon'><i class='fa fa-star'></i></span><input disabled id='template-modal-short-title' class='form-control' value='" + childSnapshot.val().short + "'></div><div>Include Lunch?<label class='switch switch-text switch-pill switch-primary'><input id='template-modal-toggle-lunch' type='checkbox' class='switch-input' checked><span class='switch-label'data-on='YES' data-off='NO'></span><span class='switch-handle'></span></label></div><hr>";
+                }
+                for(var i = 0; i < childFields; i++) {
                     (function(i){
                         if(childSnapshot.val()[i].type != null) {
                             var tempDiv = document.createElement("div");
@@ -1740,11 +1751,12 @@ $('#button-template-modal-save').on('click', function() {
     }
     var templatePath = 'company/' + companyKey + '/list/' + title + '/';
     updateEverything[templatePath + 'short'] = document.getElementById("template-modal-short-title").value;
+    updateEverything[templatePath + 'lunch'] = document.getElementById("template-modal-toggle-lunch").checked;
     for(var i = 0; actualCount < count; i++){
         if(document.getElementById("line-modal-div-" + i) != null) {
             console.log("Checking: " + i + " count: " + count);
             if(document.getElementById("view-template-checked-" + i) == null){
-                console.log("Choice: " + document.getElementById("choice-modal-input-" + i));
+                console.log("Choice: " + document.getElementById("choice-modal-input-" + i).value);
                 var thisType = document.getElementById("choice-modal-input-" + i).value;
                 updateEverything[templatePath + actualCount + "/type"] = thisType;
                 switch(thisType) {
@@ -2159,6 +2171,7 @@ $('#button-template-save').on('click',function() {
     var templatePath = 'company/' + companyKey + '/list/' + title + '/';
     var updateEverything = {};
     updateEverything[templatePath + 'short'] = document.getElementById("template-short-title").value;
+    updateEverything[templatePath + 'lunch'] = document.getElementById("template-toggle-lunch").checked;
     for(var i = 0; actualCount < count; i++){
         if(document.getElementById("line-div-" + i) != null) {
             var thisType = document.getElementById("choice-input-" + i).value;
@@ -2404,17 +2417,23 @@ $('#button-save-report').on('click', function() {
             tempDiv = document.getElementById("report-location-" + tempCount);
         }
     }
+    // If non-DPR
     else {
+        //updateEverything[path + 'tasks/' + tempCount + '/testing'] = document.getElementById('report-testing-' + tempCount).value;
+        updateEverything[path + 'lunch'] = document.getElementById('report-lunch').value;
         var i = 0;
         var templateLines = document.getElementById('report-' + i);
         while(templateLines != null) {
+            // Title
             if(templateLines.tagName == 'H5') {
                 //updateEverything[path + 'list/' + i + '/title'] = true;
                 updateEverything[path + 'list/' + i + '/type'] = "title";
                 updateEverything[path + 'list/' + i + '/work'] = templateLines.innerText;
             }
+            // Non-title fields
             else {
                 //updateEverything[path + 'list/' + i + '/title'] = false;
+                // Cost Code FIllable
                 if(document.getElementById("report-code-fillable-" + i) != null) {
                     updateEverything[path + 'list/' + i + '/type'] = "costCodeFillable";
                     updateEverything[path + 'list/' + i + '/work'] = document.getElementById("report-" + i).innerHTML;
@@ -2426,6 +2445,7 @@ $('#button-save-report').on('click', function() {
                         updateEverything[path + 'list/' + i + '/code'] = temp.value;
                     }
                 }
+                // Cost Code
                 else {
                     updateEverything[path + 'list/' + i + '/type'] = "costCode";
                     updateEverything[path + 'list/' + i + '/code'] = document.getElementById("report-code-" + i).value;
@@ -2503,10 +2523,27 @@ function newReportSelect(name) {
         document.getElementById("div-report-dpr").setAttribute('style', 'display:none');
         firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/list/' + name).once('value').then(function(snapshot) {
             var fields = snapshot.val();
+            var lunch = fields.lunch;
+            var childLength;
+            if(lunch) {
+                console.log("showing: " + lunch + " " + snapshot.numChildren());
+                childLength = snapshot.numChildren()-2;
+                document.getElementById("template-lunch").style = "display:inline";
+            }
+            else if(lunch == false){
+                console.log("hiding: " + lunch + " " + snapshot.numChildren());
+                childLength = snapshot.numChildren()-2;
+                document.getElementById("template-lunch").style = "display:none";
+            }
+            else{
+                console.log("no lunch");
+                childLength = snapshot.numChildren()-1;
+                document.getElementById("template-lunch").style = "display:none";
+            }
             document.getElementById("template-short").value = fields.short;
-            for(var i=0; i < snapshot.numChildren()-1; i++) {
+            for(var i=0; i < childLength; i++) {
                 if(fields[i].title == null) {
-                    console.log("i: " + i);
+                    console.log("i: " + i + " childlength: " + childLength);
                     console.log(fields[i]);
                     switch(fields[i].type) {
                         case "title":
