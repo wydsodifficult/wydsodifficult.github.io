@@ -1769,7 +1769,10 @@ $('#button-template-modal-save').on('click', function() {
                         break;
                     case 'costCodeFillable':
                         updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-modal-input-" + i).value;
-                        updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-fillable-modal-input-" + i).value;
+                        if(document.getElementById("code-fillable-modal-input-" + i) == null) {
+                            updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-modal-input-" + i).value;
+                        }
+                        else updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-fillable-modal-input-" + i).value;
                         break;
                 }
             }
@@ -2420,6 +2423,7 @@ $('#button-save-report').on('click', function() {
     // If non-DPR
     else {
         //updateEverything[path + 'tasks/' + tempCount + '/testing'] = document.getElementById('report-testing-' + tempCount).value;
+        if(document.getElementById('report-lunch').value != null && document.getElementById('report-lunch').value != '')
         updateEverything[path + 'lunch'] = document.getElementById('report-lunch').value;
         var i = 0;
         var templateLines = document.getElementById('report-' + i);
