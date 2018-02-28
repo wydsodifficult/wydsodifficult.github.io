@@ -1769,7 +1769,10 @@ $('#button-template-modal-save').on('click', function() {
                         break;
                     case 'costCodeFillable':
                         updateEverything[templatePath + actualCount + "/work"] = document.getElementById("work-modal-input-" + i).value;
-                        updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-fillable-modal-input-" + i).value;
+                        if(document.getElementById("code-fillable-modal-input-" + i) == null) {
+                            updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-modal-input-" + i).value;
+                        }
+                        else updateEverything[templatePath + actualCount + "/code"] = document.getElementById("code-fillable-modal-input-" + i).value;
                         break;
                 }
             }
