@@ -644,7 +644,6 @@
                 var data = $('#view-table').DataTable().row($(this)).data();
                 currentDataRow = $('#view-table').DataTable().row($(this));
                 console.log(data);
-                console.log("Getting data from: " + 'company/' + localStorage["WYDuserCompanyID"] + '/report/' + data[5]);
                 firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report/' + data[5]).once('value').then(function(snapshot) {
                     document.getElementById("button-view-download").onclick = function(){reportDownload(snapshot)};
                     document.getElementById("view-hidden-id").value = snapshot.key;

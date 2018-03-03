@@ -2425,6 +2425,14 @@ $('#button-save-report').on('click', function() {
         //updateEverything[path + 'tasks/' + tempCount + '/testing'] = document.getElementById('report-testing-' + tempCount).value;
         if(document.getElementById('report-lunch').value != null && document.getElementById('report-lunch').value != '')
         updateEverything[path + 'lunch'] = document.getElementById('report-lunch').value;
+        else if(document.getElementById('report-lunch').value == '') {
+            if(localStorage["WYDuserCompanyLunch"] != '' && localStorage["WYDuserCompanyLunch"] != null) {
+                updateEverything[path + 'lunch'] = localStorage["WYDuserCompanyLunch"];
+            }
+            else {
+                updateEverything[path + 'lunch'] = 30;
+            }
+        }
         var i = 0;
         var templateLines = document.getElementById('report-' + i);
         while(templateLines != null) {
@@ -2951,6 +2959,9 @@ function getUserData(input) {
             if(data.settings == null || data.settings.landing == null || data.settings.landing == "employees") window.location = "employees-dashboard.html";
             else window.location = "operations-dashboard.html";
         }
+    });
+    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/info/lunch").once('value').then(function(snapshot) {
+        localStorage["WYDuserCompanyLunch"] = snapshot.val();
     });
 }
 
