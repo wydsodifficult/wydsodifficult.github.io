@@ -2931,6 +2931,17 @@ $('#button-settings-unused-save').on('click', function() {
 /* ================================================== */
 /* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
+function checkVersion(user) {
+    
+    let currentVersion = "04022018";
+    if(localStorage["WYDversion"] != currentVersion) {
+        if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null || localStorage["WYDversion"]==null) {
+            getUserData();
+            localStorage["WYDversion"] = currentVersion;
+        }
+    }
+}
+
 function getUserData(input) {
     localStorage["WYDuserID"] = firebase.auth().currentUser.uid;
     toastr["info"]("Updating Local Storage for:" + localStorage["WYDuserID"]);
@@ -2964,7 +2975,6 @@ function getUserData(input) {
         localStorage["WYDuserCompanyLunch"] = snapshot.val();
     });
 }
-
 
 // Function to Enable/disable user inputs in a given div
 function enableInputs(enable, divName) {
@@ -3000,6 +3010,8 @@ $('#logout').add('#logout-sidebar').on('click', function() {
         localStorage.removeItem('WYDuserID');
         localStorage.removeItem('WYDviewClicked');
         localStorage.removeItem('WYDuserUnused');
+        localStorage.removeItem('WYDversion');
+        localStorage.removeItem('WYDuserCompanyLunch');
         localStorage.removeItem('WYDadditionalEdit');
         console.log("Logging Out");
         //alert("You Have Successfully Signed Out!");

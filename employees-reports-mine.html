@@ -492,6 +492,7 @@
     <!-- Comment out unneeded navbars -->
     <script>
         $(document).ready(function () {
+            let debug = -1;
             $("#footer").load("footer.html");
             //$("#navbar").load("god-navbar.html");
             
@@ -547,10 +548,32 @@
             }
             else {
                 firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().limitToLast(25).once('value').then(function(snapshot) {
-                    snapshot.forEach(function(childSnapshot){
+                    // localStorage["WYDviewClicked"] saves how many times a load more button is clicked
+                    localStorage["WYDviewClicked"] = 1;
+                    let keysArray = Object.keys(snapshot.val()).sort().reverse();
+                    let resultsArray = keysArray.map((key) => snapshot.val()[key]);
+                    if(debug == 0 || debug == 1) {
+                        console.log(keysArray);
+                        console.log(resultsArray);
+                    }
+                    for(let i = 0; i < keysArray.length; i++) {
+                        if(debug == 0 || debug == 1) {
+                            console.log(keysArray[i]);
+                        }
+                        dataTable.row.add([ resultsArray[i].timeStart, resultsArray[i].type, resultsArray[i].jobNum, convertDate(resultsArray[i].date),localStorage["WYDuserNameFull"], keysArray[i]]).draw();
+                        //console.log(document.getElementById("view-search-last").value);
+                        if(document.getElementById("view-search-last").value == "") document.getElementById("view-search-last").value = keysArray[i];
+                        if(keysArray[i] < document.getElementById("view-search-last").value) {
+                        if(debug == 0 || debug == 1) {
+                            console.log("Updated from " + document.getElementById("view-search-last").value + " to " + keysArray[i]);
+                        }
+                        document.getElementById("view-search-last").value = keysArray[i];
+                        }
+                    }
+        /*            snapshot.forEach(function(childSnapshot){
                         dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                         document.getElementById("view-search-last").value = childSnapshot.key;
-                    });
+                    });  */
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
                     dataTable.order([0, 'dec']).draw();
                 });
@@ -559,7 +582,44 @@
             
             // Increase view by 25
             $('#button-view-increase').on('click', function() {
-                firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().startAt(document.getElementById("view-search-last").value).limitToFirst(25).once('value').then(function(snapshot) {
+                let last = document.getElementById("view-search-last").value;
+                if(debug == 0 || debug == 2) {
+                    console.log("View Clicked: " + localStorage["WYDviewClicked"]);
+                    console.log("Last: " + last);
+                }
+                //console.log(document.getElementById("view-search-last").value);
+                if(localStorage["WYDviewClicked"] > 0) {
+                    firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().endAt(last).limitToLast(26).once('value').then(function(snapshot) {
+                        let keysArray = Object.keys(snapshot.val()).sort().reverse().slice(1);
+                        let resultsArray = keysArray.map((key) => snapshot.val()[key]);
+                        if(debug == 0 || debug == 2) {
+                            console.log(keysArray);
+                            console.log(resultsArray);
+                        }
+                        for(let i = 0; i < keysArray.length; i++) {
+                            if(debug == 0 || debug == 2) {
+                                console.log(keysArray[i]);
+                            }
+                            dataTable.row.add([ resultsArray[i].timeStart, resultsArray[i].type, resultsArray[i].jobNum, convertDate(resultsArray[i].date),localStorage["WYDuserNameFull"], keysArray[i]]).draw();
+                            document.getElementById("view-search-last").value = keysArray[i];
+                        }
+            /*            var i = 0;
+                        i = snapshot.numChildren();
+                        snapshot.forEach(function(childSnapshot){
+                            //console.log(childSnapshot.key);
+                            if(i!=0 && childSnapshot.key != last){
+                               dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate),childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                                document.getElementById("view-search-last").value = childSnapshot.key;
+                            }
+                        }); */
+                        // Set "WYDviewClicked" to -1 if the end of the list
+                        if(keysArray.length < 25) localStorage["WYDviewClicked"] = -1;
+                        else localStorage["WYDviewClicked"]++;
+                        //console.log("View Clicked" + localStorage["WYDviewClicked"]);
+                        document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
+                    });
+                }
+        /*        firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().startAt(document.getElementById("view-search-last").value).limitToFirst(25).once('value').then(function(snapshot) {
                     var i = 0;
                     snapshot.forEach(function(childSnapshot){
                         if(i!=0){
@@ -569,7 +629,7 @@
                     });
                     document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
                     dataTable.order([0, 'dec']).draw();
-                });
+                }); */
             });
             
             // Increase view for searched
@@ -1086,14 +1146,40 @@
                 document.getElementById("view-search-count").value = 25;
                 dataTable.clear()
                     .draw();
-                firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().limitToFirst(25).once('value').then(function(snapshot) {
+                firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().limitToLast(25).once('value').then(function(snapshot) {
+                    // localStorage["WYDviewClicked"] saves how many times a load more button is clicked
+                    localStorage["WYDviewClicked"] = 1;
+                    let keysArray = Object.keys(snapshot.val()).sort().reverse();
+                    let resultsArray = keysArray.map((key) => snapshot.val()[key]);
+                    if(debug == 0 || debug == 1) {
+                        console.log(keysArray);
+                        console.log(resultsArray);
+                    }
+                    for(let i = 0; i < keysArray.length; i++) {
+                        if(debug == 0 || debug == 1) {
+                            console.log(keysArray[i]);
+                        }
+                        dataTable.row.add([ resultsArray[i].timeStart, resultsArray[i].type, resultsArray[i].jobNum, convertDate(resultsArray[i].date),localStorage["WYDuserNameFull"], keysArray[i]]).draw();
+                        //console.log(document.getElementById("view-search-last").value);
+                        if(document.getElementById("view-search-last").value == "") document.getElementById("view-search-last").value = keysArray[i];
+                        if(keysArray[i] < document.getElementById("view-search-last").value) {
+                        if(debug == 0 || debug == 1) {
+                            console.log("Updated from " + document.getElementById("view-search-last").value + " to " + keysArray[i]);
+                        }
+                        document.getElementById("view-search-last").value = keysArray[i];
+                        }
+                    }
+                    document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
+                    dataTable.order([0, 'dec']).draw();
+                });
+        /*        firebase.database().ref('user/' + localStorage["WYDuserID"] + '/history').orderByKey().limitToFirst(25).once('value').then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot){
                             dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().type, childSnapshot.val().jobNum, childSnapshot.val().date, localStorage["WYDuserNameFull"], childSnapshot.key]).draw();
                             document.getElementById("view-search-last").value = childSnapshot.key;
                     });
                     document.getElementById("view-viewing").innerText = dataTable.rows().count() + " Most Recent";
                     dataTable.order([0, 'dec']).draw();
-                });
+                }); */
                 document.getElementById("button-view-increase").setAttribute("style", "display:true");
                 document.getElementById("button-view-increase-type").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-num").setAttribute("style", "display:none");
@@ -1133,7 +1219,7 @@
           if (user) {
             // User is signed in.
             //toastr["info"]("user logged in");
-            if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
+            checkVersion(user);
           } else {
             // No user is signed in.
             window.location="login.html";
