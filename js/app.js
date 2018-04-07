@@ -2294,7 +2294,7 @@ $("#report-select-job-num").change(function(){
 // Function run to calculate the difference between start and end times in "x days y hours z min"
 // calculateTimeDiff(template)
 // Operations-reports-new & Employees-reports-new
-function calculateTimeDiff(template) {
+function calculateTimeDiff(template, event) {
     // If template is 0 then being used in New Report
     if(template==0) {
         var start = document.getElementById("report-time-start-input");
@@ -2302,6 +2302,10 @@ function calculateTimeDiff(template) {
         var total = document.getElementById("report-time-total");
         var startDate = new Date(start.value);
         var endDate = new Date(end.value);
+        if(startDate == "Invalid Date") startDate = new Date();
+        if(endDate == "Invalid Date") endDate = new Date();
+        if(startDate == "Invalid Date") startDate = new Date();
+        if(endDate == "Invalid Date") endDate = new Date();
         var totalDate = endDate - startDate; // Number in ms
         totalDate = totalDate/1000; // 1000ms per s
         var totalSec = Math.floor(totalDate%60);
@@ -2336,6 +2340,7 @@ $('#button-cancel-report').on('click', function() {
 // saveNewReport()
 // Operations-reports-new & Employees-reports-new
 $('#button-save-report').on('click', function() {
+    calculateTimeDiff(0);
     console.log("submittedDate: " + document.getElementById('report-date').innerText);
     document.getElementById('loading').setAttribute('style', 'display:true');
     var counts = 0;
@@ -2933,7 +2938,7 @@ $('#button-settings-unused-save').on('click', function() {
 // Function to save all user data into localStorage
 function checkVersion(user) {
     
-    let currentVersion = "04022018";
+    let currentVersion = "04062018";
     if(localStorage["WYDversion"] != currentVersion) {
         if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null || localStorage["WYDversion"]==null) {
             getUserData();

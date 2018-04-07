@@ -265,7 +265,9 @@
                                     <input type="datetime" class="form-control"></input>
                                 </div>
                                 <label for="report-time-start">Start Time</label>
-                                <div class="input-group mb-1 date" id='report-time-start' onblur="calculateTimeDiff(0)">
+                                <div class="input-group mb-1 date" id='report-time-start-picker'>
+                                </div>
+                                <div style="display:none" class="input-group mb-1 date" id='report-time-start' onblur="calculateTimeDiff(0)">
                                     <span class="input-group-addon"><i class="icon-clock"></i></span>
                                     <input type="datetime" class="form-control" id="report-time-start-input"/>
                                     <span class="input-group-addon">
@@ -273,7 +275,9 @@
                                     </span>
                                 </div>
                                 <label for="report-time-end">End Time</label>
-                                <div class="input-group mb-1 date" id='report-time-end' onblur="calculateTimeDiff(0)">
+                                <div class="input-group mb-1 date" id='report-time-end-picker'>
+                                </div>
+                                <div style="display:none" class="input-group mb-1 date" id='report-time-end' onblur="calculateTimeDiff(0)">
                                     <span class="input-group-addon"><i class="icon-clock"></i></span>
                                     <input type="datetime" class="form-control" id="report-time-end-input"/>
                                     <span class="input-group-addon">
@@ -403,7 +407,7 @@
                                 <label for="report-iqr">Issues / Questions / Remarks</label>
                                 <div class="input-group mb-1">
                                     <span class="input-group-addon"><i class="icon-emotsmile"></i></span>
-                                    <textarea class="form-control"  id="report-iqr" placeholder="Any Issues Should Be Reported IMMEDIATELY"></textarea>
+                                    <textarea rows="4" class="form-control"  id="report-iqr" placeholder="Any Issues Should Be Reported IMMEDIATELY"></textarea>
                                 </div>
                                 <div id="template-lunch" style="display:none">
                                     <label for="report-lunch">Lunch Length (Minutes)</label>
@@ -479,6 +483,10 @@
                 document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
                 document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
             }
+            $('#report-dpr-techs').select2();
+            $('#report-foreman').select2({
+                placeholder: "Select Your Foreman"
+            });
         });
     </script>
     
@@ -501,20 +509,26 @@
     
     <script>
        $(function () {
-            $('#report-dpr-techs').select2({
-            });
-            $('#report-time-start').datetimepicker({
-                //inline: true,
+            //$("#report-time-start-input").mask("99/99/9999 9:99 aa");
+            //$("#report-time-end-input").mask("99/99/9999 9:99 aa");
+            $('#report-time-start-picker').datetimepicker({
+                inline: true,
                 sideBySide: true,
                 showTodayButton: true
             });
-            $('#report-time-end').datetimepicker({
-                //inline: true,
+            $('#report-time-end-picker').datetimepicker({
+                inline: true,
                 sideBySide: true,
                 showTodayButton: true
             });
-            $("#report-time-start-input").mask("99/99/9999 9:99 aa");
-            $("#report-time-end-input").mask("99/99/9999 9:99 aa");
+            $('#report-time-start-picker').on('dp.change', function(event) {
+                document.getElementById("report-time-start-input").value = event.date.format("MM/DD/YYYY h:mm a");
+                calculateTimeDiff(0);
+            });
+            $('#report-time-end-picker').on('dp.change', function(event) {
+                document.getElementById("report-time-end-input").value = event.date.format("MM/DD/YYYY h:mm a");
+                calculateTimeDiff(0);
+            });
        });
     </script>
 
