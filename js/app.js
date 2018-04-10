@@ -2302,10 +2302,6 @@ function calculateTimeDiff(template, event) {
         var total = document.getElementById("report-time-total");
         var startDate = new Date(start.value);
         var endDate = new Date(end.value);
-        if(startDate == "Invalid Date") startDate = new Date();
-        if(endDate == "Invalid Date") endDate = new Date();
-        if(startDate == "Invalid Date") startDate = new Date();
-        if(endDate == "Invalid Date") endDate = new Date();
         var totalDate = endDate - startDate; // Number in ms
         totalDate = totalDate/1000; // 1000ms per s
         var totalSec = Math.floor(totalDate%60);
@@ -2316,9 +2312,11 @@ function calculateTimeDiff(template, event) {
         totalDate = totalDate/24;
         var totalDay = Math.floor(totalDate);
         total.value = (totalDay + " days " + totalHour + " hours " + totalMin + " minutes");
+        console.log("start: " + startDate + ", end: " + endDate + ", total: " + total.value);
         
         // Enables the Save Button   
-        if(!isNaN(totalMin))document.getElementById("button-save-report").disabled = false;
+    //    if(!isNaN(totalMin))document.getElementById("button-save-report").disabled = false;
+        if(startDate != "Invalid Date" && endDate != "Invalid Date")document.getElementById("button-save-report").disabled = false;
     }
 }
 
@@ -2938,7 +2936,7 @@ $('#button-settings-unused-save').on('click', function() {
 // Function to save all user data into localStorage
 function checkVersion(user) {
     
-    let currentVersion = "04062018";
+    let currentVersion = "04092018";
     if(localStorage["WYDversion"] != currentVersion) {
         if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null || localStorage["WYDversion"]==null) {
             getUserData();
