@@ -2311,12 +2311,15 @@ function calculateTimeDiff(template, event) {
         var totalHour = Math.floor(totalDate%24);
         totalDate = totalDate/24;
         var totalDay = Math.floor(totalDate);
-        total.value = (totalDay + " days " + totalHour + " hours " + totalMin + " minutes");
+        if(startDate != "Invalid Date" && endDate != "Invalid Date" && !isNaN(totalMin)) {
+            console.log("It's all G");
+            document.getElementById("button-save-report").disabled = false;  
+            total.value = (totalDay + " days " + totalHour + " hours " + totalMin + " minutes");
+        }
         console.log("start: " + startDate + ", end: " + endDate + ", total: " + total.value);
         
         // Enables the Save Button   
     //    if(!isNaN(totalMin))document.getElementById("button-save-report").disabled = false;
-        if(startDate != "Invalid Date" && endDate != "Invalid Date")document.getElementById("button-save-report").disabled = false;
     }
 }
 
@@ -2326,7 +2329,7 @@ function calculateTimeDiff(template, event) {
 $('#button-cancel-report').on('click', function() {
     document.getElementById("report-time-start-input").value = "";
     document.getElementById("report-time-end-input").value = "";
-    document.getElementById("report-time-total").value = "8";
+    document.getElementById("report-time-total").value = "Not Yet Set";
     document.getElementById("template-holder").setAttribute('style', 'display:none');
     document.getElementById("template-reselect").setAttribute('style', 'display:none');
     document.getElementById("template-hide-select").setAttribute('style', 'display:none');
@@ -2338,13 +2341,15 @@ $('#button-cancel-report').on('click', function() {
 // saveNewReport()
 // Operations-reports-new & Employees-reports-new
 $('#button-save-report').on('click', function() {
+    let debug = true;
     calculateTimeDiff(0);
-    console.log("submittedDate: " + document.getElementById('report-date').innerText);
+    if(debug) console.log("submittedDate: " + document.getElementById('report-date').innerText);
     document.getElementById('loading').setAttribute('style', 'display:true');
     var counts = 0;
     var companyKey = localStorage["WYDuserCompanyID"];
     var updateEverything = {};
     var newReport = firebase.database().ref('company/' + companyKey + '/report').push();
+    if(debug) console.log(newReport);
     var path = 'company/' + companyKey + '/report/' + newReport.key + '/';
     var userPath = 'user/' + localStorage["WYDuserID"] +    '/history/' + newReport.key + '/';
     updateEverything[userPath + 'reportId'] = newReport.key;
@@ -2386,7 +2391,7 @@ $('#button-save-report').on('click', function() {
         var tempDiv = document.getElementById("report-tech-0");
         var tempCount = 0;
         while (tempDiv != null) {
-            console.log("Looking for " + tempCount);
+            if(debug) console.log("Looking for " + tempCount);
             updateEverything[path + 'employees/' + tempCount + '/name'] = tempDiv.innerText;
             updateEverything[path + 'employees/' + tempCount + '/id'] = tempDiv.value;
             updateEverything[path + 'employees/' + tempCount + '/hours'] = document.getElementById('report-tech-hours-' + tempCount).value;
@@ -2482,9 +2487,14 @@ $('#button-save-report').on('click', function() {
     //updateEverything[path + ''] = 
     
     // Send All Date to Firebase
+    console.log(updateEverything);
     firebase.database().ref().update(updateEverything).then(function() {
        $('#button-cancel-report').trigger('click');
         toastr["info"](newReport.key + " has successfully been submitted!");
+    })    
+    .catch(function(err) {
+        toastr["error"](newReport.key + " has encountered an ERROR:<br>" + err);
+        console.log('error', err);
     });
 });
 
@@ -2499,9 +2509,10 @@ function newReportSelect(name) {
     document.getElementById("template-select").setAttribute('style', 'display:none');
     document.getElementById("report-date").innerHTML = Date();
     document.getElementById("template-type").value = name;
+    document.getElementById("template-lunch").style = "display:none";
     document.getElementById("template-type-title").innerText = name;
     if(name == "DPR") {
-        console.log("lol dumpit");
+        console.log("lol dumpit DPR");
         var templateFields = document.getElementById("template-fields");
         var reportTechs = document.getElementById("report-dpr-techs");
         var reportForeman = document.getElementById("report-foreman");
@@ -2761,7 +2772,7 @@ function newReportSelect(name) {
     }
 }
 
-// Function run when a the Report Reselect Button is clicked
+// Function run when the Report Reselect Button is clicked
 // newReportReselect()
 // Operations-reports-new & Employees-reports-new
 function newReportReselect() {
@@ -2935,8 +2946,7 @@ $('#button-settings-unused-save').on('click', function() {
 /* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
 function checkVersion(user) {
-    
-    let currentVersion = "04092018";
+    let currentVersion = "alpha04112018";
     if(localStorage["WYDversion"] != currentVersion) {
         if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null || localStorage["WYDversion"]==null) {
             getUserData();
