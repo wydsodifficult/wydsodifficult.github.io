@@ -1,0 +1,541 @@
+<!--
+ * WYD - Operations New Template
+ * @version v0.17.08.08
+ * Copyright (c) 2017 WYD
+ * NOTE: Login redirect is commented out
+ -->
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="WYD - What'd You Do?">
+    <meta name="author" content="Higashi">
+    <meta name="keyword" content="WYD, What'd You Do?, Whatd You Do">
+    <link rel="shortcut icon" href="img/WYD_logo.png">
+
+    <title>WYD-Reports New</title>
+
+    <!-- Icons -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/simple-line-icons.css" rel="stylesheet">
+
+    <!-- Premium Icons -->
+    <link href="css/glyphicons.css" rel="stylesheet">
+    <link href="css/glyphicons-filetypes.css" rel="stylesheet">
+    <link href="css/glyphicons-social.css" rel="stylesheet">
+    
+    <!-- Main styles for this application -->
+    <link href="css/style.css" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+    <script src="js/fbinit.js"></script>
+
+</head>
+
+<!-- BODY options, add following classes to body to change options
+
+// Sidebar options
+1. '.sidebar-fixed'					- Fixed Sidebar
+2. '.sidebar-hidden'				- Hidden Sidebar
+3. '.sidebar-off-canvas'		- Off Canvas Sidebar
+4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
+
+-->
+
+<body class="app header-fixed sidebar-fixed">
+    
+    <!-- Navigation Header for Operations-->     
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">≡</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <a class="navbar-brand" href="operations-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">≡</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cubes"></i>OPERATIONS
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout-sidebar" class="py-1 px-2" href="#" ><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header>
+    
+    <!-- Navigation Header for employees
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">≡</button>
+        <span class="nav navbar-nav py-1 px-2 hidden-lg-up">
+            <i class="fa fa-paw"></i>EMPLOYEES
+        </span>
+        <a class="navbar-brand" href="employees-dashboard.html"></a>
+        <ul class="nav navbar-nav hidden-md-down b-r-1">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">≡</a>
+            </li>
+
+        </ul>
+        <span class="nav navbar-nav float-left py-1 px-2 hidden-md-down">
+            <i class="fa fa-cube"></i>EMPLOYEES
+        </span>
+        <span class="nav navbar-toggler-right float-right hidden-md-down">
+            <a id="logout" class="py-1 px-2" href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Logout</a>
+        </span>
+
+    </header>
+    -->
+
+    <div class="app-body">
+        <div class="sidebar">
+
+            <div class="sidebar-header">
+                <div>
+                   <br>
+                    <strong id="full-name">SHANIQUA JONES</strong>
+                </div>
+                <div class="text-muted">
+                    <small id="job-title">Seated User</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- This nav is hidden if employees-navbar is loaded -->
+                <ul class="nav" id="operations-sidebar">
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees-dashboard.html"> Switch to Employee View</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="operations-dashboard.html">
+                        <i class="icon-speedometer"></i>DASHBOARD</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i>REPORTS</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports-new.html"><i class="icon-doc"></i>  New</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports.html"><i class="icon-docs"></i>  View</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-reports-templates.html"><i class="icon-wrench"></i>  Templates</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-home"></i>HOUSEKEEPING</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-jobs.html"><i class="icon-basket-loaded"></i>  Jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-seats.html"><i class="icon-puzzle"></i>  Seats</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="operations-company.html"><i class="icon-picture"></i>  Company Profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="icon-settings"></i>SETTINGS</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+                
+                <!-- This nav is hidden if operations-navbar is loaded -->
+                <ul class="nav" id="employees-sidebar">
+                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="operations-dashboard.html"> Switch to Operations View</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees-dashboard.html">
+                        <i class="icon-speedometer"></i>DASHBOARD</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i>REPORTS</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports-new.html"><i class="icon-doc"></i>  New</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports-mine.html"><i class="icon-book-open"></i>  View Mine</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-reports.html"><i class="icon-docs"></i>  View All</a>
+                            </li>
+                        </ul>
+                    </li>
+                   <li class="nav-item">
+                        <a class="nav-link" href="employees-profile.html">
+                        <i class="icon-user"></i>MY PROFILE</a>
+                    </li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-home"></i>OPERATIONAL</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-jobs.html"><i class="icon-basket-loaded"></i>  Jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-list.html"><i class="icon-puzzle"></i>  Employee List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="employees-company.html"><i class="icon-picture"></i>  Company Profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="icon-settings"></i>SETTINGS</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#"><i class="icon-logout"></i>LOGOUT</a>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main content -->
+        <main class="main">
+
+            <div class="container-fluid">
+
+                <div class="animated fadeIn">
+                    <h1>New Report</h1>
+                    <hr>
+                    <div>
+                        <div class="card">
+                            <div class="card-block" id="template-select">
+                                <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportSelect('DPR')">Daily Project Report</button> 
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card">
+                            <div class="card-block" id="template-reselect">
+                                <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportReselect()">Choose A Different Template</button> 
+                            </div>
+                            <div class="card-block" id="template-hide-select">
+                                <button id="button-report-dpr" type="button" class="btn btn-secondary btn-block btn-lg" onclick="newReportHideSelect()">Hide Templates</button> 
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="template-holder" style="diplay:none">
+                        <!--div id="template-holder" class="card card-accent-primary" style="diplay:none"-->
+                            <div class="card-header" id="template-type-title"></div>
+                            <div id="template-hidden-fields" style="display:none">
+                                <input id="template-type" type="text">
+                                <input id="template-short" type="text">
+                                <select id="report-select-job-id"></select>
+                            </div>
+                            <div class="card-block" id="template-defaults">
+                                <h5>Job Info</h5>
+                                <hr>
+                                <label for="report-select-job-name">Job Name</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-briefcase"></i></span>
+                                    <select class="form-control"  id="report-select-job-name"></select>
+                                </div>
+                                <label for="report-select-job-num">Job Number</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon">#</span>
+                                    <select class="form-control"  id="report-select-job-num"></select>
+                                </div>
+                                <label for="report-date" style="display:none">Date</label>
+                                <div class="input-group mb-1 date" id="report-date" style="display:none">
+                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                    <input type="datetime" class="form-control"></input>
+                                </div>
+                                <label for="report-time-start">Start Time</label>
+                                <div class="input-group mb-1 date" id='report-time-start-picker'>
+                                </div>
+                                <div style="display:none" class="input-group mb-1 date" id='report-time-start' onblur="calculateTimeDiff(0)">
+                                    <span class="input-group-addon"><i class="icon-clock"></i></span>
+                                    <input type="datetime" class="form-control" id="report-time-start-input"/>
+                                    <span class="input-group-addon">
+                                    <i class="fa fa-hourglass-start"  onfocus="blur();"></i>Click Me!
+                                    </span>
+                                </div>
+                                <label for="report-time-end">End Time</label>
+                                <div class="input-group mb-1 date" id='report-time-end-picker'>
+                                </div>
+                                <div style="display:none" class="input-group mb-1 date" id='report-time-end' onblur="calculateTimeDiff(0)">
+                                    <span class="input-group-addon"><i class="icon-clock"></i></span>
+                                    <input type="datetime" class="form-control" id="report-time-end-input"/>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-hourglass-end"  onfocus="blur();"></i>Click Me!
+                                    </span>
+                                </div>
+                                <label for="report-time-total">Total Time (Auto-Calculated)</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-calculator"></i></span>
+                                    <input type="text" class="form-control"  id="report-time-total" value="Not Yet Set" readonly></input>
+                                </div>
+                                <label for="report-contractor">Job Contractor (Uneditable)</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-wrench"></i></span>
+                                    <input readonly class="form-control"  id="report-contractor"></input>
+                                </div>
+                                <label for="report-foreman">Select Foreman</label>
+                                <div class="foreman-select input-group mb-1">
+                                    <span class="input-group-addon"><i class="fa fa-fort-awesome"></i></span>
+                                    <select class="form-control"  id="report-foreman" placeholder="Select a Foreman"></select>
+                                </div>
+                                <!-- Input Fields for DPR -->
+                                <div id="div-report-dpr" style="display:none">
+                                    <label for="report-dpr-lunch">Lunch Length (Minutes)</label>
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                        <input type="number" id="report-dpr-lunch" value="30" class="form-control">
+                                        </input>
+                                    </div>
+                                    <label for="report-dpr-techs">Select Employees</label>
+                                    <div class="input-group mb-1 employee-select">
+                                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                        <select id="report-dpr-techs" placeholder="Select Your Employees" class="form-control select2-multiple" multiple="" style="80%">
+                                        </select>
+                                    </div>
+                                    <button id="report-tech-hours" type="button" class="btn btn-primary" onclick="reportSetTechHours()">Set Hours for Chosen Employees</button>
+                                    <div id = "report-dpr-techs-hours">
+                                    </div>
+                                    <label for="report-materials-0">Materials / Equipment Needed</label>
+                                    <div class="row">
+                                        <div class="input-group mb-1 col-sm">
+                                            <span class="input-group-addon"><i class="fa fa-shopping-basket"></i></span>
+                                            <input id="report-materials-0" placeholder="Materials Needed" class="form-control">
+                                        </div>
+                                        <div class="input-group mb-1 col-sm">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input id="report-materials-date-0" type="date" placeholder="Date Needed" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div id = "report-dpr-materials">
+                                        <input id="report-dpr-materials-count" style="display:none" value=0></input>
+                                    </div>  
+                                    <button type="button" class="btn btn-primary" onclick="newDPRLine('materials')">Add Another Materials Line</button>
+                                    <div class="row">
+                                        <div class="col-sm mb-1">
+                                            <label for="report-performed-0">Work Performed</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-like"></i></span>
+                                                <input id="report-performed-0" placeholder="Work Performed" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-performed-location-0">Location</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-map"></i></span>
+                                                <input id="report-performed-location-0" placeholder="Location" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id = "report-dpr-performed">
+                                        <input id="report-dpr-performed-count" style="display:none" value=0></input>
+                                    </div>  
+                                    <button  type="button" class="btn btn-primary mb-1" onclick="newDPRLine('performed')">Add Another Work Performed Line</button>
+                                    <h5>Tasks</h5>
+                                    <div class="row">
+                                        <div class="col-sm mb-1">
+                                            <label for="report-location-0">Location</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-globe-alt"></i></span>
+                                                <input id="report-location-0" placeholder="Task Location" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-tr-0">TR Build Out</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                                                <input id="report-tr-0" type="number" placeholder="TR % " class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-pathways-0">Pathways</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-exchange"></i></span>
+                                                <input id="report-pathways-0" type="number" placeholder="Pathways %" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm mb-1">
+                                            <label for="report-roughin-0">Rough In</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-industry"></i></span>
+                                                <input id="report-roughin-0" type="number" placeholder="Rough In %" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-terminations-0">Terminations</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-terminal"></i></span>
+                                                <input id="report-terminations-0" type="number" placeholder="Terminations %" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm mb-1">
+                                            <label for="report-testing-0">Testing</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calculator"></i></span>
+                                                <input id="report-testing-0" type="number" placeholder="Testing %" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id = "report-dpr-tasks">
+                                        <input id="report-dpr-tasks-count" style="display:none" value=0></input>
+                                    </div>  
+                                    <button  type="button" class="btn btn-primary mb-1" onclick="newDPRLine('tasks')">Add Another Tasks Line</button>
+                                </div>
+                                <label for="report-iqr">Issues / Questions / Remarks</label>
+                                <div class="input-group mb-1">
+                                    <span class="input-group-addon"><i class="icon-emotsmile"></i></span>
+                                    <textarea rows="4" class="form-control"  id="report-iqr" placeholder="Any Issues Should Be Reported IMMEDIATELY"></textarea>
+                                </div>
+                                <div id="template-lunch" style="display:none">
+                                    <label for="report-lunch">Lunch Length (Minutes)</label>
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                        <input type="number" id="report-lunch" placeholder="Ex: 30. Leave blank to use Company Default" class="form-control">
+                                        </input>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div id="template-fields">
+
+                                </div>
+                               <div id="loading" class="sk-cube-grid" style="display:none">
+                                    <div class="sk-cube sk-cube1"></div>
+                                    <div class="sk-cube sk-cube2"></div>
+                                    <div class="sk-cube sk-cube3"></div>
+                                    <div class="sk-cube sk-cube4"></div>
+                                    <div class="sk-cube sk-cube5"></div>
+                                    <div class="sk-cube sk-cube6"></div>
+                                    <div class="sk-cube sk-cube7"></div>
+                                    <div class="sk-cube sk-cube8"></div>
+                                    <div class="sk-cube sk-cube9"></div>
+                                </div>
+                            </div>
+                            <!--div class="card-footer"-->
+                            <div>
+                                <button id="button-cancel-report" type="button" class="btn btn-danger" >Cancel</button> 
+                                <button disabled id="button-save-report" type="button" class="btn btn-success" >Save</button> 
+                                <br>
+                                <span class="help-block">Select Start and End Times to unlock Save</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.conainer-fluid -->
+        </main>
+
+    </div>
+    
+    <div id="footer"></div>
+
+    <!-- Load jquery for navs and footer -->
+    <script src="js/libs/jquery.min.js"></script>
+    <!-- Main scripts -->
+    <script src="js/app.js"></script>
+    
+    <!-- Bootstrap and necessary plugins -->
+    <script src="js/libs/tether.min.js"></script>
+    <script src="js/libs/bootstrap.min.js"></script>
+    <script src="js/libs/pace.min.js"></script>
+    <script src="js/libs/moment.js"></script>
+    <script src="js/libs/select2.min.js"></script>
+    
+    <!-- Plugins and scripts required by this page -->
+    <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <!--script type="text/javascript" src="/bower_components/tempusdominus-core/build/js/core.min.js"></script-->
+
+
+    <!-- Plugins and scripts required by all views -->
+    <script src="js/libs/Chart.min.js"></script>
+    <script src="js/libs/toastr.min.js"></script>
+    <script src="js/libs/jquery.maskedinput.min.js"></script>
+    
+    <!-- Comment out unneeded navbars -->
+    <script>
+        $(document).ready(function () {
+            $("#footer").load("footer.html");
+            //$("#navbar").load("god-navbar.html");
+            
+            document.getElementById("employees-sidebar").style.display = "none";
+            //document.getElementById("operations-sidebar").style.display = "none";
+            if(localStorage["WYDuserNameFull"]!=null){
+                document.getElementById("full-name").innerHTML = localStorage["WYDuserNameFull"];
+                document.getElementById("job-title").innerHTML = localStorage["WYDuserJobTitle"];
+            }
+            $('#report-dpr-techs').select2();
+            $('#report-foreman').select2({
+                placeholder: "Select Your Foreman"
+            });
+        });
+    </script>
+    
+    <!-- Make sure user is logged in, else send to login -->
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            // User is signed in.
+            //toastr["info"]("user logged in");
+            if(localStorage["WYDuserID"]!=user.uid || localStorage["WYDuserAccess"]==null) getUserData();
+            viewNewTemplates();
+            $('#button-cancel-report').trigger('click');
+          } else {
+            // No user is signed in.
+            window.location="login.html";
+            //toastr["warning"]("User Not Logged In!");
+          }
+        });
+    </script>
+    
+    <script>
+       $(function () {
+            //$("#report-time-start-input").mask("99/99/9999 9:99 aa");
+            //$("#report-time-end-input").mask("99/99/9999 9:99 aa");
+            $('#report-time-start-picker').datetimepicker({
+                inline: true,
+                sideBySide: true,
+                showTodayButton: true
+            });
+            $('#report-time-end-picker').datetimepicker({
+                inline: true,
+                sideBySide: true,
+                showTodayButton: true
+            });
+            $('#report-time-start-picker').on('dp.change', function(event) {
+                document.getElementById("report-time-start-input").value = event.date.format("MM/DD/YYYY h:mm a");
+                calculateTimeDiff(0);
+            });
+            $('#report-time-end-picker').on('dp.change', function(event) {
+                document.getElementById("report-time-end-input").value = event.date.format("MM/DD/YYYY h:mm a");
+                calculateTimeDiff(0);
+            });
+       });
+    </script>
+
+</body>
+
+</html>
