@@ -2419,8 +2419,6 @@ $('#button-save-report').on('click', function() {
         tempDiv = document.getElementById("report-location-" + tempCount);
         while (tempDiv != null) {
             updateEverything[path + 'tasks/' + tempCount + '/location'] = tempDiv.value;
-            console.log("TempCount: " + tempCount + " ~ Location: ");
-            console.log(tempDiv);
             updateEverything[path + 'tasks/' + tempCount + '/tr'] = document.getElementById('report-tr-' + tempCount).value;
             updateEverything[path + 'tasks/' + tempCount + '/pathways'] = document.getElementById('report-pathways-' + tempCount).value;
             updateEverything[path + 'tasks/' + tempCount + '/roughin'] = document.getElementById('report-roughin-' + tempCount).value;
