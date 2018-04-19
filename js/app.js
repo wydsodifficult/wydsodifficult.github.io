@@ -2410,15 +2410,17 @@ $('#button-save-report').on('click', function() {
         tempCount = 0;
         while (tempDiv != null) {
             updateEverything[path + 'work/' + tempCount + '/performed'] = tempDiv.value;
-            updateEverything[path + 'work/' + tempCount + '/location'] = document.getElementById('report-location-' + tempCount).value;
+            updateEverything[path + 'work/' + tempCount + '/location'] = document.getElementById('report-performed-location-' + tempCount).value;
             tempCount++;
             tempDiv = document.getElementById("report-performed-" + tempCount);
         }
-        tempDiv = document.getElementById("report-location-0");
-        tempCount = 0;
         updateEverything[path + 'tasks/lunch'] = document.getElementById('report-dpr-lunch').value;
+        tempCount = 0;
+        tempDiv = document.getElementById("report-location-" + tempCount);
         while (tempDiv != null) {
             updateEverything[path + 'tasks/' + tempCount + '/location'] = tempDiv.value;
+            console.log("TempCount: " + tempCount + " ~ Location: ");
+            console.log(tempDiv);
             updateEverything[path + 'tasks/' + tempCount + '/tr'] = document.getElementById('report-tr-' + tempCount).value;
             updateEverything[path + 'tasks/' + tempCount + '/pathways'] = document.getElementById('report-pathways-' + tempCount).value;
             updateEverything[path + 'tasks/' + tempCount + '/roughin'] = document.getElementById('report-roughin-' + tempCount).value;
@@ -2849,7 +2851,7 @@ function newDPRLine(section) {
             count++;
             document.getElementById("report-dpr-performed-count").value = count;
             var holdingDiv = document.createElement("div");
-            holdingDiv.innerHTML = '<div class="row"><div class="col-sm mb-1"><label for="report-performed-' + count + '">Work Performed</label><div class="input-group"><span class="input-group-addon"><i class="icon-like"></i></span><input id="report-performed-' + count + '" placeholder="Work Performed" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-location-' + count + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input id="report-location-' + count + '" placeholder="Location" class="form-control"></div></div></div>';
+            holdingDiv.innerHTML = '<div class="row"><div class="col-sm mb-1"><label for="report-performed-' + count + '">Work Performed</label><div class="input-group"><span class="input-group-addon"><i class="icon-like"></i></span><input id="report-performed-' + count + '" placeholder="Work Performed" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-performed-location-' + count + '">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input id="report-performed-location-' + count + '" placeholder="Location" class="form-control"></div></div></div>';
             performedLine.append(holdingDiv);
             break;
         case 'tasks':
@@ -2946,7 +2948,7 @@ $('#button-settings-unused-save').on('click', function() {
 /* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
 function checkVersion(user) {
-    let currentVersion = "alpha04112018";
+    let currentVersion = "alpha04182018";
     if(localStorage["WYDversion"] != currentVersion) {
         if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null || localStorage["WYDversion"]==null) {
             getUserData();
