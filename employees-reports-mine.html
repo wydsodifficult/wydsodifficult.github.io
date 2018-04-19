@@ -777,7 +777,7 @@
                                 var div = document.createElement("div");
                                 div.id = "view-report-dpr-materials-row-" + i;
                                 div.className = "row";
-                                div.innerHTML = '<div class="col-sm mb-1"><label for="report-performed-0">Work Performed</label><div class="input-group"><span class="input-group-addon"><i class="icon-like"></i></span><input readonly id="view-report-performed-' + i + '" placeholder="Work Performed" value="' + snapshot.val().work[i].performed + '" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-location-0">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="view-report-location-' + i + '" placeholder="Location"  value="' + snapshot.val().work[i].location + '" class="form-control"></div></div>';
+                                div.innerHTML = '<div class="col-sm mb-1"><label for="report-performed-0">Work Performed</label><div class="input-group"><span class="input-group-addon"><i class="icon-like"></i></span><input readonly id="view-report-performed-' + i + '" placeholder="Work Performed" value="' + snapshot.val().work[i].performed + '" class="form-control"></div></div><div class="col-sm mb-1"><label for="report-performed-location-0">Location</label><div class="input-group"><span class="input-group-addon"><i class="icon-map"></i></span><input readonly id="view-report-performed-location-' + i + '" placeholder="Location"  value="' + snapshot.val().work[i].location + '" class="form-control"></div></div>';
                                 performed.append(div);
                             }
                         }
