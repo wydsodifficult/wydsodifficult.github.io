@@ -2946,7 +2946,7 @@ $('#button-settings-unused-save').on('click', function() {
 /* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
 function checkVersion(user) {
-    let currentVersion = "alpha04182018";
+    let currentVersion = "alpha04232018";
     if(localStorage["WYDversion"] != currentVersion) {
         if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null || localStorage["WYDversion"]==null) {
             getUserData();
