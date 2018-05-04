@@ -2366,6 +2366,16 @@ $('#button-save-report').on('click', function() {
     var selectedNum = document.getElementById('report-select-job-num');
     updateEverything[path + 'jobNum'] = selectedNum.options[selectedNum.selectedIndex].text;
     updateEverything[userPath + 'jobNum'] = selectedNum.options[selectedNum.selectedIndex].text;
+    //Search Terms
+    // type_number (Short Template + Job Number)
+    updateEverything[path + 'short-num']= document.getElementById('template-short').value + '_' + selectedNum.options[selectedNum.selectedIndex].text;
+    // type_submitted (Short Template + Submitted By)
+    updateEverything[path + 'short-submitted']= document.getElementById('template-short').value + '_' + localStorage["WYDuserInitials"];
+    // type_number_submitted (Short Template + Job Number + Submitted By)
+    updateEverything[path + 'short-num-submitted']= document.getElementById('template-short').value + '_' + selectedNum.options[selectedNum.selectedIndex].text + '_' + localStorage["WYDuserInitials"];
+    // number_submitted (Job Number + Submitted By)
+    updateEverything[path + 'num-submitted']= selectedNum.options[selectedNum.selectedIndex].text + '_' + localStorage["WYDuserInitials"];
+    // End search terms
     updateEverything[path + 'jobId'] = document.getElementById('report-select-job-id').value;
     updateEverything[userPath + 'jobId'] = document.getElementById('report-select-job-id').value;
     if(document.getElementById('report-select-job-name').value != 'option') {
@@ -2946,7 +2956,7 @@ $('#button-settings-unused-save').on('click', function() {
 /* USEFUL SCRIPTS: USEFUL ON ALL PAGES WHEN LOGGED IN */
 // Function to save all user data into localStorage
 function checkVersion(user) {
-    let currentVersion = "alpha04232018";
+    let currentVersion = "alpha05032018";
     if(localStorage["WYDversion"] != currentVersion) {
         if(user.uid!=localStorage["WYDuserID"] || localStorage["WYDuserAccess"]==null || localStorage["WYDversion"]==null) {
             getUserData();

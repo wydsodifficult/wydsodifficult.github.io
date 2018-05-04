@@ -347,23 +347,29 @@ Hello
                     <div class="col-sm">
                         <div class="card card-accecnt-info">
                             <div class="card-header" data-toggle="collapse" href='#collapseSearch'>
-                                 <span><i class="fa fa-search"></i></span><b>    Search All Reports By Category (CASE SENSITIVE)</b>
+                                 <span><i class="fa fa-search"></i></span><b> Search All Reports By Category (CASE SENSITIVE)</b>
                             </div>
                             <div class="card-block collapse" id="collapseSearch">
-                                <div class="input-group mb-1">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input id="view-search" class="form-control" type="text" placeholder="What are you looking for?">
-                                    </input>
+                                <div class="row">
+                                    <div class="col-sm-4 input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input id="view-search-type" class="form-control" type="text" placeholder="Report Type">
+                                        </input>
+                                    </div>
+                                    <div class="col-sm-4 input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input id="view-search-number" class="form-control" type="text" placeholder="Job Number">
+                                        </input>
+                                    </div>
+                                    <div class="col-sm-4 input-group mb-1">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input id="view-search-submitted" class="form-control" type="text" placeholder="Submitted By">
+                                        </input>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col" style="margin-bottom:4px">
-                                        <button id="button-search-type" class="btn btn-block btn-info">Report Type</button>
-                                    </div>
-                                    <div class="col" style="margin-bottom:4px">
-                                        <button id="button-search-num" class="btn btn-block btn-info" >Job Number</button>
-                                    </div>
-                                    <div class="col" style="margin-bottom:4px">
-                                        <button id="button-search-by" class="btn btn-block btn-info">Submitted By</button>
+                                        <button id="button-search" class="btn btn-block btn-info">Search</button>
                                     </div>
                                 </div>
                                 <hr>
@@ -431,12 +437,11 @@ Hello
                             </div>
                             <div class="card-footer">
                                 <button id="button-view-increase" class="btn btn-primary float-right">Increase by 25</button>
-                                <button id="button-view-increase-type" class="btn btn-primary float-right" style="display:none">Increase Type Search by 25</button>
-                                <button id="button-view-increase-num" class="btn btn-primary float-right" style="display:none">Increase Job Number Search by 25</button>
-                                <button id="button-view-increase-date" class="btn btn-primary float-right" style="display:none">Increase Date Search by 25</button>
-                                <button id="button-view-increase-by" class="btn btn-primary float-right" style="display:none">Increase Submitted By Search by 25</button>
+                                <button id="button-view-increase-search" class="btn btn-primary float-right" style="display:none">Increase Search by 25</button>
                                 <input id="view-search-count" value=25 style="display:none"></input>
                                 <input id="view-search-last" style="display:none"></input>
+                                <input id="view-search-ref" style="display:none"></input>
+                                <input id="view-search-search" style="display:none"></input>
                             </div>
                         </div>
                     </div>
@@ -481,7 +486,7 @@ Hello
     <!-- Comment out unneeded navbars -->
     <script>
         $(document).ready(function () {
-            let debug = -1;
+            let debug = -1;//-1
             $("#footer").load("footer.html");
             //$("#navbar").load("god-navbar.html");
             
@@ -577,6 +582,58 @@ Hello
                 //dataTable.row.add(["DPR", "69-001", convertDate(Date()), "Shaniqua Jones"]).draw(false);
             }
             
+            
+            // Increase searched view by 25
+            $('#button-view-increase-search').on('click', function() {
+                let last = document.getElementById("view-search-last").value;
+                let searchRefInput = document.getElementById("view-search-ref").value;
+                let searchInput = document.getElementById("view-search-search").value;
+                if(debug == 0 || debug == 2) {
+                    console.log("View Clicked: " + localStorage["WYDviewClicked"]);
+                    console.log("Last: " + last);
+                }
+                //console.log(document.getElementById("view-search-last").value);
+                if(localStorage["WYDviewClicked"] > 0) {
+                    if(debug == 0 || debug == 2) {
+                        console.log("Ordered by: " + searchRefInput + " and equal to: " + searchInput + ", ending at: " + last + ", limiting to: " + (25 * (Number(localStorage["WYDviewClicked"]) + 1)+1));
+                    }
+                    firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild(searchRefInput).equalTo(searchInput).limitToLast(25 * (Number(localStorage["WYDviewClicked"]) + 1)+1).once('value').then(function(snapshot) {
+                        let keysArray = Object.keys(snapshot.val()).sort().reverse().slice(1);
+                        let resultsArray = keysArray.map((key) => snapshot.val()[key]);
+                        let leftoverLength = Number(keysArray.length) - 25 * Number(localStorage["WYDviewClicked"]);
+                        if(debug == 0 || debug == 2) {
+                            console.log(keysArray);
+                            console.log(resultsArray);
+                            console.log(leftoverLength);
+                        }
+                        for(let i = (25 * Number(localStorage["WYDviewClicked"])); i < keysArray.length; i++) {
+                            if(debug == 0 || debug == 2) {
+                                console.log(keysArray[i]);
+                            }
+                            dataTable.row.add([ resultsArray[i].timeStart, resultsArray[i].short, resultsArray[i].jobNum, convertDate(resultsArray[i].submittedDate),resultsArray[i].submittedBy, keysArray[i]]).draw();
+                            document.getElementById("view-search-last").value = keysArray[i];
+                        }
+            /*            var i = 0;
+                        i = snapshot.numChildren();
+                        snapshot.forEach(function(childSnapshot){
+                            //console.log(childSnapshot.key);
+                            if(i!=0 && childSnapshot.key != last){
+                               dataTable.row.add([ childSnapshot.val().timeStart, childSnapshot.val().short, childSnapshot.val().jobNum, convertDate(childSnapshot.val().submittedDate),childSnapshot.val().submittedBy, childSnapshot.key]).draw();
+                                document.getElementById("view-search-last").value = childSnapshot.key;
+                            }
+                        }); */
+                        // Set "WYDviewClicked" to -1 if the end of the list
+                        if(leftoverLength < 25) {
+                            localStorage["WYDviewClicked"] = -1;
+                            document.getElementById("button-view-increase-search").disabled = true;
+                        }
+                        else localStorage["WYDviewClicked"]++;
+                        //console.log("View Clicked" + localStorage["WYDviewClicked"]);
+                        document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
+                    });
+                }
+            });
+            
             // Increase view by 25
             $('#button-view-increase').on('click', function() {
                 let last = document.getElementById("view-search-last").value;
@@ -618,6 +675,8 @@ Hello
                 }
             });
             
+            
+    /*
             // Increase view for searched
             // Increase for Report Type
             $('#button-view-increase-type').on('click', function() {
@@ -674,6 +733,7 @@ Hello
                 count.value = Number(count.value) + 25;
                 document.getElementById("view-viewing").innerText = count.value + " Reports Types Searched from: " + document.getElementById("view-search-last-input").value;
             });
+    */
             
             // Close currently Viewed Report
             $('#button-view-close').on('click', function() {
@@ -1010,6 +1070,152 @@ Hello
             } );
             
             // Custom Search Buttons
+            $('#button-search').on('click', function() {
+                if(debug==0 || debug == 3) {
+                    console.log("Search Clicked");
+                }
+                let type = document.getElementById("view-search-type").value;
+                let number = document.getElementById("view-search-number").value;
+                let submitted = document.getElementById("view-search-submitted").value;
+                document.getElementById("view-search-count").value = 25;
+                dataTable.clear()
+                    .draw();
+                // Reference for "orderByChild()"
+                let searchRef;
+                // Reference for "equalTo()"
+                let search;
+                let searchInput = document.getElementById("view-search-search").value;
+                if(debug==0 || debug == 3) {
+                    console.log("Type: " + type + "\nNumber: " + number + "\nSubmitted: " + submitted);
+                }
+                if(type=='') {
+                    if(number=='') {
+                        // None
+                        if(submitted=='') {
+                            if(debug==0 || debug == 3) {
+                                console.log("Empty Searches");
+                            }
+                            searchRef = '';
+                            search = '';
+                            document.getElementById("view-search-ref").value = '';
+                            document.getElementById("view-search-search").value = '';
+                        }
+                        // Only Submitted
+                        else {
+                            if(debug==0 || debug == 3) {
+                                console.log("Submitted Only");
+                            }
+                            searchRef = 'submittedInitials';
+                            search = submitted;
+                            document.getElementById("view-search-ref").value = 'submittedInitials';
+                            document.getElementById("view-search-search").value = submitted;
+                        }
+                    }
+                    else {
+                        // Only Number
+                        if(submitted=='') {
+                            if(debug==0 || debug == 3) {
+                                console.log("Number Only");
+                            }
+                            searchRef = 'jobNum';
+                            search = number;
+                            document.getElementById("view-search-ref").value = 'jobNum';
+                            document.getElementById("view-search-search").value = number;
+                        }
+                        // Number & Submitted
+                        else {
+                            if(debug==0 || debug == 3) {
+                                console.log("Number & Submitted");
+                            }
+                            searchRef = 'num-submitted';
+                            search = number + "_" + submitted;
+                            document.getElementById("view-search-ref").value = 'num-submitted';
+                            document.getElementById("view-search-search").value = number + "_" + submitted;
+                        }
+                    }
+                }
+                else {
+                    if(number=='') {
+                        // Only Type
+                        if(submitted=='') {
+                            if(debug==0 || debug == 3) {
+                                console.log("Type Only");
+                            }
+                            searchRef = 'short';
+                            search = type;
+                            document.getElementById("view-search-ref").value = 'short';
+                            document.getElementById("view-search-search").value = type;
+                        }
+                        // Type & Submitted
+                        else {
+                            if(debug==0 || debug == 3) {
+                                console.log("Type & Submitted");
+                            }
+                            searchRef = 'short-submitted';
+                            search = type + "_" + submitted;
+                            document.getElementById("view-search-ref").value = 'short-submitted';
+                            document.getElementById("view-search-search").value = type + "_" + submitted;
+                        }
+                    }
+                    else {
+                        // Type & Number
+                        if(submitted=='') {
+                            if(debug==0 || debug == 3) {
+                                console.log("Type & Number");
+                            }
+                            searchRef = 'short-num';
+                            search = type + "_" + number;
+                            document.getElementById("view-search-ref").value = 'short-num';
+                            document.getElementById("view-search-search").value = type + "_" + number;
+                        }
+                        // Type, Number, & Submitted
+                        else {
+                            if(debug==0 || debug == 3) {
+                                console.log("Type, Number, & Submitted");
+                            }
+                            searchRef = 'short-num-submitted';
+                            search = type + "_" + number + "_" + submitted;
+                            document.getElementById("view-search-ref").value = 'short-num-submitted';
+                            document.getElementById("view-search-search").value = type + "_" + number + "_" + submitted;
+                        }
+                    }
+                }
+                firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + '/report').orderByChild(searchRef).equalTo(search).limitToLast(25).once('value').then(function(snapshot) {
+                    // localStorage["WYDviewClicked"] saves how many times a load more button is clicked
+                    localStorage["WYDviewClicked"] = 1;
+                    let keysArray = Object.keys(snapshot.val()).sort().reverse();
+                    let resultsArray = keysArray.map((key) => snapshot.val()[key]);
+                    if(debug == 0 || debug == 1) {
+                        console.log(keysArray);
+                        console.log(resultsArray);
+                    }
+                    for(let i = 0; i < keysArray.length; i++) {
+                        if(debug == 0 || debug == 1) {
+                            console.log(keysArray[i]);
+                        }
+                        dataTable.row.add([ resultsArray[i].timeStart, resultsArray[i].short, resultsArray[i].jobNum, convertDate(resultsArray[i].submittedDate),resultsArray[i].submittedBy, keysArray[i]]).draw();
+                        //console.log(document.getElementById("view-search-last").value);
+                        if(document.getElementById("view-search-last").value == "") document.getElementById("view-search-last").value = keysArray[i];
+                        if(keysArray[i] < document.getElementById("view-search-last").value) {
+                        if(debug == 0 || debug == 1) {
+                            console.log("Updated from " + document.getElementById("view-search-last").value + " to " + keysArray[i]);
+                        }
+                        document.getElementById("view-search-last").value = keysArray[i];
+                        }
+                    }
+                    document.getElementById("view-viewing").innerText = (dataTable.rows().count()) + " Most Recent";
+                    dataTable.order([0, 'dec']).draw();
+                });
+                document.getElementById("button-view-increase").setAttribute("style", "display:none");
+                document.getElementById("button-view-increase-search").setAttribute("style", "display:true");
+                document.getElementById("button-view-increase-search").disabled = false;
+                //document.getElementById("button-view-increase-num").setAttribute("style", "display:none");
+                //document.getElementById("button-view-increase-date").setAttribute("style", "display:none");
+                //document.getElementById("button-view-increase-by").setAttribute("style", "display:none");
+            });
+            
+    /*
+            // Custom Search Buttons
             // Report Type
             $('#button-search-type').on('click', function() {
                 var search = document.getElementById("view-search");
@@ -1075,6 +1281,7 @@ Hello
                 document.getElementById("button-view-increase-date").setAttribute("style", "display:none");
                 document.getElementById("button-view-increase-by").setAttribute("style", "display:none");
             });
+    */
             
             // Submitted Date
             $('#button-search-date-submitted').on('click', function() {
