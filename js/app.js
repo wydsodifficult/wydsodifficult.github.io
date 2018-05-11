@@ -911,6 +911,7 @@ function getActiveJobs() {
     if(access < 3) {
         document.getElementById("button-add-job-div").setAttribute("style", "display:inline");
         document.getElementById("button-switch-job-div").setAttribute("style", "display:inline");
+        document.getElementById("button-switch-completed-job-div").setAttribute("style", "display:inline");
     }
     var query = firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/job/active").orderByChild("jobName");
     query.once('value').then(function(snapshot) {
@@ -989,10 +990,17 @@ $('#button-switch-job').on('click',function(){
             var cell2 = row.insertCell(1).innerHTML = childSnapshot.val().jobNum; ;
             var cell3 = row.insertCell(2);
             var infoLink = document.createElement("a");
+            var switchVal;
+            if(switchButton.value == "inactive") {
+                switchVal = "inactive";
+            }
+            else {
+                switchVal = "active";
+            }
             infoLink.className = "btn btn-success";
             infoLink.title = "More Info";
             infoLink.href = "#";
-            infoLink.onclick = function(){viewJob(childSnapshot,"inactive")};
+            infoLink.onclick = function(){viewJob(childSnapshot,switchVal)};
             infoLink.setAttribute("data-toggle","modal");
             infoLink.setAttribute("data-target","#view-job-modal");
             var infoImg = document.createElement("i");
@@ -1020,6 +1028,62 @@ $('#button-switch-job').on('click',function(){
             switchButton.value = "inactive";
             switchButton.innerText = "View Inactive Jobs";
         }
+    },function(error){
+        document.getElementById("job-div").innerHTML = "An Error Occured! Please Try Again!";
+    });
+});
+
+// Function Run to show Complete/Incompleted Jobs when clicked
+// completedJobView()
+// Operations-jobs
+$('#button-switch-completed-job').on('click',function(){
+    var switchButton = document.getElementById("button-switch-job");
+    var completedButton = document.getElementById("button-switch-completed-job");
+    var tableDiv = document.getElementById("job-div");
+    tableDiv.innerHTML = "";
+    var jobCountDiv = document.getElementById("job-count");
+    var query = firebase.database().ref('company/' + localStorage["WYDuserCompanyID"] + "/job/complete").orderByChild("jobName");
+    query.once('value').then(function(snapshot) {
+        var jobTable = document.createElement("table");
+        jobTable.id = "job-table";
+        jobTable.className = "table table-striped table-bordered";
+        var jobHead = jobTable.createTHead()
+        var jobHeadRow = jobHead.insertRow();
+        var headerCell0 = document.createElement("th");
+        var headerCell1 = document.createElement("th");
+        var headerCell2 = document.createElement("th");
+        var jobBody = jobTable.createTBody();
+        tableDiv.append(jobTable);
+        snapshot.forEach(function(childSnapshot){
+            var row = jobBody.insertRow();
+            row.id = ("job-" + childSnapshot.key);
+            var cell1 = row.insertCell(0).innerHTML = childSnapshot.val().jobName;
+            var cell2 = row.insertCell(1).innerHTML = childSnapshot.val().jobNum; ;
+            var cell3 = row.insertCell(2);
+            var infoLink = document.createElement("a");
+            infoLink.className = "btn btn-success";
+            infoLink.title = "More Info";
+            infoLink.href = "#";
+            infoLink.onclick = function(){viewJob(childSnapshot,"complete")};
+            infoLink.setAttribute("data-toggle","modal");
+            infoLink.setAttribute("data-target","#view-job-modal");
+            var infoImg = document.createElement("i");
+            infoImg.className = "fa fa-search-plus";
+            infoLink.append(infoImg);
+            cell3.append(infoLink);
+            jobCountDiv.value++;
+        });
+        headerCell0.innerHTML = "Job Name";
+        headerCell0.id = "job-sort-0";
+        headerCell0.onclick=function(){sortJobTable(0)};
+        headerCell1.innerHTML = "Job Num";
+        headerCell1.id = "job-sort-1";
+        headerCell2.innerHTML = "Actions";
+        headerCell1.onclick=function(){sortJobTable(1)};
+        jobHeadRow.appendChild(headerCell0);
+        jobHeadRow.appendChild(headerCell1);
+        jobHeadRow.appendChild(headerCell2);
+        tableDiv.append(jobTable);
     },function(error){
         document.getElementById("job-div").innerHTML = "An Error Occured! Please Try Again!";
     });
@@ -1245,19 +1309,30 @@ $('#button-add-job-contact').on('click',function(){
 // Function run when a job is clicked to view all relevent information
 // viewJob()
 // Operations-jobs
-function viewJob(thisJob,active) {
+function viewJob(thisJob, type) {
     snapShot = thisJob.val();
     document.getElementById("viewJobModalTitle").innerHTML = (snapShot.jobName + " - " + snapShot.jobNum);
     document.getElementById("view-name-input").value = snapShot.jobName;
     document.getElementById("jobID").value = thisJob.key;
     document.getElementById("view-number-input").value = snapShot.jobNum;
     if(snapShot.jobLocation != null)document.getElementById("view-location-input").value = snapShot.jobLocation;
-    if(active == "active") document.getElementById("view-active-input").checked = true;
-    else document.getElementById("view-active-input").checked = false;
+    switch(type) {
+        case "active":
+            document.getElementById("view-active-input").checked = true;
+            document.getElementById("view-complete-input").checked = false;
+            break;
+        case "inactive":
+            document.getElementById("view-active-input").checked = false;
+            document.getElementById("view-complete-input").checked = false;
+            break;
+        case "complete":
+            document.getElementById("view-active-input").checked = false;
+            document.getElementById("view-complete-input").checked = true;
+    }
     if(snapShot.pmName != null)document.getElementById("view-pm-name-input").value = snapShot.pmName;
     if(snapShot.pmNum != null)document.getElementById("view-pm-contact-input").value = snapShot.pmNum;
     if(snapShot.jobContractor != null)document.getElementById("view-contractor-input").value = snapShot.jobContractor;
-    jobContacts = document.getElementById("view-modal-job-contacts");
+    let jobContacts = document.getElementById("view-modal-job-contacts");
     jobContacts.innerHTML = "";
     //for(i = 0; i < snapShot.contacts.length; i++) {
     var count = 0;
@@ -1357,23 +1432,35 @@ $('#button-job-delete').on('click',function() {
 $('#button-job-save').on('click',function() {
     document.getElementById('loading').setAttribute('style','display:true');
     var active;
+    var complete=false;
     var companyKey = localStorage["WYDuserCompanyID"];
     var jobKey = document.getElementById("jobID").value;
     var count = document.getElementById("view-contact-count").value;
     var updateEverything = {};
-    if(document.getElementById("view-active-input").checked==true) {
-        active = "active";
-        if(document.getElementById("button-switch-job").value=="active") {
-            console.log("Job was inactive");
-            updateEverything['company/' + companyKey + '/job/inactive/' + jobKey] = null;
-        }
+    var jobRef;
+    if(document.getElementById("view-complete-input").checked==true) {
+        complete=true;
+        updateEverything['company/' + companyKey + '/job/inactive/' + jobKey] = null;
+        updateEverything['company/' + companyKey + '/job/active/' + jobKey] = null;
     }
     else {
-        active = "inactive";
-            console.log("Job was active");
-            updateEverything['company/' + companyKey + '/job/active/' + jobKey] = null;
+        if(document.getElementById("view-active-input").checked==true) {
+            active = "active";
+            if(document.getElementById("button-switch-job").value=="active") {
+                console.log("Job was inactive");
+                updateEverything['company/' + companyKey + '/job/inactive/' + jobKey] = null;
+                updateEverything['company/' + companyKey + '/job/complete/' + jobKey] = null;
+            }
+        }
+        else {
+            active = "inactive";
+                console.log("Job was active");
+                updateEverything['company/' + companyKey + '/job/active/' + jobKey] = null;
+                updateEverything['company/' + companyKey + '/job/complete/' + jobKey] = null;
+        }
     }
-    var jobRef = 'company/' + companyKey + '/job/' + active + '/' + jobKey + '/';
+    if(complete) jobRef = 'company/' + companyKey + '/job/complete/' + jobKey + '/';
+    else jobRef = 'company/' + companyKey + '/job/' + active + '/' + jobKey + '/';
     var newEditJob = firebase.database().ref('company/' + companyKey + '/job/' + active + '/' + jobKey + '/editedBy').push();
     var newEditJobKey = newEditJob.key;
     var jobName = document.getElementById("view-name-input").value;

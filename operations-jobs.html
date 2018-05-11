@@ -231,6 +231,14 @@
                                     <span class="switch-handle"></span>
                                 </label>
                             </div>
+                            <div>
+                                Complete Job?
+                                <label class="switch switch-text switch-pill switch-primary">
+                                    <input disabled id="view-complete-input" type="checkbox" class="switch-input" checked="">
+                                    <span class="switch-label"data-on="YES" data-off="NO"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
                             
                             <label>Project Manager</label>
                             <div class="input-group mb-1">
@@ -340,10 +348,16 @@
                         <button id="button-add-job-cancel" type="button" class="btn btn-danger">Cancel</button>
                         <button id="button-add-job-confirm" type="button" class="btn btn-success" disabled>Add Job</button>
                     </div>
-                    <div id="button-switch-job-div">
-                        <hr>
-                        <button type="button" class="btn  btn-primary btn-block" id="button-switch-job" value="inactive">View Inactive Jobs</button>
-                        <hr>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-6" id="button-switch-job-div">
+                            <button type="button" class="btn  btn-primary btn-block" id="button-switch-job" value="inactive">View Inactive Jobs</button>
+                            <hr>
+                        </div>
+                        <div class="col-sm-6" id="button-switch-completed-job-div">
+                            <button type="button" class="btn  btn-primary btn-block" id="button-switch-completed-job" value="completed">View Completed Jobs</button>
+                            <hr>
+                        </div>
                     </div>
                     <input id="job-count" type="number" disabled style="display:none" value="0">
                     <div class="card">
