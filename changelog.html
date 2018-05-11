@@ -101,6 +101,42 @@
                     <hr>
                     <div class="card">
                         <div class="card-header">
+                            <b>May 09, 2018</b>
+                            <br>
+                            
+                        </div>
+                        <div class="card-block">
+                            <b>operations-jobs</b>
+                            <ul>
+                                <li>Added in button to show completed jobs</li>
+                                <li>Added in toggle to complete jobs when viewing</li>
+                            </ul>
+                            <b>app.js</b>
+                            <ul>
+                                <li>getActiveJobs()</li>
+                                    <ul>
+                                        <li>Shows Completed jobs button if access is less than 3</li>
+                                    </ul>
+                                <li>viewJob(thisJob, type)</li>
+                                    <ul>
+                                        <li>Changed second input to "Type" (active, inactive, complete)</li>
+                                    </ul>
+                                <li>#button-switch-completed-job</li>
+                                    <ul>
+                                        <li>Grabs completed jobs from Firebase</li>
+                                    </ul>
+                                <li>#button-job-save</li>
+                                    <ul>
+                                        <li>If job is complete, deleted job from "active" or "inactive" paths and creates one in "complete" path</li>
+                                    </ul>
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <b>Author:</b> Higashi
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
                             <b>April 27, 2018</b>
                             <br>
                             
