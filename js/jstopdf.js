@@ -70,26 +70,26 @@ function reportDownload (snapshot) {
             margin: {horizontal: 20},
             columnStyles: {text: {columnWidth: 'auto'}}
         });
-    }
     
-    // Table for DPR Employee's Hours
-    if(values.type == "DPR" && values.employees != null) {
-        var employeeRows = [];
-        for(var i = 0; i < values.employees.length; i++) {
-            employeeRows.push({"0": values.employees[i].name, "1": values.employees[i].hours});
+        // Table for DPR Employee's Hours
+        if(values.employees != null) {
+            var employeeRows = [];
+            for(var i = 0; i < values.employees.length; i++) {
+                employeeRows.push({"0": values.employees[i].name, "1": values.employees[i].hours});
+            }
+            var employeeCols= [
+                {title: "EMPLOYEE NAME", datakey: "name"}, {title: "HOURS", datakey: "hours"}
+            ];
+
+            doc.autoTable(employeeCols, employeeRows, {
+                theme: "grid",
+                startY: doc.autoTable.previous.finalY + 5,
+                styles: {overflow: 'linebreak', fontSize: 8},
+                fontSize: 8,
+                margin: {horizontal: 20},
+                columnStyles: {text: {columnWidth: 'auto'}}
+            });
         }
-        var employeeCols= [
-            {title: "EMPLOYEE NAME", datakey: "name"}, {title: "HOURS", datakey: "hours"}
-        ];
-        
-        doc.autoTable(employeeCols, employeeRows, {
-            theme: "grid",
-            startY: doc.autoTable.previous.finalY + 5,
-            styles: {overflow: 'linebreak', fontSize: 8},
-            fontSize: 8,
-            margin: {horizontal: 20},
-            columnStyles: {text: {columnWidth: 'auto'}}
-        });
         
         var materialRows = [];
         for(var i = 0; i < values.materials.length; i++) {
